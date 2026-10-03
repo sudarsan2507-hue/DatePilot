@@ -71,30 +71,62 @@ def travel_minutes(lat1: float, lng1: float, lat2: float, lng2: float) -> float:
     return max(6.0, (km / AVG_SPEED_KMH) * 60.0)
 
 
-def is_open(venue: Venue, day_name: str, hhmm: str) -> bool:
-    """Check if venue is open at given day and HH:MM time, supporting split shift hours."""
+def is_open(venue: Venue, day_name: str, hhmm: str, departure_hhmm: str | None = None) -> bool:
+    """Check that a visit falls fully inside one opening-hours shift."""
     hours = venue.open_hours.get(day_name.lower())
     if not hours or hours.lower() == "closed":
         return False
     try:
-        t = datetime.strptime(hhmm, "%H:%M").time()
+        arrival = datetime.strptime(hhmm, "%H:%M")
+        departure = datetime.strptime(departure_hhmm or hhmm, "%H:%M")
+        if departure < arrival:
+            departure += timedelta(days=1)
         shifts = hours.split(",")
         for shift in shifts:
             shift = shift.strip()
             if not shift or "-" not in shift:
                 continue
             open_s, close_s = shift.split("-")
-            open_t = datetime.strptime(open_s.strip(), "%H:%M").time()
-            close_t = datetime.strptime(close_s.strip(), "%H:%M").time()
-            if open_t <= close_t:
-                if open_t <= t <= close_t:
-                    return True
-            else:
-                if t >= open_t or t <= close_t:
-                    return True
+            open_dt = datetime.strptime(open_s.strip(), "%H:%M")
+            close_dt = datetime.strptime(close_s.strip(), "%H:%M")
+            if close_dt < open_dt:
+                close_dt += timedelta(days=1)
+                if arrival < open_dt:
+                    arrival += timedelta(days=1)
+                    departure += timedelta(days=1)
+            if open_dt <= arrival and departure <= close_dt:
+                return True
         return False
     except Exception:
-        return True
+        return False
+
+
+def next_open_visit(
+    venue: Venue,
+    day_name: str,
+    earliest_arrival: datetime,
+    duration_minutes: int,
+) -> tuple[datetime, datetime] | None:
+    """Return the earliest same-day visit that fits fully within an opening shift."""
+    hours = venue.open_hours.get(day_name.lower())
+    if not hours or hours.lower() == "closed":
+        return None
+    for shift in hours.split(","):
+        try:
+            open_s, close_s = shift.strip().split("-", 1)
+            open_time = datetime.strptime(open_s.strip(), "%H:%M").time()
+            close_time = datetime.strptime(close_s.strip(), "%H:%M").time()
+        except ValueError:
+            continue
+        open_dt = datetime.combine(earliest_arrival.date(), open_time)
+        close_dt = datetime.combine(earliest_arrival.date(), close_time)
+        if close_dt < open_dt:
+            close_dt += timedelta(days=1)
+        arrival = max(earliest_arrival, open_dt)
+        departure = arrival + timedelta(minutes=duration_minutes)
+        if departure <= close_dt:
+            return arrival, departure
+    return None
 
 
 def merge_constraints(a: TasteCard, b: TasteCard) -> dict:
@@ -130,7 +162,13 @@ def score_venue(venue: Venue, constraints: dict, slot: SlotType) -> float:
     return score
 
 
-def plan_date(session: SessionDB, taste_a: TasteCard, taste_b: TasteCard) -> list[DatePlan]:
+def plan_date(
+    session: SessionDB,
+    taste_a: TasteCard,
+    taste_b: TasteCard,
+    *,
+    indoor_only: bool = False,
+) -> list[DatePlan]:
     """Generates top viable date plans fitting budget, time, and travel constraints."""
     venues = load_venues()
     slots_raw = json.loads(session.slots_enabled)
@@ -145,17 +183,17 @@ def plan_date(session: SessionDB, taste_a: TasteCard, taste_b: TasteCard) -> lis
     dietary = constraints["dietary"]
     dislikes = constraints["dislikes"]
 
-    try:
-        dt_start = datetime.strptime(f"{session.date} {session.time_start}", "%Y-%m-%d %H:%M")
-        dt_end = datetime.strptime(f"{session.date} {session.time_end}", "%Y-%m-%d %H:%M")
-    except Exception:
-        dt_start = datetime.strptime("2026-10-04 12:00", "%Y-%m-%d %H:%M")
-        dt_end = datetime.strptime("2026-10-04 22:30", "%Y-%m-%d %H:%M")
+    dt_start = datetime.strptime(f"{session.date} {session.time_start}", "%Y-%m-%d %H:%M")
+    dt_end = datetime.strptime(f"{session.date} {session.time_end}", "%Y-%m-%d %H:%M")
+    if dt_end <= dt_start:
+        return []
 
     day_name = dt_start.strftime("%A").lower()
 
     def is_candidate(v: Venue, s_type: SlotType) -> bool:
         if v.type != s_type:
+            return False
+        if indoor_only and not v.indoor:
             return False
         tags = [t.lower() for t in v.vibe_tags + v.cuisine_tags]
         if any(d in tags for d in dislikes):
@@ -197,18 +235,18 @@ def plan_date(session: SessionDB, taste_a: TasteCard, taste_b: TasteCard) -> lis
                     valid = False
                     break
 
-                cur_t += timedelta(minutes=int(travel_min))
+                earliest_arrival = cur_t + timedelta(minutes=int(round(travel_min)))
                 total_travel += int(travel_min)
-                arrive_s = cur_t.strftime("%H:%M")
 
                 dur = venue.typical_duration_min or DEFAULT_DURATIONS.get(slot, 60)
-                depart_t = cur_t + timedelta(minutes=dur)
-
-                if depart_t > dt_end:
+                visit = next_open_visit(venue, day_name, earliest_arrival, dur)
+                if not visit:
                     valid = False
                     break
+                arrival_t, depart_t = visit
+                arrive_s = arrival_t.strftime("%H:%M")
 
-                if not is_open(venue, day_name, arrive_s):
+                if depart_t > dt_end:
                     valid = False
                     break
 
@@ -220,7 +258,7 @@ def plan_date(session: SessionDB, taste_a: TasteCard, taste_b: TasteCard) -> lis
                 # Backup venue selection (next best open candidate for this slot)
                 backups = [
                     b for b in slot_cands.get(slot, [])
-                    if b.id != venue.id and is_open(b, day_name, arrive_s)
+                    if b.id != venue.id and is_open(b, day_name, arrive_s, depart_t.strftime("%H:%M"))
                 ]
                 backup = backups[0] if backups else None
 

@@ -56,11 +56,13 @@ def delete_taste(session_token: str, partner: str) -> None:
                 row.taste_a = None
             else:
                 row.taste_b = None
+            # Existing plans are derived from both cards and must not survive a privacy wipe.
+            row.plan_json = None
             db.add(row)
 
         # Also purge any feedback by this partner for this session
         memory_stmt = select(TasteMemoryDB).where(
-            (TasteMemoryDB.session_token == session_token) & (TasteMemoryDB.partner == partner)
+            (TasteMemoryDB.session_token == row.token_a) & (TasteMemoryDB.partner == partner)
         )
         for mem in db.exec(memory_stmt).all():
             db.delete(mem)

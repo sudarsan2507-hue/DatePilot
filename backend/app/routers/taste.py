@@ -14,6 +14,7 @@ from app.memory import save_taste, load_taste, delete_taste
 from app.services.taste_extractor import taste_from_export, taste_from_image, taste_from_quiz
 
 router = APIRouter(prefix="/taste", tags=["taste"])
+MAX_UPLOAD_BYTES = 15 * 1024 * 1024
 
 
 @router.post("/{token}/upload")
@@ -32,8 +33,15 @@ async def upload_taste(token: str, file: UploadFile = File(...)):
     if not row:
         raise HTTPException(status_code=404, detail="Session not found")
 
-    content = await file.read()
+    content = await file.read(MAX_UPLOAD_BYTES + 1)
     filename = file.filename or ""
+
+    if len(content) > MAX_UPLOAD_BYTES:
+        del content
+        raise HTTPException(status_code=413, detail="Upload must be 15 MB or smaller")
+    if not filename.lower().endswith((".zip", ".json", ".png", ".jpg", ".jpeg", ".webp")):
+        del content
+        raise HTTPException(status_code=415, detail="Upload a ZIP, JSON, PNG, JPG, or WEBP file")
 
     try:
         if filename.lower().endswith((".png", ".jpg", ".jpeg", ".webp")):

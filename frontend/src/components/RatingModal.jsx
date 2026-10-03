@@ -7,7 +7,6 @@ export default function RatingModal({ token, stops, onClose }) {
   const [notes, setNotes] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [insights, setInsights] = useState(null);
-  const [submittedCount, setSubmittedCount] = useState(0);
 
   const currentStop = stops[selectedStopIdx];
 
@@ -38,7 +37,6 @@ export default function RatingModal({ token, stops, onClose }) {
         notes,
       });
 
-      setSubmittedCount((c) => c + 1);
       setNotes('');
       // Move to next stop if available
       if (selectedStopIdx < stops.length - 1) {

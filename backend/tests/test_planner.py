@@ -3,7 +3,7 @@ Tests for deterministic date planner, beam search, and constraint enforcement.
 """
 import json
 import pytest
-from app.models.schema import SessionDB, TasteCard, SlotType
+from app.models.schema import SessionDB, TasteCard, SlotType, Venue
 from app.services.planner import (
     plan_date,
     build_rain_mode_plan,
@@ -31,6 +31,25 @@ def test_haversine_and_travel():
     assert 4.0 <= dist <= 8.0
     time_min = travel_minutes(13.0336, 80.2520, 12.9998, 80.2700)
     assert 10.0 <= time_min <= 40.0
+
+
+def test_open_hours_require_entire_visit_to_fit():
+    venue = Venue(
+        id="hours-test",
+        name="Hours Test",
+        type="cafe",
+        area="Adyar",
+        lat=13.0,
+        lng=80.25,
+        avg_cost_for_two=500,
+        typical_duration_min=60,
+        open_hours={day: "10:00-12:00,17:00-22:00" for day in [
+            "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"
+        ]},
+    )
+    assert is_open(venue, "monday", "10:30", "11:30") is True
+    assert is_open(venue, "monday", "11:30", "12:30") is False
+    assert is_open(venue, "monday", "12:30", "13:00") is False
 
 
 def test_plan_date_hard_constraints():

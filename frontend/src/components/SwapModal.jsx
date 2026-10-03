@@ -26,10 +26,17 @@ export default function SwapModal({
     }
   };
 
-  const handleApply = () => {
-    if (diff?.updated_plan) {
-      onSwapApplied(planIndex, diff.updated_plan);
+  const handleApply = async () => {
+    setLoading(true);
+    setError('');
+    try {
+      const applied = await api.swapStop(token, planIndex, stopIndex, true);
+      onSwapApplied(planIndex, applied.updated_plan);
       onClose();
+    } catch (err) {
+      setError(err.message || 'Could not apply this swap');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -117,20 +124,27 @@ export default function SwapModal({
                   {diff.budget_ok ? '✓ Within Budget' : '✗ Exceeds Budget'}
                 </span>
               </div>
+              <div className="flex justify-between">
+                <span className="text-warm-500">Schedule:</span>
+                <span className="font-semibold text-warm-900">
+                  {diff.schedule_change.old_arrival}–{diff.schedule_change.old_departure} → {diff.schedule_change.new_arrival}–{diff.schedule_change.new_departure}
+                </span>
+              </div>
             </div>
 
             <button
               type="button"
               onClick={handleApply}
+              disabled={loading}
               className="w-full py-2.5 px-4 bg-rose-500 hover:bg-rose-600 text-white font-medium rounded-xl text-xs transition-all shadow-md shadow-rose-200"
             >
-              Apply Swap & Save Plan ✓
+              {loading ? 'Applying…' : 'Apply Swap & Save Plan ✓'}
             </button>
           </div>
         ) : (
           <div className="text-center py-2">
             <p className="text-xs text-warm-500 mb-4 leading-relaxed">
-              Planner will keep all other stops locked in place and re-solve this slot with the next best matching venue in Chennai.
+              Planner keeps every other venue locked, then rechecks and shifts downstream times when needed.
             </p>
             <button
               type="button"

@@ -8,6 +8,7 @@ import MatchSummary from './components/MatchSummary';
 import ItineraryViewer from './components/ItineraryViewer';
 import SwapModal from './components/SwapModal';
 import RatingModal from './components/RatingModal';
+import PartnerLimits from './components/PartnerLimits';
 
 export default function App() {
   // Session state
@@ -16,7 +17,7 @@ export default function App() {
   const [tokenB, setTokenB] = useState('');
   const [activePartner, setActivePartner] = useState('a'); // 'a' or 'b'
   
-  // App views: 'setup' | 'invite' | 'taste' | 'review' | 'match' | 'plans'
+  // App views: 'setup' | 'limits' | 'invite' | 'taste' | 'review' | 'match' | 'plans'
   const [view, setView] = useState('setup');
 
   // Candidate Taste Cards for review
@@ -64,7 +65,7 @@ export default function App() {
       } else if (s.my_taste_submitted) {
         setView(partner === 'a' ? 'invite' : 'match');
       } else {
-        setView('taste');
+        setView(partner === 'b' ? 'limits' : 'taste');
       }
     } catch {
       // ignore
@@ -109,7 +110,7 @@ export default function App() {
 
   const handleSwitchToPartnerB = () => {
     setActivePartner('b');
-    setView('taste');
+    setView('limits');
   };
 
   const handleSwitchToPartnerA = () => {
@@ -268,6 +269,14 @@ export default function App() {
         )}
 
         {/* Step 2: Taste Profiler */}
+        {view === 'limits' && (
+          <PartnerLimits
+            token={tokenB}
+            session={session}
+            onSaved={() => setView('taste')}
+          />
+        )}
+
         {view === 'taste' && (
           <TasteProfiler
             sessionToken={activePartner === 'a' ? tokenA : tokenB}

@@ -2,14 +2,15 @@
  * Centralized API client for DatePilot.
  * Uses VITE_API_URL or defaults to localhost:8000.
  */
-const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const configuredUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const BASE_URL = configuredUrl.startsWith('http') ? configuredUrl : `https://${configuredUrl}`;
 
 async function request(path, options = {}) {
   const url = `${BASE_URL}${path}`;
   const res = await fetch(url, {
     ...options,
     headers: {
-      ...(options.headers || {}),
+      ...options.headers,
     },
   });
 
@@ -86,8 +87,8 @@ export const api = {
 
   getCurrentPlan: (token) => request(`/plan/${token}/current`),
 
-  swapStop: (token, planIndex, stopIndex) =>
-    request(`/plan/${token}/swap/${planIndex}/${stopIndex}`, {
+  swapStop: (token, planIndex, stopIndex, apply = false) =>
+    request(`/plan/${token}/swap/${planIndex}/${stopIndex}?apply=${apply}`, {
       method: 'POST',
     }),
 

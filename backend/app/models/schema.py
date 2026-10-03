@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Optional, Dict, List, Any
 from datetime import datetime, timezone
 from enum import Enum
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator, model_validator
 from sqlmodel import SQLModel, Field as SField
 
 
@@ -34,6 +34,21 @@ class TasteCard(BaseModel):
     price_comfort: PriceComfort = PriceComfort.mid
     confidence: dict[str, float] = Field(default_factory=dict)  # item -> 0.0..1.0
 
+    @field_validator("cuisines", "dietary_signals", "vibes", "activities", "dislikes")
+    @classmethod
+    def normalize_tags(cls, values: list[str]) -> list[str]:
+        cleaned: list[str] = []
+        for value in values:
+            tag = value.strip().lower()
+            if tag and tag not in cleaned:
+                cleaned.append(tag[:80])
+        return cleaned[:30]
+
+    @field_validator("confidence")
+    @classmethod
+    def validate_confidence(cls, values: dict[str, float]) -> dict[str, float]:
+        return {key[:80]: max(0.0, min(1.0, float(value))) for key, value in values.items()}
+
 
 # ── Session / Partner ────────────────────────────────────────────────────────
 
@@ -41,9 +56,9 @@ class SessionCreate(BaseModel):
     date: str                                       # ISO date YYYY-MM-DD
     time_start: str                                 # "HH:MM"
     time_end: str                                   # "HH:MM"
-    budget_inr: int = 4000
+    budget_inr: int = Field(default=4000, ge=0, le=100_000)
     start_area: str = "Alwarpet"
-    max_travel_minutes: int = 35
+    max_travel_minutes: int = Field(default=35, ge=1, le=180)
     surprise_mode: bool = False
     slots_enabled: list[SlotType] = Field(
         default_factory=lambda: [
@@ -55,10 +70,46 @@ class SessionCreate(BaseModel):
         ]
     )
 
+    @field_validator("date")
+    @classmethod
+    def valid_date(cls, value: str) -> str:
+        datetime.strptime(value, "%Y-%m-%d")
+        return value
+
+    @field_validator("time_start", "time_end")
+    @classmethod
+    def valid_time(cls, value: str) -> str:
+        datetime.strptime(value, "%H:%M")
+        return value
+
+    @field_validator("start_area")
+    @classmethod
+    def valid_area(cls, value: str) -> str:
+        value = value.strip()
+        if not value:
+            raise ValueError("start_area cannot be empty")
+        return value[:80]
+
+    @field_validator("slots_enabled")
+    @classmethod
+    def valid_slots(cls, values: list[SlotType]) -> list[SlotType]:
+        unique = list(dict.fromkeys(values))
+        if not unique:
+            raise ValueError("Select at least one date slot")
+        return unique
+
+    @model_validator(mode="after")
+    def valid_window(self):
+        start = datetime.strptime(self.time_start, "%H:%M")
+        end = datetime.strptime(self.time_end, "%H:%M")
+        if end <= start:
+            raise ValueError("time_end must be later than time_start")
+        return self
+
 
 class PartnerBLimits(BaseModel):
-    budget_inr: Optional[int] = None
-    max_travel_minutes: Optional[int] = None
+    budget_inr: Optional[int] = Field(default=None, ge=0, le=100_000)
+    max_travel_minutes: Optional[int] = Field(default=None, ge=1, le=180)
 
 
 class SessionDB(SQLModel, table=True):

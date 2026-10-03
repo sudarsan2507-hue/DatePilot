@@ -46,6 +46,9 @@ KNOWN_ACTIVITIES = [
     "sunset-walk", "beach-stroll", "paddle-boarding", "boating", "craft-walk"
 ]
 
+MAX_ARCHIVE_FILES = 2_000
+MAX_ARCHIVE_JSON_BYTES = 25 * 1024 * 1024
+
 
 def _harvest_strings(obj: Any, depth: int = 0) -> list[str]:
     """Recursively harvest string leaves from arbitrary JSON tree up to depth 8."""
@@ -77,11 +80,19 @@ def _extract_text_from_instagram_zip(data: bytes) -> str:
     texts: list[str] = []
     try:
         with zipfile.ZipFile(io.BytesIO(data)) as z:
-            for name in z.namelist():
+            infos = z.infolist()
+            if len(infos) > MAX_ARCHIVE_FILES:
+                return ""
+            json_bytes = 0
+            for info in infos:
+                name = info.filename
                 # Instagram export paths vary e.g. saved_posts.json, liked_posts.json, your_topics.json
-                if name.endswith(".json") and not name.startswith("__MACOSX"):
+                if name.lower().endswith(".json") and not name.startswith("__MACOSX"):
+                    json_bytes += info.file_size
+                    if json_bytes > MAX_ARCHIVE_JSON_BYTES or info.file_size > 5 * 1024 * 1024:
+                        continue
                     try:
-                        content = z.read(name)
+                        content = z.read(info)
                         parsed = json.loads(content)
                         texts.extend(_harvest_strings(parsed))
                     except Exception:

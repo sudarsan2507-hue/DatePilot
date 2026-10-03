@@ -83,9 +83,9 @@ def set_partner_b_limits(token_b: str, limits: PartnerBLimits):
         row = db.exec(select(SessionDB).where(SessionDB.token_b == token_b)).first()
         if not row:
             raise HTTPException(status_code=404, detail="Session not found")
-        if limits.budget_inr:
+        if limits.budget_inr is not None:
             row.budget_b_inr = limits.budget_inr
-        if limits.max_travel_minutes:
+        if limits.max_travel_minutes is not None:
             row.max_travel_min = min(row.max_travel_min, limits.max_travel_minutes)
         db.add(row)
         db.commit()

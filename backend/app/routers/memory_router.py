@@ -26,7 +26,7 @@ def rate_stop(token: str, feedback: StopFeedback):
 
     partner = "a" if row.token_a == token else "b"
     feedback.partner = partner
-    recorded = record_feedback(token, feedback)
+    recorded = record_feedback(row.token_a, feedback)
     return {"status": "recorded", "id": recorded.id, "rating": recorded.rating}
 
 
@@ -42,4 +42,4 @@ def get_insights(token: str):
     if not row:
         raise HTTPException(status_code=404, detail="Session not found")
 
-    return get_memory_insights(token)
+    return get_memory_insights(row.token_a)
