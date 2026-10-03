@@ -1,7 +1,7 @@
 """Pydantic / SQLModel schemas used across the DatePilot app."""
 from __future__ import annotations
 from typing import Optional, Dict, List, Any
-from datetime import datetime
+from datetime import datetime, timezone
 from enum import Enum
 from pydantic import BaseModel, Field
 from sqlmodel import SQLModel, Field as SField
@@ -78,7 +78,7 @@ class SessionDB(SQLModel, table=True):
     taste_a: Optional[str] = None       # JSON TasteCard
     taste_b: Optional[str] = None       # JSON TasteCard
     plan_json: Optional[str] = None     # JSON list[DatePlan]
-    created_at: datetime = SField(default_factory=datetime.utcnow)
+    created_at: datetime = SField(default_factory=lambda: datetime.now(timezone.utc))
 
 
 # ── Venue ────────────────────────────────────────────────────────────────────
@@ -150,4 +150,4 @@ class TasteMemoryDB(SQLModel, table=True):
     slot: str
     rating: int
     notes: Optional[str] = None
-    created_at: datetime = SField(default_factory=datetime.utcnow)
+    created_at: datetime = SField(default_factory=lambda: datetime.now(timezone.utc))

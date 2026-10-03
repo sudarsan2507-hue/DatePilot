@@ -1,0 +1,104 @@
+"""
+Tests for deterministic date planner, beam search, and constraint enforcement.
+"""
+import json
+import pytest
+from app.models.schema import SessionDB, TasteCard, SlotType
+from app.services.planner import (
+    plan_date,
+    build_rain_mode_plan,
+    load_venues,
+    haversine_km,
+    travel_minutes,
+    is_open,
+)
+
+
+def test_venues_dataset_integrity():
+    venues = load_venues()
+    assert len(venues) >= 30, "Venue dataset should contain at least 30 venues"
+    for v in venues:
+        assert v.lat > 12.0 and v.lat < 14.0, f"Lat out of Chennai bounds for {v.name}"
+        assert v.lng > 79.5 and v.lng < 81.0, f"Lng out of Chennai bounds for {v.name}"
+        assert v.avg_cost_for_two >= 0
+        assert v.type in list(SlotType)
+        assert len(v.open_hours) == 7
+
+
+def test_haversine_and_travel():
+    # Alwarpet to Besant Nagar (~6 km)
+    dist = haversine_km(13.0336, 80.2520, 12.9998, 80.2700)
+    assert 4.0 <= dist <= 8.0
+    time_min = travel_minutes(13.0336, 80.2520, 12.9998, 80.2700)
+    assert 10.0 <= time_min <= 40.0
+
+
+def test_plan_date_hard_constraints():
+    session = SessionDB(
+        token_a="test_a",
+        token_b="test_b",
+        date="2026-10-04",
+        time_start="12:00",
+        time_end="22:30",
+        budget_inr=5000,
+        start_area="Alwarpet",
+        max_travel_min=45,
+        surprise_mode=False,
+        slots_enabled=json.dumps(["lunch", "activity", "cafe", "sunset", "dinner"]),
+    )
+    taste_a = TasteCard(
+        cuisines=["south-indian", "continental"],
+        vibes=["romantic", "artsy"],
+        dietary_signals=["vegetarian"],
+        dislikes=["loud"],
+    )
+    taste_b = TasteCard(
+        cuisines=["continental", "cafe"],
+        vibes=["romantic", "quiet"],
+        dislikes=["crowded"],
+    )
+
+    plans = plan_date(session, taste_a, taste_b)
+    assert len(plans) > 0, "Should generate at least one valid plan"
+
+    top = plans[0]
+    # 1. Total cost <= budget
+    assert top.total_cost <= 5000
+    assert top.budget_remaining == 5000 - top.total_cost
+
+    # 2. Vegetarian constraint: all food stops must be veg_friendly
+    for stop in top.stops:
+        assert stop.venue.veg_friendly is True
+        # 3. Dislikes excluded
+        tags = [t.lower() for t in stop.venue.vibe_tags + stop.venue.cuisine_tags]
+        assert "loud" not in tags
+        assert "crowded" not in tags
+        # 4. Backup venue assigned
+        if stop.backup_venue:
+            assert stop.backup_venue.id != stop.venue.id
+
+
+def test_rain_mode_plan():
+    session = SessionDB(
+        token_a="test_a",
+        token_b="test_b",
+        date="2026-10-04",
+        time_start="12:00",
+        time_end="22:30",
+        budget_inr=6000,
+        start_area="Alwarpet",
+        max_travel_min=45,
+        surprise_mode=False,
+        slots_enabled=json.dumps(["lunch", "activity", "cafe", "sunset", "dinner"]),
+    )
+    taste_a = TasteCard(vibes=["romantic"])
+    taste_b = TasteCard(vibes=["romantic"])
+    plans = plan_date(session, taste_a, taste_b)
+    assert len(plans) > 0
+
+    rain_plan, note = build_rain_mode_plan(plans[0], "sunday")
+    assert rain_plan.rain_mode_active is True
+    assert len(note) > 0
+    # Every stop in rain plan should be indoor
+    for stop in rain_plan.stops:
+        assert stop.venue.indoor is True, f"Rain stop {stop.venue.name} should be indoor"

@@ -7,6 +7,7 @@ Supports:
 """
 import os
 import json
+import time
 import logging
 from typing import Any, Optional
 import httpx
@@ -19,16 +20,21 @@ OPENAI_API_KEY  = os.getenv("OPENAI_API_KEY", "")
 LLM_MODEL       = os.getenv("LLM_MODEL", "gemma3:4b")
 VISION_MODEL    = os.getenv("VISION_MODEL", "llava:7b")
 
+_last_ollama_fail: float = 0.0
+_last_openai_fail: float = 0.0
+
 
 async def chat(prompt: str, system: str = "", model: Optional[str] = None) -> str:
     """
     Send prompt to configured open-weight model endpoint.
     Falls back gracefully if endpoint is unreachable.
     """
+    global _last_ollama_fail, _last_openai_fail
+    now = time.time()
     m = model or LLM_MODEL
 
-    # 1. Try OpenAI-compatible endpoint if configured
-    if OPENAI_BASE_URL:
+    # 1. Try OpenAI-compatible endpoint if configured and not in cooldown
+    if OPENAI_BASE_URL and (now - _last_openai_fail > 30.0):
         headers = {"Authorization": f"Bearer {OPENAI_API_KEY}"} if OPENAI_API_KEY else {}
         messages = []
         if system:
@@ -36,7 +42,7 @@ async def chat(prompt: str, system: str = "", model: Optional[str] = None) -> st
         messages.append({"role": "user", "content": prompt})
 
         try:
-            async with httpx.AsyncClient(timeout=45.0) as client:
+            async with httpx.AsyncClient(timeout=10.0) as client:
                 r = await client.post(
                     f"{OPENAI_BASE_URL}/chat/completions",
                     headers=headers,
@@ -46,27 +52,30 @@ async def chat(prompt: str, system: str = "", model: Optional[str] = None) -> st
                     data = r.json()
                     return data["choices"][0]["message"]["content"]
         except Exception as e:
-            logger.warning(f"Hosted LLM endpoint error: {e}. Falling back to Ollama or local template.")
+            _last_openai_fail = time.time()
+            logger.warning(f"Hosted LLM endpoint error: {e}. Falling back.")
 
-    # 2. Try Ollama endpoint
-    payload = {
-        "model": m,
-        "messages": [
-            *([{"role": "system", "content": system}] if system else []),
-            {"role": "user", "content": prompt},
-        ],
-        "stream": False,
-        "options": {"temperature": 0.3},
-    }
+    # 2. Try Ollama endpoint if not in cooldown
+    if now - _last_ollama_fail > 30.0:
+        payload = {
+            "model": m,
+            "messages": [
+                *([{"role": "system", "content": system}] if system else []),
+                {"role": "user", "content": prompt},
+            ],
+            "stream": False,
+            "options": {"temperature": 0.3},
+        }
 
-    try:
-        timeout = httpx.Timeout(20.0, connect=2.0)
-        async with httpx.AsyncClient(timeout=timeout) as client:
-            r = await client.post(f"{OLLAMA_BASE_URL}/api/chat", json=payload)
-            if r.status_code == 200:
-                return r.json()["message"]["content"]
-    except Exception as e:
-        logger.info(f"Ollama endpoint at {OLLAMA_BASE_URL} not reachable: {e}. Utilizing built-in heuristic fallback.")
+        try:
+            timeout = httpx.Timeout(10.0, connect=1.0)
+            async with httpx.AsyncClient(timeout=timeout) as client:
+                r = await client.post(f"{OLLAMA_BASE_URL}/api/chat", json=payload)
+                if r.status_code == 200:
+                    return r.json()["message"]["content"]
+        except Exception as e:
+            _last_ollama_fail = time.time()
+            logger.info(f"Ollama endpoint at {OLLAMA_BASE_URL} not reachable: {e}. Activating fast heuristic fallback.")
 
     # 3. Graceful fallback
     return ""

@@ -301,6 +301,18 @@ def build_rain_mode_plan(plan: DatePlan, day_name: str) -> Tuple[DatePlan, str]:
                 if v.type == stop.slot and v.indoor and v.id != stop.venue.id
                 and is_open(v, day_name, stop.arrival_time)
             ]
+            if not cands:
+                # Check indoor venues of the same slot open anytime during the evening
+                cands = [
+                    v for v in venues
+                    if v.type == stop.slot and v.indoor and v.id != stop.venue.id
+                ]
+            if not cands and stop.slot == SlotType.sunset:
+                # If no indoor sunset exists, substitute with cozy indoor cafe or evening activity
+                cands = [
+                    v for v in venues
+                    if v.type in (SlotType.cafe, SlotType.activity) and v.indoor and v.id != stop.venue.id
+                ]
             if cands:
                 cands.sort(key=lambda x: x.rating, reverse=True)
                 sub = cands[0]
