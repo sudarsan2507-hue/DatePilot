@@ -162,6 +162,73 @@ def score_venue(venue: Venue, constraints: dict, slot: SlotType) -> float:
     return score
 
 
+def apply_venue_replacement(
+    session: SessionDB,
+    plan: DatePlan,
+    stop_index: int,
+    replacement: Venue,
+) -> DatePlan | None:
+    """Return a fully revalidated copy with one venue replaced, or None if infeasible."""
+    if stop_index < 0 or stop_index >= len(plan.stops):
+        return None
+    result = plan.model_copy(deep=True)
+    target = result.stops[stop_index]
+    if replacement.type != target.slot or replacement.id == target.venue.id:
+        return None
+
+    budget = min(session.budget_inr, session.budget_b_inr) if session.budget_b_inr else session.budget_inr
+    new_total = result.total_cost - target.cost + replacement.avg_cost_for_two
+    if new_total > budget:
+        return None
+
+    base_date = datetime.strptime(session.date, "%Y-%m-%d")
+    day_name = base_date.strftime("%A").lower()
+    session_end = datetime.combine(base_date.date(), datetime.strptime(session.time_end, "%H:%M").time())
+    if stop_index > 0:
+        previous = result.stops[stop_index - 1]
+        current_time = datetime.combine(base_date.date(), datetime.strptime(previous.departure_time, "%H:%M").time())
+        previous_coords = (previous.venue.lat, previous.venue.lng)
+    else:
+        current_time = datetime.combine(base_date.date(), datetime.strptime(session.time_start, "%H:%M").time())
+        previous_coords = CHENNAI_AREAS.get(session.start_area.strip().lower(), (13.0336, 80.2520))
+
+    for index in range(stop_index, len(result.stops)):
+        stop = result.stops[index]
+        venue = replacement if index == stop_index else stop.venue
+        leg = int(round(travel_minutes(previous_coords[0], previous_coords[1], venue.lat, venue.lng)))
+        if leg > session.max_travel_min:
+            return None
+        earliest_arrival = current_time + timedelta(minutes=leg)
+        duration = venue.typical_duration_min or DEFAULT_DURATIONS.get(stop.slot, 60)
+        visit = next_open_visit(venue, day_name, earliest_arrival, duration)
+        if not visit:
+            return None
+        arrival, departure = visit
+        if departure > session_end:
+            return None
+
+        stop.venue = venue
+        stop.cost = venue.avg_cost_for_two
+        stop.arrival_time = arrival.strftime("%H:%M")
+        stop.departure_time = departure.strftime("%H:%M")
+        stop.travel_from_prev_min = leg
+        stop.distance_from_prev_km = round(
+            haversine_km(previous_coords[0], previous_coords[1], venue.lat, venue.lng) * ROAD_FACTOR,
+            1,
+        )
+        if index == stop_index:
+            stop.why_picked = ""
+            stop.backup_venue = None
+        current_time = departure
+        previous_coords = (venue.lat, venue.lng)
+
+    result.total_cost = sum(stop.cost for stop in result.stops)
+    result.budget_remaining = budget - result.total_cost
+    result.total_travel_min = sum(stop.travel_from_prev_min for stop in result.stops)
+    result.constraints_ok = {"budget": True, "hours": True, "travel": True, "dietary": True}
+    return result
+
+
 def plan_date(
     session: SessionDB,
     taste_a: TasteCard,
@@ -204,10 +271,12 @@ def plan_date(
 
     # Build candidates per slot, sorted by score with budget tier diversity
     slot_cands: dict[SlotType, list[Venue]] = {}
+    slot_all_cands: dict[SlotType, list[Venue]] = {}
     for s in requested_slots:
         cands = [v for v in venues if is_candidate(v, s)]
         # Sort candidates: combine raw score with value
         cands.sort(key=lambda v: (score_venue(v, constraints, s), -v.avg_cost_for_two), reverse=True)
+        slot_all_cands[s] = cands
         # Keep top 6 candidates per slot to allow broad budget exploration
         slot_cands[s] = cands[:6] if cands else []
 
@@ -255,13 +324,6 @@ def plan_date(
                     valid = False
                     break
 
-                # Backup venue selection (next best open candidate for this slot)
-                backups = [
-                    b for b in slot_cands.get(slot, [])
-                    if b.id != venue.id and is_open(b, day_name, arrive_s, depart_t.strftime("%H:%M"))
-                ]
-                backup = backups[0] if backups else None
-
                 stops.append(PlannedStop(
                     slot=slot,
                     venue=venue,
@@ -270,7 +332,7 @@ def plan_date(
                     cost=venue.avg_cost_for_two,
                     travel_from_prev_min=int(round(travel_min)),
                     distance_from_prev_km=round(dist_km, 1),
-                    backup_venue=backup,
+                    backup_venue=None,
                 ))
                 cur_t = depart_t
                 prev_coords = (venue.lat, venue.lng)
@@ -315,13 +377,36 @@ def plan_date(
 
     # Score and rank plans: balance quality ratings + travel efficiency + budget reserve
     def plan_rank_score(p: DatePlan) -> float:
-        rating_sum = sum(s.venue.rating for s in p.stops)
+        quality_sum = sum(score_venue(s.venue, constraints, s.slot) for s in p.stops)
         travel_pen = p.total_travel_min * 0.04
         budget_bonus = min(2.5, p.budget_remaining / 800.0)
-        return rating_sum + budget_bonus - travel_pen
+        food_stops = [s for s in p.stops if s.slot in (SlotType.lunch, SlotType.cafe, SlotType.dinner)]
+        primary_cuisines = [s.venue.cuisine_tags[0].lower() for s in food_stops if s.venue.cuisine_tags]
+        variety_bonus = len(set(primary_cuisines)) * 0.7
+        repetition_penalty = (len(primary_cuisines) - len(set(primary_cuisines))) * 1.2
+        flexible_stops = sum(
+            1
+            for index, stop in enumerate(p.stops)
+            if any(
+                apply_venue_replacement(session, p, index, candidate)
+                for candidate in slot_all_cands.get(stop.slot, [])
+                if candidate.id != stop.venue.id
+            )
+        )
+        return quality_sum + budget_bonus + variety_bonus + flexible_stops * 2.0 - repetition_penalty - travel_pen
 
     plans.sort(key=plan_rank_score, reverse=True)
-    return plans[:3]
+    top_plans = plans[:3]
+
+    # Backups are real constraint-safe swaps, not merely similar venues.
+    for plan in top_plans:
+        for index, stop in enumerate(plan.stops):
+            ranked_alternatives = [v for v in slot_all_cands.get(stop.slot, []) if v.id != stop.venue.id]
+            for alternative in ranked_alternatives:
+                if apply_venue_replacement(session, plan, index, alternative):
+                    stop.backup_venue = alternative
+                    break
+    return top_plans
 
 
 def build_rain_mode_plan(plan: DatePlan, day_name: str) -> Tuple[DatePlan, str]:

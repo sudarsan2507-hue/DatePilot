@@ -23,6 +23,7 @@ from app.services.planner import (
     DEFAULT_DURATIONS,
     CHENNAI_AREAS,
     merge_constraints,
+    apply_venue_replacement,
 )
 from app.services.writer import write_why_picked, write_itinerary
 
@@ -149,12 +150,9 @@ async def swap_stop(token: str, plan_index: int, stop_index: int, apply: bool = 
     old_venue = target_stop.venue
     old_total_cost = plan.total_cost
     old_travel_total = plan.total_travel_min
-    budget_limit = min(row.budget_inr, row.budget_b_inr) if row.budget_b_inr else row.budget_inr
 
     # Find candidate substitutes for this slot (excluding current venue)
     venues = load_venues()
-    day_name = datetime.strptime(row.date, "%Y-%m-%d").strftime("%A").lower()
-
     raw_candidates = [
         v for v in venues
         if v.type == slot_to_swap and v.id != old_venue.id
@@ -162,88 +160,26 @@ async def swap_stop(token: str, plan_index: int, stop_index: int, apply: bool = 
         and (not any("veg" in d.lower() for d in constraints["dietary"]) or v.veg_friendly)
     ]
 
-    # Calculate travel from previous stop
-    prev_coords = (
-        (plan.stops[stop_index - 1].venue.lat, plan.stops[stop_index - 1].venue.lng)
-        if stop_index > 0
-        else CHENNAI_AREAS.get(row.start_area.strip().lower(), (13.0336, 80.2520))
-    )
-    base_date = datetime.strptime(row.date, "%Y-%m-%d")
-    if stop_index > 0:
-        cur_t = datetime.combine(base_date.date(), datetime.strptime(plan.stops[stop_index - 1].departure_time, "%H:%M").time())
-    else:
-        cur_t = datetime.combine(base_date.date(), datetime.strptime(row.time_start, "%H:%M").time())
-    session_end = datetime.strptime(row.time_end, "%H:%M")
-    session_end = datetime.combine(base_date.date(), session_end.time())
-
     feasible: list[tuple] = []
     for candidate in raw_candidates:
-        new_total = old_total_cost - target_stop.cost + candidate.avg_cost_for_two
-        if new_total > budget_limit:
-            continue
-
-        trial_t = cur_t
-        trial_coords = prev_coords
-        updated_suffix: list[tuple[int, int, float, datetime, datetime]] = []
-        valid = True
-        for index in range(stop_index, len(plan.stops)):
-            venue = candidate if index == stop_index else plan.stops[index].venue
-            leg_minutes = int(round(travel_minutes(trial_coords[0], trial_coords[1], venue.lat, venue.lng)))
-            if leg_minutes > row.max_travel_min:
-                valid = False
-                break
-            arrival_dt = trial_t + timedelta(minutes=leg_minutes)
-            duration = venue.typical_duration_min or DEFAULT_DURATIONS.get(plan.stops[index].slot, 60)
-            departure_dt = arrival_dt + timedelta(minutes=duration)
-            if departure_dt > session_end or not is_open(
-                venue, day_name, arrival_dt.strftime("%H:%M"), departure_dt.strftime("%H:%M")
-            ):
-                valid = False
-                break
-            distance = round(haversine_km(trial_coords[0], trial_coords[1], venue.lat, venue.lng) * ROAD_FACTOR, 1)
-            updated_suffix.append((index, leg_minutes, distance, arrival_dt, departure_dt))
-            trial_t = departure_dt
-            trial_coords = (venue.lat, venue.lng)
-
-        if valid:
-            feasible.append((candidate, updated_suffix))
+        replacement_plan = apply_venue_replacement(row, plan, stop_index, candidate)
+        if replacement_plan:
+            feasible.append((candidate, replacement_plan))
 
     if not feasible:
         raise HTTPException(status_code=422, detail="No alternative can preserve the schedule, budget, hours, and travel limits")
 
     feasible.sort(
-        key=lambda item: (score_venue(item[0], constraints, slot_to_swap), -sum(leg[1] for leg in item[1])),
+        key=lambda item: (score_venue(item[0], constraints, slot_to_swap), -item[1].total_travel_min),
         reverse=True,
     )
-    best_substitute, updated_suffix = feasible[0]
-    _, new_travel_min, new_dist_km, arrival_dt, departure_dt = updated_suffix[0]
-    departure_time = departure_dt.strftime("%H:%M")
+    best_substitute, replacement_plan = feasible[0]
     backup_venue = feasible[1][0] if len(feasible) > 1 else None
-
-    new_stop = PlannedStop(
-        slot=slot_to_swap,
-        venue=best_substitute,
-        arrival_time=arrival_dt.strftime("%H:%M"),
-        departure_time=departure_time,
-        cost=best_substitute.avg_cost_for_two,
-        travel_from_prev_min=new_travel_min,
-        distance_from_prev_km=new_dist_km,
-        backup_venue=backup_venue,
-    )
+    new_stop = replacement_plan.stops[stop_index]
+    new_stop.backup_venue = backup_venue
     new_stop.why_picked = await write_why_picked(new_stop, plan.matched_vibes, plan.matched_cuisines)
-
-    # Update plan
+    plan = replacement_plan
     plan.stops[stop_index] = new_stop
-    for index, leg_minutes, distance, new_arrival, new_departure in updated_suffix[1:]:
-        downstream = plan.stops[index]
-        downstream.travel_from_prev_min = leg_minutes
-        downstream.distance_from_prev_km = distance
-        downstream.arrival_time = new_arrival.strftime("%H:%M")
-        downstream.departure_time = new_departure.strftime("%H:%M")
-    plan.total_cost = sum(s.cost for s in plan.stops)
-    plan.budget_remaining = budget_limit - plan.total_cost
-    plan.total_travel_min = sum(s.travel_from_prev_min for s in plan.stops)
-    plan.constraints_ok = {"budget": True, "hours": True, "travel": True, "dietary": True}
 
     if apply:
         plans_raw[plan_index] = plan.model_dump()

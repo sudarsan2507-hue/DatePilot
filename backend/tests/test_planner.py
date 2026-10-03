@@ -11,6 +11,7 @@ from app.services.planner import (
     haversine_km,
     travel_minutes,
     is_open,
+    apply_venue_replacement,
 )
 
 
@@ -86,7 +87,7 @@ def test_plan_date_hard_constraints():
     assert top.budget_remaining == 5000 - top.total_cost
 
     # 2. Vegetarian constraint: all food stops must be veg_friendly
-    for stop in top.stops:
+    for index, stop in enumerate(top.stops):
         assert stop.venue.veg_friendly is True
         # 3. Dislikes excluded
         tags = [t.lower() for t in stop.venue.vibe_tags + stop.venue.cuisine_tags]
@@ -95,6 +96,7 @@ def test_plan_date_hard_constraints():
         # 4. Backup venue assigned
         if stop.backup_venue:
             assert stop.backup_venue.id != stop.venue.id
+            assert apply_venue_replacement(session, top, index, stop.backup_venue) is not None
 
 
 def test_rain_mode_plan():

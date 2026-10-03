@@ -169,7 +169,7 @@ export default function ItineraryViewer({
                           <strong className="text-warm-700">Backup:</strong> {stop.backup_venue.name} ({stop.backup_venue.area})
                         </span>
                       ) : (
-                        <span className="italic">No alternatives needed</span>
+                        <span className="italic">No constraint-safe backup for this stop</span>
                       )}
                     </div>
 
