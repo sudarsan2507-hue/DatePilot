@@ -1,6 +1,8 @@
 # DatePilot / DateOptimizer
 
-DatePilot builds a real, constraint-checked Chennai date for two people. Each partner submits preferences privately; the application reveals only their overlap. An open-weight model extracts taste and writes explanations, while deterministic Python enforces budget, opening hours, dietary rules, travel limits, and the requested time window.
+DatePilot builds a real, constraint-checked Tamil Nadu date for two people. Partner A chooses a supported city and starting locality; each partner then submits preferences privately, and the application reveals only their overlap. An open-weight model extracts taste and writes explanations, while deterministic Python enforces city boundaries, budget, opening hours, dietary rules, travel limits, and the requested time window.
+
+The launch dataset supports Chennai, Coimbatore, and Madurai. Every venue is tagged by city so plans, backups, swaps, and rain alternatives cannot cross city boundaries. More Tamil Nadu cities can be added by extending the locality map and curated venue data.
 
 ## Run locally
 

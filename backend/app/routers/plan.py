@@ -21,7 +21,6 @@ from app.services.planner import (
     is_open,
     ROAD_FACTOR,
     DEFAULT_DURATIONS,
-    CHENNAI_AREAS,
     merge_constraints,
     apply_venue_replacement,
 )
@@ -38,7 +37,7 @@ def _surprise_is_hidden(row: SessionDB, token: str) -> bool:
     return datetime.now(IST) < reveal_at
 
 
-def _redact_surprise_plans(plans: list[dict]) -> list[dict]:
+def _redact_surprise_plans(plans: list[dict], city: str) -> list[dict]:
     redacted = json.loads(json.dumps(plans))
     for plan in redacted:
         plan["itinerary_text"] = "Your partner has kept the venues as a surprise. Times, cost, and constraints are ready."
@@ -46,7 +45,8 @@ def _redact_surprise_plans(plans: list[dict]) -> list[dict]:
             venue = stop["venue"]
             venue.update({
                 "name": f"Surprise {stop['slot'].title()}",
-                "area": "Chennai",
+                "city": city,
+                "area": city,
                 "lat": 0.0,
                 "lng": 0.0,
                 "cuisine_tags": [],
@@ -113,7 +113,7 @@ def get_plan(token: str):
     if not row or not row.plan_json:
         raise HTTPException(status_code=404, detail="No plan generated yet")
     plans = json.loads(row.plan_json)
-    return _redact_surprise_plans(plans) if _surprise_is_hidden(row, token) else plans
+    return _redact_surprise_plans(plans, row.city) if _surprise_is_hidden(row, token) else plans
 
 
 @router.post("/{token}/swap/{plan_index}/{stop_index}")
@@ -152,7 +152,7 @@ async def swap_stop(token: str, plan_index: int, stop_index: int, apply: bool = 
     old_travel_total = plan.total_travel_min
 
     # Find candidate substitutes for this slot (excluding current venue)
-    venues = load_venues()
+    venues = [v for v in load_venues() if v.city.lower() == row.city.lower()]
     raw_candidates = [
         v for v in venues
         if v.type == slot_to_swap and v.id != old_venue.id

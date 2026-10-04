@@ -35,6 +35,18 @@ def test_rejects_invalid_session_window_and_upload_type():
     })
     assert invalid.status_code == 422
 
+    unsupported_city = client.post("/sessions/", json={
+        "date": "2026-10-04",
+        "time_start": "12:00",
+        "time_end": "22:00",
+        "budget_inr": 5000,
+        "city": "Bengaluru",
+        "start_area": "Indiranagar",
+        "max_travel_minutes": 45,
+        "slots_enabled": ["lunch", "dinner"],
+    })
+    assert unsupported_city.status_code == 422
+
     created = client.post("/sessions/", json={
         "date": "2026-10-04",
         "time_start": "12:00",
@@ -58,6 +70,7 @@ def test_full_date_pilot_flow():
         "time_start": "12:00",
         "time_end": "22:30",
         "budget_inr": 5000,
+        "city": "Chennai",
         "start_area": "Alwarpet",
         "max_travel_minutes": 45,
         "surprise_mode": False,
@@ -73,6 +86,7 @@ def test_full_date_pilot_flow():
     res_b = client.get(f"/sessions/{token_b}")
     assert res_b.status_code == 200
     assert res_b.json()["partner"] == "b"
+    assert res_b.json()["city"] == "Chennai"
     assert res_b.json()["budget_inr"] == 5000
 
     private_limits = client.post(

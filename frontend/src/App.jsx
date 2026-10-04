@@ -262,7 +262,7 @@ export default function App() {
                 DatePilot
               </h1>
               <span className="text-[10px] text-warm-500 uppercase tracking-widest block font-medium">
-                Chennai AI Date Optimizer
+                Tamil Nadu AI Date Optimizer
               </span>
             </div>
           </div>

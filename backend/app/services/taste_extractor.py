@@ -12,7 +12,7 @@ from typing import Any, Dict, List, Optional
 from app.llm import chat_json, chat_vision
 from app.models.schema import TasteCard, PriceComfort
 
-SYSTEM_TASTE = """You extract taste signals from social text/image data for date planning in Chennai, India.
+SYSTEM_TASTE = """You extract taste signals from social text/image data for date planning in Tamil Nadu, India.
 Output ONLY a valid JSON object matching the TasteCard schema:
 {
   "cuisines": ["italian", "cafe", "south-indian"],
@@ -173,7 +173,7 @@ async def taste_from_export(file_bytes: bytes, filename: str) -> TasteCard:
     if not text.strip():
         return _extract_heuristic_taste("aesthetic quiet cafe sunset romantic")
 
-    prompt = f"""Extract date preferences in Chennai from this Instagram export data:
+    prompt = f"""Extract date preferences for a Tamil Nadu date from this Instagram export data:
 ---
 {text[:4500]}
 ---
@@ -191,7 +191,7 @@ Return valid JSON only matching TasteCard."""
 
 async def taste_from_image(image_bytes: bytes) -> TasteCard:
     """Extract TasteCard from screenshot via vision model or fallback."""
-    prompt = """Analyze this saved post / aesthetic screenshot. Extract date vibe, cuisine signals, and activities in Chennai.
+    prompt = """Analyze this saved post / aesthetic screenshot. Extract date vibe, cuisine signals, and activities for Tamil Nadu.
 Return JSON with keys: cuisines, dietary_signals, vibes, activities, dislikes, price_comfort, confidence."""
 
     raw_text = await chat_vision(image_bytes, prompt)

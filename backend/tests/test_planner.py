@@ -17,13 +17,37 @@ from app.services.planner import (
 
 def test_venues_dataset_integrity():
     venues = load_venues()
-    assert len(venues) >= 30, "Venue dataset should contain at least 30 venues"
+    assert len(venues) >= 50, "Multi-city venue dataset should contain at least 50 venues"
+    assert {v.city for v in venues} == {"Chennai", "Coimbatore", "Madurai"}
     for v in venues:
-        assert v.lat > 12.0 and v.lat < 14.0, f"Lat out of Chennai bounds for {v.name}"
-        assert v.lng > 79.5 and v.lng < 81.0, f"Lng out of Chennai bounds for {v.name}"
+        assert 8.0 < v.lat < 14.0, f"Lat out of Tamil Nadu bounds for {v.name}"
+        assert 76.0 < v.lng < 81.0, f"Lng out of Tamil Nadu bounds for {v.name}"
         assert v.avg_cost_for_two >= 0
         assert v.type in list(SlotType)
         assert len(v.open_hours) == 7
+
+
+@pytest.mark.parametrize(("city", "area"), [
+    ("Chennai", "Alwarpet"),
+    ("Coimbatore", "R.S. Puram"),
+    ("Madurai", "Anna Nagar"),
+])
+def test_plans_stay_inside_selected_city(city, area):
+    session = SessionDB(
+        token_a=f"{city}-a", token_b=f"{city}-b", city=city,
+        date="2026-10-05", time_start="12:00", time_end="22:30",
+        budget_inr=6500, start_area=area, max_travel_min=45,
+        surprise_mode=False,
+        slots_enabled=json.dumps(["lunch", "activity", "cafe", "sunset", "dinner"]),
+    )
+    plans = plan_date(session, TasteCard(vibes=["romantic"]), TasteCard(vibes=["romantic"]))
+
+    assert plans, f"Expected a complete or adapted plan for {city}"
+    assert all(stop.venue.city == city for plan in plans for stop in plan.stops)
+    assert all(
+        not stop.backup_venue or stop.backup_venue.city == city
+        for plan in plans for stop in plan.stops
+    )
 
 
 def test_haversine_and_travel():

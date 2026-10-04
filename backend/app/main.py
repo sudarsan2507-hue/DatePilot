@@ -16,7 +16,7 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="DatePilot — AI Date Optimizer for Chennai",
+    title="DatePilot — AI Date Optimizer for Tamil Nadu",
     version="0.1.0",
     lifespan=lifespan,
 )

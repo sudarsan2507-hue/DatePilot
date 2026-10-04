@@ -754,5 +754,145 @@
     "rating": 4.5,
     "source_url": "https://maps.google.com/?cid=basilwithatwist",
     "last_verified": "2024-12-15"
+  },
+  {
+    "id": "cbe-01", "name": "Sree Annapoorna - R.S. Puram", "type": "lunch", "city": "Coimbatore", "area": "R.S. Puram",
+    "lat": 11.0067, "lng": 76.9502, "avg_cost_for_two": 500, "typical_duration_min": 60,
+    "open_hours": {"monday":"07:00-22:30","tuesday":"07:00-22:30","wednesday":"07:00-22:30","thursday":"07:00-22:30","friday":"07:00-22:30","saturday":"07:00-22:30","sunday":"07:00-22:30"},
+    "cuisine_tags": ["south-indian","vegetarian","dosa","meals"], "vibe_tags": ["local","classic","casual"],
+    "veg_friendly": true, "indoor": true, "rating": 4.5, "source_url": "https://www.sreeannapoorna.com/pages/restaurants", "last_verified": "2026-10-04"
+  },
+  {
+    "id": "cbe-02", "name": "Sree Annapoorna - Peoples Park", "type": "lunch", "city": "Coimbatore", "area": "Gandhipuram",
+    "lat": 11.0180, "lng": 76.9670, "avg_cost_for_two": 550, "typical_duration_min": 60,
+    "open_hours": {"monday":"07:00-22:30","tuesday":"07:00-22:30","wednesday":"07:00-22:30","thursday":"07:00-22:30","friday":"07:00-22:30","saturday":"07:00-22:30","sunday":"07:00-22:30"},
+    "cuisine_tags": ["south-indian","vegetarian","tiffin","meals"], "vibe_tags": ["local","bright","casual"],
+    "veg_friendly": true, "indoor": true, "rating": 4.4, "source_url": "https://www.sreeannapoorna.com/pages/restaurants", "last_verified": "2026-10-04"
+  },
+  {
+    "id": "cbe-03", "name": "Gedee Car Museum", "type": "activity", "city": "Coimbatore", "area": "Race Course",
+    "lat": 11.0018, "lng": 76.9810, "avg_cost_for_two": 400, "typical_duration_min": 75,
+    "open_hours": {"monday":"09:00-18:30","tuesday":"09:00-18:30","wednesday":"09:00-18:30","thursday":"09:00-18:30","friday":"09:00-18:30","saturday":"09:00-18:30","sunday":"09:00-18:30"},
+    "cuisine_tags": [], "vibe_tags": ["museum","retro","curious","indoor"],
+    "veg_friendly": true, "indoor": true, "rating": 4.6, "source_url": "https://gedeecarmuseum.com/explore/", "last_verified": "2026-10-04"
+  },
+  {
+    "id": "cbe-04", "name": "Tamil Nadu Police Museum", "type": "activity", "city": "Coimbatore", "area": "Gandhipuram",
+    "lat": 11.0176, "lng": 76.9634, "avg_cost_for_two": 100, "typical_duration_min": 60,
+    "open_hours": {"monday":"10:00-17:30","tuesday":"10:00-17:30","wednesday":"10:00-17:30","thursday":"10:00-17:30","friday":"10:00-17:30","saturday":"10:00-17:30","sunday":"10:00-17:30"},
+    "cuisine_tags": [], "vibe_tags": ["museum","history","quiet","indoor"],
+    "veg_friendly": true, "indoor": true, "rating": 4.5, "source_url": "https://coimbatore.nic.in/tourist-places/", "last_verified": "2026-10-04"
+  },
+  {
+    "id": "cbe-05", "name": "The French Door Cafe & Restaurant", "type": "cafe", "city": "Coimbatore", "area": "R.S. Puram",
+    "lat": 11.0088, "lng": 76.9495, "avg_cost_for_two": 1000, "typical_duration_min": 55,
+    "open_hours": {"monday":"11:00-22:30","tuesday":"11:00-22:30","wednesday":"11:00-22:30","thursday":"11:00-22:30","friday":"11:00-22:30","saturday":"11:00-22:30","sunday":"11:00-22:30"},
+    "cuisine_tags": ["cafe","continental","desserts","coffee"], "vibe_tags": ["romantic","garden","cozy","aesthetic"],
+    "veg_friendly": true, "indoor": true, "rating": 4.3, "source_url": "https://www.google.com/maps/search/?api=1&query=The+French+Door+Cafe+Coimbatore", "last_verified": "2026-10-04"
+  },
+  {
+    "id": "cbe-06", "name": "Cafe Totaram", "type": "cafe", "city": "Coimbatore", "area": "Race Course",
+    "lat": 11.0015, "lng": 76.9778, "avg_cost_for_two": 800, "typical_duration_min": 50,
+    "open_hours": {"monday":"10:00-22:30","tuesday":"10:00-22:30","wednesday":"10:00-22:30","thursday":"10:00-22:30","friday":"10:00-22:30","saturday":"10:00-22:30","sunday":"10:00-22:30"},
+    "cuisine_tags": ["cafe","coffee","desserts","snacks"], "vibe_tags": ["cozy","artsy","quiet","casual"],
+    "veg_friendly": true, "indoor": true, "rating": 4.3, "source_url": "https://www.google.com/maps/search/?api=1&query=Cafe+Totaram+Coimbatore", "last_verified": "2026-10-04"
+  },
+  {
+    "id": "cbe-07", "name": "Ukkadam Valankulam Lake Walk", "type": "sunset", "city": "Coimbatore", "area": "Ukkadam",
+    "lat": 10.9944, "lng": 76.9704, "avg_cost_for_two": 0, "typical_duration_min": 45,
+    "open_hours": {"monday":"06:00-21:00","tuesday":"06:00-21:00","wednesday":"06:00-21:00","thursday":"06:00-21:00","friday":"06:00-21:00","saturday":"06:00-21:00","sunday":"06:00-21:00"},
+    "cuisine_tags": [], "vibe_tags": ["outdoors","lake","sunset","walk","free"],
+    "veg_friendly": true, "indoor": false, "rating": 4.4, "source_url": "https://www.google.com/maps/search/?api=1&query=Ukkadam+Valankulam+Lake", "last_verified": "2026-10-04"
+  },
+  {
+    "id": "cbe-08", "name": "Race Course Evening Walk", "type": "sunset", "city": "Coimbatore", "area": "Race Course",
+    "lat": 11.0012, "lng": 76.9770, "avg_cost_for_two": 0, "typical_duration_min": 40,
+    "open_hours": {"monday":"05:00-22:00","tuesday":"05:00-22:00","wednesday":"05:00-22:00","thursday":"05:00-22:00","friday":"05:00-22:00","saturday":"05:00-22:00","sunday":"05:00-22:00"},
+    "cuisine_tags": [], "vibe_tags": ["outdoors","walk","city-lights","free"],
+    "veg_friendly": true, "indoor": false, "rating": 4.4, "source_url": "https://www.google.com/maps/search/?api=1&query=Race+Course+Coimbatore", "last_verified": "2026-10-04"
+  },
+  {
+    "id": "cbe-09", "name": "Pavilion - The Residency Towers", "type": "dinner", "city": "Coimbatore", "area": "Race Course",
+    "lat": 11.0060, "lng": 76.9820, "avg_cost_for_two": 2200, "typical_duration_min": 75,
+    "open_hours": {"monday":"19:00-23:00","tuesday":"19:00-23:00","wednesday":"19:00-23:00","thursday":"19:00-23:00","friday":"19:00-23:00","saturday":"19:00-23:00","sunday":"19:00-23:00"},
+    "cuisine_tags": ["multi-cuisine","indian","continental","buffet"], "vibe_tags": ["elegant","romantic","fine-dining","indoor"],
+    "veg_friendly": true, "indoor": true, "rating": 4.5, "source_url": "https://www.theresidency.com/towers-coimbatore/dining-options-in-coimbatore.html", "last_verified": "2026-10-04"
+  },
+  {
+    "id": "cbe-10", "name": "That's Y Food", "type": "dinner", "city": "Coimbatore", "area": "R.S. Puram",
+    "lat": 11.0092, "lng": 76.9512, "avg_cost_for_two": 1500, "typical_duration_min": 75,
+    "open_hours": {"monday":"19:00-23:00","tuesday":"19:00-23:00","wednesday":"19:00-23:00","thursday":"19:00-23:00","friday":"19:00-23:00","saturday":"19:00-23:00","sunday":"19:00-23:00"},
+    "cuisine_tags": ["indian","continental","asian","desserts"], "vibe_tags": ["romantic","cozy","modern","indoor"],
+    "veg_friendly": true, "indoor": true, "rating": 4.3, "source_url": "https://www.google.com/maps/search/?api=1&query=Thats+Y+Food+Coimbatore", "last_verified": "2026-10-04"
+  },
+  {
+    "id": "mdu-01", "name": "Murugan Idli Shop - West Masi Street", "type": "lunch", "city": "Madurai", "area": "Town Hall Road",
+    "lat": 9.9175, "lng": 78.1138, "avg_cost_for_two": 450, "typical_duration_min": 55,
+    "open_hours": {"monday":"07:00-23:00","tuesday":"07:00-23:00","wednesday":"07:00-23:00","thursday":"07:00-23:00","friday":"07:00-23:00","saturday":"07:00-23:00","sunday":"07:00-23:00"},
+    "cuisine_tags": ["south-indian","vegetarian","idli","dosa"], "vibe_tags": ["iconic","local","casual"],
+    "veg_friendly": true, "indoor": true, "rating": 4.4, "source_url": "https://www.google.com/maps/search/?api=1&query=Murugan+Idli+Shop+West+Masi+Street+Madurai", "last_verified": "2026-10-04"
+  },
+  {
+    "id": "mdu-02", "name": "Sree Sabarees", "type": "lunch", "city": "Madurai", "area": "Town Hall Road",
+    "lat": 9.9162, "lng": 78.1157, "avg_cost_for_two": 500, "typical_duration_min": 60,
+    "open_hours": {"monday":"06:30-22:30","tuesday":"06:30-22:30","wednesday":"06:30-22:30","thursday":"06:30-22:30","friday":"06:30-22:30","saturday":"06:30-22:30","sunday":"06:30-22:30"},
+    "cuisine_tags": ["south-indian","vegetarian","meals","tiffin"], "vibe_tags": ["local","family","casual"],
+    "veg_friendly": true, "indoor": true, "rating": 4.4, "source_url": "https://www.google.com/maps/search/?api=1&query=Sree+Sabarees+Madurai", "last_verified": "2026-10-04"
+  },
+  {
+    "id": "mdu-03", "name": "Gandhi Memorial Museum", "type": "activity", "city": "Madurai", "area": "Goripalayam",
+    "lat": 9.9383, "lng": 78.1387, "avg_cost_for_two": 0, "typical_duration_min": 75,
+    "open_hours": {"monday":"10:00-17:00","tuesday":"10:00-17:00","wednesday":"10:00-17:00","thursday":"10:00-17:00","friday":"10:00-17:00","saturday":"10:00-17:00","sunday":"closed"},
+    "cuisine_tags": [], "vibe_tags": ["museum","history","quiet","indoor"],
+    "veg_friendly": true, "indoor": true, "rating": 4.5, "source_url": "https://gandhimmm.org/", "last_verified": "2026-10-04"
+  },
+  {
+    "id": "mdu-04", "name": "Thirumalai Nayakkar Palace", "type": "activity", "city": "Madurai", "area": "Town Hall Road",
+    "lat": 9.9153, "lng": 78.1246, "avg_cost_for_two": 120, "typical_duration_min": 70,
+    "open_hours": {"monday":"09:00-17:00","tuesday":"09:00-17:00","wednesday":"09:00-17:00","thursday":"09:00-17:00","friday":"09:00-17:00","saturday":"09:00-17:00","sunday":"09:00-17:00"},
+    "cuisine_tags": [], "vibe_tags": ["heritage","architecture","artsy","history"],
+    "veg_friendly": true, "indoor": true, "rating": 4.4, "source_url": "https://madurai.nic.in/tourist-place/thirumalai-nayak-palace/", "last_verified": "2026-10-04"
+  },
+  {
+    "id": "mdu-05", "name": "MLounge - Courtyard Madurai", "type": "cafe", "city": "Madurai", "area": "KK Nagar",
+    "lat": 9.9350, "lng": 78.1428, "avg_cost_for_two": 1100, "typical_duration_min": 50,
+    "open_hours": {"monday":"08:00-23:00","tuesday":"08:00-23:00","wednesday":"08:00-23:00","thursday":"08:00-23:00","friday":"08:00-23:00","saturday":"08:00-23:00","sunday":"08:00-23:00"},
+    "cuisine_tags": ["cafe","coffee","pastries","sandwiches"], "vibe_tags": ["quiet","modern","cozy","indoor"],
+    "veg_friendly": true, "indoor": true, "rating": 4.5, "source_url": "https://www.marriott.com/en-us/hotels/ixmcy-courtyard-madurai/dining/", "last_verified": "2026-10-04"
+  },
+  {
+    "id": "mdu-06", "name": "Famous Jigarthanda - East Marret Street", "type": "cafe", "city": "Madurai", "area": "Town Hall Road",
+    "lat": 9.9168, "lng": 78.1210, "avg_cost_for_two": 250, "typical_duration_min": 40,
+    "open_hours": {"monday":"10:00-23:00","tuesday":"10:00-23:00","wednesday":"10:00-23:00","thursday":"10:00-23:00","friday":"10:00-23:00","saturday":"10:00-23:00","sunday":"10:00-23:00"},
+    "cuisine_tags": ["desserts","jigarthanda","local","drinks"], "vibe_tags": ["iconic","local","casual"],
+    "veg_friendly": true, "indoor": true, "rating": 4.4, "source_url": "https://www.google.com/maps/search/?api=1&query=Famous+Jigarthanda+East+Marret+Street+Madurai", "last_verified": "2026-10-04"
+  },
+  {
+    "id": "mdu-07", "name": "Vandiyur Mariamman Teppakulam Walk", "type": "sunset", "city": "Madurai", "area": "Vandiyur",
+    "lat": 9.9103, "lng": 78.1488, "avg_cost_for_two": 0, "typical_duration_min": 45,
+    "open_hours": {"monday":"06:00-21:00","tuesday":"06:00-21:00","wednesday":"06:00-21:00","thursday":"06:00-21:00","friday":"06:00-21:00","saturday":"06:00-21:00","sunday":"06:00-21:00"},
+    "cuisine_tags": [], "vibe_tags": ["outdoors","heritage","sunset","walk","free"],
+    "veg_friendly": true, "indoor": false, "rating": 4.5, "source_url": "https://madurai.nic.in/tourist-place/mariamman-teppakulam/", "last_verified": "2026-10-04"
+  },
+  {
+    "id": "mdu-08", "name": "Madurai Corporation Eco Park", "type": "sunset", "city": "Madurai", "area": "KK Nagar",
+    "lat": 9.9367, "lng": 78.1451, "avg_cost_for_two": 60, "typical_duration_min": 45,
+    "open_hours": {"monday":"16:00-21:00","tuesday":"16:00-21:00","wednesday":"16:00-21:00","thursday":"16:00-21:00","friday":"16:00-21:00","saturday":"16:00-21:00","sunday":"16:00-21:00"},
+    "cuisine_tags": [], "vibe_tags": ["outdoors","garden","walk","relaxed"],
+    "veg_friendly": true, "indoor": false, "rating": 4.1, "source_url": "https://www.google.com/maps/search/?api=1&query=Madurai+Corporation+Eco+Park", "last_verified": "2026-10-04"
+  },
+  {
+    "id": "mdu-09", "name": "Madurai Kitchen - Courtyard Madurai", "type": "dinner", "city": "Madurai", "area": "KK Nagar",
+    "lat": 9.9350, "lng": 78.1428, "avg_cost_for_two": 2200, "typical_duration_min": 75,
+    "open_hours": {"monday":"18:30-23:00","tuesday":"18:30-23:00","wednesday":"18:30-23:00","thursday":"18:30-23:00","friday":"18:30-23:00","saturday":"18:30-23:00","sunday":"18:30-23:00"},
+    "cuisine_tags": ["south-indian","multi-cuisine","international","local"], "vibe_tags": ["elegant","romantic","modern","indoor"],
+    "veg_friendly": true, "indoor": true, "rating": 4.5, "source_url": "https://www.marriott.com/en-us/hotels/ixmcy-courtyard-madurai/dining/", "last_verified": "2026-10-04"
+  },
+  {
+    "id": "mdu-10", "name": "Phil's Bistro", "type": "dinner", "city": "Madurai", "area": "KK Nagar",
+    "lat": 9.9312, "lng": 78.1452, "avg_cost_for_two": 1200, "typical_duration_min": 75,
+    "open_hours": {"monday":"18:00-23:00","tuesday":"18:00-23:00","wednesday":"18:00-23:00","thursday":"18:00-23:00","friday":"18:00-23:00","saturday":"18:00-23:00","sunday":"18:00-23:00"},
+    "cuisine_tags": ["italian","continental","pizza","pasta"], "vibe_tags": ["cozy","casual","modern","indoor"],
+    "veg_friendly": true, "indoor": true, "rating": 4.3, "source_url": "https://www.marriott.com/en-us/hotels/ixmcy-courtyard-madurai/dining/", "last_verified": "2026-10-04"
   }
 ]

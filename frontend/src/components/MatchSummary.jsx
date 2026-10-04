@@ -94,7 +94,7 @@ export default function MatchSummary({
             ))}
             {(!summary.shared_cuisines || summary.shared_cuisines.length === 0) && (
               <span className="text-xs text-warm-500 italic">
-                Curated Chennai fusion & bistros
+                Curated local favorites and complementary flavors
               </span>
             )}
           </div>

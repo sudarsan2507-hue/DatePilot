@@ -233,10 +233,10 @@ export default function ItineraryViewer({
               <span className="text-[10px] text-amber-700">Deep link only (no payments)</span>
             </div>
             <p className="text-[11px] text-warm-600 mb-2">
-              Extend your date with a seaside view at <strong>Taj Fisherman's Cove Resort & Spa</strong> (Covelong Beach, ECR) or <strong>The Leela Palace Chennai</strong> (MRC Nagar).
+              Extend your date with a stay near your final stop in <strong>{plan.stops?.[0]?.venue?.city || 'Tamil Nadu'}</strong>. Browse current options and choose what fits your comfort and budget.
             </p>
             <a
-              href="https://www.google.com/travel/hotels/chennai"
+              href={`https://www.google.com/travel/hotels/${encodeURIComponent(plan.stops?.[0]?.venue?.city || 'Tamil Nadu')}`}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-block px-3 py-1 bg-amber-600 hover:bg-amber-700 text-white font-medium rounded-lg text-[10px]"

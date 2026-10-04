@@ -54,7 +54,8 @@ async def write_itinerary(plan: DatePlan) -> str:
         f"- {s.arrival_time} {s.venue.name} ({s.slot.value}): ₹{s.cost}, {s.travel_from_prev_min} min travel"
         for s in plan.stops
     )
-    prompt = f"""Write a warm, romantic date itinerary in 3–4 sentences for a couple exploring Chennai.
+    city = plan.stops[0].venue.city if plan.stops else "Tamil Nadu"
+    prompt = f"""Write a warm, romantic date itinerary in 3–4 sentences for a couple exploring {city}, Tamil Nadu.
 Use ONLY these exact facts:
 {stops_summary}
 Total budget spent: ₹{plan.total_cost}. Budget remaining: ₹{plan.budget_remaining}. Total travel: {plan.total_travel_min} mins.
@@ -77,7 +78,7 @@ Do NOT invent places, prices, or times."""
     first = plan.stops[0]
     last = plan.stops[-1]
     lines = [
-        f"Your Chennai date begins at {first.arrival_time} with {first.slot.value} at {first.venue.name} ({first.venue.area}).",
+        f"Your {first.venue.city} date begins at {first.arrival_time} with {first.slot.value} at {first.venue.name} ({first.venue.area}).",
     ]
     for s in plan.stops[1:-1]:
         lines.append(f"Next, enjoy a relaxing {s.slot.value} stop at {s.venue.name}.")

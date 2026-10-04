@@ -57,6 +57,7 @@ class SessionCreate(BaseModel):
     time_start: str                                 # "HH:MM"
     time_end: str                                   # "HH:MM"
     budget_inr: int = Field(default=4000, ge=0, le=100_000)
+    city: str = "Chennai"
     start_area: str = "Alwarpet"
     max_travel_minutes: int = Field(default=35, ge=1, le=180)
     surprise_mode: bool = False
@@ -82,13 +83,21 @@ class SessionCreate(BaseModel):
         datetime.strptime(value, "%H:%M")
         return value
 
-    @field_validator("start_area")
+    @field_validator("city", "start_area")
     @classmethod
-    def valid_area(cls, value: str) -> str:
+    def valid_location(cls, value: str) -> str:
         value = value.strip()
         if not value:
-            raise ValueError("start_area cannot be empty")
+            raise ValueError("city and start_area cannot be empty")
         return value[:80]
+
+    @field_validator("city")
+    @classmethod
+    def supported_city(cls, value: str) -> str:
+        canonical = {name.lower(): name for name in ("Chennai", "Coimbatore", "Madurai")}
+        if value.lower() not in canonical:
+            raise ValueError("Choose a supported Tamil Nadu city: Chennai, Coimbatore, or Madurai")
+        return canonical[value.lower()]
 
     @field_validator("slots_enabled")
     @classmethod
@@ -122,6 +131,7 @@ class SessionDB(SQLModel, table=True):
     time_end: str
     budget_inr: int
     budget_b_inr: Optional[int] = None
+    city: str = "Chennai"
     start_area: str
     max_travel_min: int
     surprise_mode: bool
@@ -138,6 +148,7 @@ class Venue(BaseModel):
     id: str
     name: str
     type: SlotType
+    city: str = "Chennai"
     area: str
     lat: float
     lng: float

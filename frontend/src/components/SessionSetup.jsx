@@ -1,24 +1,20 @@
 import React, { useState } from 'react';
 
-const CHENNAI_AREAS = [
-  'Alwarpet',
-  'Adyar',
-  'Besant Nagar',
-  'Mylapore',
-  'Nungambakkam',
-  'T. Nagar',
-  'Anna Nagar',
-  'Gopalapuram',
-  'Royapettah',
-  'Egmore',
-  'Guindy',
-  'Kotturpuram',
-  'Thiruvanmiyur',
-  'ECR / Neelankarai',
-  'Muttukadu / Kovalam',
-  'Marina Beach',
-  'Velachery',
-];
+const CITY_AREAS = {
+  Chennai: [
+    'Alwarpet', 'Adyar', 'Besant Nagar', 'Mylapore', 'Nungambakkam',
+    'T. Nagar', 'Anna Nagar', 'Egmore', 'Guindy', 'Velachery',
+    'ECR / Neelankarai', 'Muttukadu / Kovalam', 'Marina Beach',
+  ],
+  Coimbatore: [
+    'R.S. Puram', 'Gandhipuram', 'Peelamedu', 'Race Course',
+    'Saibaba Colony', 'Ukkadam',
+  ],
+  Madurai: [
+    'Anna Nagar', 'KK Nagar', 'Goripalayam', 'Mattuthavani',
+    'Town Hall Road', 'Vandiyur',
+  ],
+};
 
 const SLOTS = [
   { id: 'lunch', label: 'Lunch / Brunch', icon: '🍽️' },
@@ -37,6 +33,7 @@ export default function SessionSetup({ onSessionCreated }) {
   const [timeStart, setTimeStart] = useState('12:00');
   const [timeEnd, setTimeEnd] = useState('22:30');
   const [budgetInr, setBudgetInr] = useState(5000);
+  const [city, setCity] = useState('Chennai');
   const [startArea, setStartArea] = useState('Alwarpet');
   const [maxTravelMin, setMaxTravelMin] = useState(35);
   const [surpriseMode, setSurpriseMode] = useState(false);
@@ -73,6 +70,7 @@ export default function SessionSetup({ onSessionCreated }) {
         time_start: timeStart,
         time_end: timeEnd,
         budget_inr: Number(budgetInr),
+        city,
         start_area: startArea,
         max_travel_minutes: Number(maxTravelMin),
         surprise_mode: surpriseMode,
@@ -94,10 +92,10 @@ export default function SessionSetup({ onSessionCreated }) {
           Partner A • Step 1
         </span>
         <h2 className="text-2xl font-serif text-warm-900 mt-1">
-          Plan Your Date in Chennai
+          Plan Your Date in Tamil Nadu
         </h2>
         <p className="text-xs text-warm-500 mt-1 max-w-sm mx-auto">
-          Set your time, starting area, and budget constraints. We'll generate a share link for your partner next.
+          Choose a city and starting place, then set your time and budget. We’ll build the route and generate your partner link.
         </p>
       </div>
 
@@ -108,8 +106,8 @@ export default function SessionSetup({ onSessionCreated }) {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-5">
-        {/* Date & Starting Area */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {/* Date, City & Starting Area */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div>
             <label className="block text-xs font-medium text-warm-800 mb-1">
               Date
@@ -125,14 +123,33 @@ export default function SessionSetup({ onSessionCreated }) {
 
           <div>
             <label className="block text-xs font-medium text-warm-800 mb-1">
-              Chennai Start Area
+              City
+            </label>
+            <select
+              value={city}
+              onChange={(e) => {
+                const nextCity = e.target.value;
+                setCity(nextCity);
+                setStartArea(CITY_AREAS[nextCity][0]);
+              }}
+              className="w-full px-3 py-2 text-sm bg-warm-50 border border-warm-200 rounded-lg focus:ring-2 focus:ring-rose-400 focus:outline-none"
+            >
+              {Object.keys(CITY_AREAS).map((name) => (
+                <option key={name} value={name}>{name}</option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-xs font-medium text-warm-800 mb-1">
+              Starting Place
             </label>
             <select
               value={startArea}
               onChange={(e) => setStartArea(e.target.value)}
               className="w-full px-3 py-2 text-sm bg-warm-50 border border-warm-200 rounded-lg focus:ring-2 focus:ring-rose-400 focus:outline-none"
             >
-              {CHENNAI_AREAS.map((a) => (
+              {CITY_AREAS[city].map((a) => (
                 <option key={a} value={a}>
                   {a}
                 </option>

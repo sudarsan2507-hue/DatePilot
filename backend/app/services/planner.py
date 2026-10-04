@@ -16,31 +16,44 @@ from app.models.schema import (
 )
 
 VENUES_PATH = Path(__file__).parent.parent.parent / "data" / "venues.json"
-ROAD_FACTOR = 1.4      # haversine × 1.4 ≈ Chennai road distance
-AVG_SPEED_KMH = 24.0   # Chennai city traffic average speed
+ROAD_FACTOR = 1.4      # haversine × road factor ≈ urban road distance
+AVG_SPEED_KMH = 24.0   # conservative Tamil Nadu city traffic estimate
 
-CHENNAI_AREAS: dict[str, tuple[float, float]] = {
-    "alwarpet": (13.0336, 80.2520),
-    "adyar": (13.0033, 80.2552),
-    "besant nagar": (12.9998, 80.2700),
-    "mylapore": (13.0331, 80.2687),
-    "nungambakkam": (13.0617, 80.2415),
-    "t. nagar": (13.0418, 80.2341),
-    "anna nagar": (13.0850, 80.2101),
-    "gopalapuram": (13.0519, 80.2520),
-    "royapettah": (13.0559, 80.2492),
-    "egmore": (13.0732, 80.2609),
-    "guindy": (13.0075, 80.2206),
-    "kotturpuram": (13.0181, 80.2407),
-    "thiruvanmiyur": (12.9868, 80.2612),
-    "ecr": (12.9463, 80.2561),
-    "neelankarai": (12.9463, 80.2561),
-    "injambakkam": (12.9169, 80.2536),
-    "muttukadu": (12.8228, 80.2444),
-    "kovalam": (12.7915, 80.2520),
-    "marina": (13.0500, 80.2824),
-    "velachery": (12.9759, 80.2212),
+TAMIL_NADU_LOCATIONS: dict[str, dict[str, tuple[float, float]]] = {
+    "chennai": {
+        "alwarpet": (13.0336, 80.2520), "adyar": (13.0033, 80.2552),
+        "besant nagar": (12.9998, 80.2700), "mylapore": (13.0331, 80.2687),
+        "nungambakkam": (13.0617, 80.2415), "t. nagar": (13.0418, 80.2341),
+        "anna nagar": (13.0850, 80.2101), "egmore": (13.0732, 80.2609),
+        "guindy": (13.0075, 80.2206), "velachery": (12.9759, 80.2212),
+        "ecr / neelankarai": (12.9463, 80.2561),
+        "muttukadu / kovalam": (12.8069, 80.2482), "marina beach": (13.0500, 80.2824),
+    },
+    "coimbatore": {
+        "r.s. puram": (11.0084, 76.9504), "gandhipuram": (11.0183, 76.9674),
+        "peelamedu": (11.0255, 77.0065), "race course": (11.0012, 76.9770),
+        "saibaba colony": (11.0233, 76.9436), "ukkadam": (10.9925, 76.9629),
+    },
+    "madurai": {
+        "anna nagar": (9.9252, 78.1491), "kk nagar": (9.9344, 78.1404),
+        "goripalayam": (9.9384, 78.1327), "mattuthavani": (9.9560, 78.1550),
+        "town hall road": (9.9166, 78.1155), "vandiyur": (9.9103, 78.1488),
+    },
 }
+
+CITY_CENTERS = {
+    "chennai": (13.0336, 80.2520),
+    "coimbatore": (11.0168, 76.9558),
+    "madurai": (9.9252, 78.1198),
+}
+
+
+def start_coordinates(city: str, area: str) -> tuple[float, float]:
+    city_key = city.strip().lower()
+    return TAMIL_NADU_LOCATIONS.get(city_key, {}).get(
+        area.strip().lower(),
+        CITY_CENTERS.get(city_key, CITY_CENTERS["chennai"]),
+    )
 
 DEFAULT_DURATIONS: dict[SlotType, int] = {
     SlotType.lunch: 70,
@@ -175,6 +188,8 @@ def apply_venue_replacement(
     target = result.stops[stop_index]
     if replacement.type != target.slot or replacement.id == target.venue.id:
         return None
+    if replacement.city.lower() != session.city.lower():
+        return None
 
     budget = min(session.budget_inr, session.budget_b_inr) if session.budget_b_inr else session.budget_inr
     new_total = result.total_cost - target.cost + replacement.avg_cost_for_two
@@ -190,7 +205,7 @@ def apply_venue_replacement(
         previous_coords = (previous.venue.lat, previous.venue.lng)
     else:
         current_time = datetime.combine(base_date.date(), datetime.strptime(session.time_start, "%H:%M").time())
-        previous_coords = CHENNAI_AREAS.get(session.start_area.strip().lower(), (13.0336, 80.2520))
+        previous_coords = start_coordinates(session.city, session.start_area)
 
     for index in range(stop_index, len(result.stops)):
         stop = result.stops[index]
@@ -237,7 +252,7 @@ def plan_date(
     indoor_only: bool = False,
 ) -> list[DatePlan]:
     """Generates top viable date plans fitting budget, time, and travel constraints."""
-    venues = load_venues()
+    venues = [v for v in load_venues() if v.city.lower() == session.city.lower()]
     slots_raw = json.loads(session.slots_enabled)
     requested_slots = [SlotType(s) for s in slots_raw]
 
@@ -280,7 +295,7 @@ def plan_date(
         # Keep top 6 candidates per slot to allow broad budget exploration
         slot_cands[s] = cands[:6] if cands else []
 
-    start_coords = CHENNAI_AREAS.get(session.start_area.strip().lower(), (13.0336, 80.2520))
+    start_coords = start_coordinates(session.city, session.start_area)
 
     def solve_for_slots(slots_to_try: list[SlotType]) -> list[DatePlan]:
         candidate_lists = [slot_cands.get(s, []) for s in slots_to_try]
@@ -410,7 +425,8 @@ def plan_date(
 
 def build_rain_mode_plan(plan: DatePlan, day_name: str) -> Tuple[DatePlan, str]:
     """Produce Plan B (all-indoor swaps) for any outdoor stop in the plan."""
-    venues = load_venues()
+    city = plan.stops[0].venue.city if plan.stops else "Chennai"
+    venues = [v for v in load_venues() if v.city.lower() == city.lower()]
     new_stops: list[PlannedStop] = []
     swapped_names: list[str] = []
 
@@ -450,7 +466,7 @@ def build_rain_mode_plan(plan: DatePlan, day_name: str) -> Tuple[DatePlan, str]:
 
     new_cost = sum(s.cost for s in new_stops)
     note = (
-        f"Rain Protocol: If rain starts in Chennai, seamlessly swap: {', '.join(swapped_names)}."
+        f"Rain Protocol: If rain starts in {city}, seamlessly swap: {', '.join(swapped_names)}."
         if swapped_names else "All stops in this plan already have indoor protection."
     )
 

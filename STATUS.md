@@ -1,7 +1,7 @@
 # DatePilot (DateOptimizer) — Project Status & Roadmap
 
 **Hackathon Challenge:** DEV Hacktoberfest Weekend Challenge  
-**Core Mission:** An open-model AI agent that constructs a real, constraint-checked date for two partners in Chennai, India.  
+**Core Mission:** An open-model AI agent that constructs a real, constraint-checked date for two partners in Tamil Nadu, India.
 **Core Guarantee:** Open-weight models (Gemma 4/3 via Ollama or hosted endpoints) ensure her taste data stays completely private and local. Deterministic code does all the math.
 
 ---
@@ -9,7 +9,7 @@
 ## 1. What Is Completed Till Now
 
 ### Core Models & Database Layer
-- [x] **Curated Chennai Venue Database (`venues.json`)**: Hand-curated dataset of 36 real Chennai venues spanning 5 slots (`lunch`, `activity`, `cafe`, `sunset`, `dinner`) across key Chennai localities (Alwarpet, Adyar, Besant Nagar, Mylapore, Nungambakkam, ECR, Marina, Guindy, etc.). Contains accurate geographic coordinates, typical durations, operating hours per day (with split shifts), cuisine tags, vibe tags, veg-friendly flags, indoor flags, ratings, and Google Maps source links.
+- [x] **Curated Tamil Nadu Venue Database (`venues.json`)**: Hand-curated multi-city dataset spanning Chennai, Coimbatore, and Madurai across 5 slots (`lunch`, `activity`, `cafe`, `sunset`, `dinner`). Venues carry city/locality, coordinates, typical duration, operating hours, cuisine/vibe tags, dietary/indoor flags, ratings, source links, and verification dates.
 - [x] **Pydantic & SQLModel Schemas (`schema.py`)**: `TasteCard`, `PriceComfort`, `SlotType`, `Venue`, `PlannedStop`, `DatePlan`, `SessionCreate`, `SessionDB`, `TasteMemoryDB`, `StopFeedback`.
 - [x] **SQLite Database Layer (`db.py`)**: Automatic table creation for sessions and memory.
 - [x] **Memory & Feedback Interface (`memory.py`)**: Stable interface for storing taste profiles, recording post-date ratings (1-5 + notes), and generating learned taste insights ("What I learned about you two") ready for HippocampAI.
@@ -20,7 +20,7 @@
 - [x] **Hard Constraint Engine**:
   - Total cost ≤ budget (strictly takes the minimum of both partners' limits).
   - All stops verified open during arrival and departure windows.
-  - Inter-stop travel time ≤ max travel limit (Haversine formula × road factor 1.4 ÷ 24 km/h Chennai traffic speed).
+  - Every stop stays in the selected city; inter-stop travel time ≤ max travel limit (Haversine formula × road factor 1.4 ÷ conservative 24 km/h city speed).
   - Whole itinerary fits within requested time window.
   - Strict dietary enforcement (union of vegetarian/vegan signals).
   - Strict exclusion of dislikes from either partner.
@@ -57,7 +57,7 @@
 
 2. **Frontend UI (React + Vite + Tailwind CSS)**:
    - Mobile-first, romantic-minimal aesthetic (blush rose, warm slate, elegant serif accents, cards).
-   - Partner A setup screen (budget, date, time window, Chennai starting area, max travel, enabled slots).
+   - Partner A setup screen (Tamil Nadu city, starting locality, budget, date, time window, max travel, enabled slots).
    - Partner B private invite link screen with copy button.
    - Interactive Taste Card profiling (Upload IG Export, Upload Screenshot, or Romantic Preference Quiz).
    - Taste Card Review Modal (editable tags, delete buttons, confidence badges, confirm button, delete all data button).
@@ -77,7 +77,7 @@
 
 ## 3. The 15 Logical Commits Plan
 
-1. `feat(core): schema models, memory interface, and curated Chennai venue dataset` *(done)*
+1. `feat(core): schema models, memory interface, and curated Tamil Nadu venue dataset` *(done)*
 2. `feat(planner): deterministic beam-search date planner with constraint validation & time slot engine` *(done)*
 3. `feat(ai): open-model LLM integration (Gemma/Ollama) with fallback & Instagram/quiz taste extractor` *(done)*
 4. `feat(sessions): private 2-person session management, invite tokens & anonymous match summary`
@@ -86,7 +86,7 @@
 7. `feat(memory-api): post-date stop rating, learned taste feedback & memory insights endpoints`
 8. `test(backend): comprehensive test suite for planner constraints, API routes & fallbacks`
 9. `feat(ui-setup): configure Tailwind CSS, romantic-minimal design system, and API service layer`
-10. `feat(ui-session): session creation, Chennai area picker, time window controls & partner invite link`
+10. `feat(ui-session): session creation, Tamil Nadu city/locality picker, time window controls & partner invite link`
 11. `feat(ui-taste): taste profiling uploader, screenshot parser, interactive quiz & review card`
 12. `feat(ui-match): 'What We Matched On' anonymous overlap summary component`
 13. `feat(ui-itinerary): multi-plan carousel, constraint checklist, timeline stops & ranked backups`
