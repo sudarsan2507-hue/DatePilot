@@ -28,6 +28,8 @@ export default function App() {
 
   // Match and Plans state
   const [matchSummary, setMatchSummary] = useState(null);
+  const [matchRefreshError, setMatchRefreshError] = useState('');
+  const [refreshingMatch, setRefreshingMatch] = useState(false);
   const [plans, setPlans] = useState([]);
   const [generating, setGenerating] = useState(false);
   const [rainModeActive, setRainModeActive] = useState(false);
@@ -49,6 +51,44 @@ export default function App() {
       }
     }
   }, []);
+
+  // Partner A and Partner B commonly complete this flow on different devices.
+  // Keep the waiting screen in sync with the server instead of relying on the
+  // stale session snapshot captured when the page first loaded.
+  useEffect(() => {
+    if (view !== 'match' || matchSummary?.ready) return undefined;
+
+    const currentToken = activePartner === 'a' ? tokenA : tokenB;
+    if (!currentToken) return undefined;
+
+    let cancelled = false;
+    const refresh = async () => {
+      try {
+        const summary = await api.getMatchSummary(currentToken);
+        if (cancelled) return;
+        setMatchSummary(summary);
+        setMatchRefreshError('');
+        if (summary.ready) {
+          setSession((current) => current ? {
+            ...current,
+            both_submitted: true,
+            partner_taste_submitted: true,
+          } : current);
+        }
+      } catch (err) {
+        if (!cancelled) {
+          setMatchRefreshError(err.message || 'Could not refresh partner status.');
+        }
+      }
+    };
+
+    refresh();
+    const pollId = window.setInterval(refresh, 3000);
+    return () => {
+      cancelled = true;
+      window.clearInterval(pollId);
+    };
+  }, [view, matchSummary?.ready, activePartner, tokenA, tokenB]);
 
   const loadSessionData = async (token, partner) => {
     try {
@@ -108,29 +148,38 @@ export default function App() {
     }
   };
 
-  const handleSwitchToPartnerB = () => {
+  const handleSwitchToPartnerB = async () => {
+    if (!tokenB) return;
     setActivePartner('b');
-    setView('limits');
+    await loadSessionData(tokenB, 'b');
   };
 
-  const handleSwitchToPartnerA = () => {
+  const handleSwitchToPartnerA = async () => {
+    if (!tokenA) return;
     setActivePartner('a');
-    if (plans.length > 0) {
-      setView('plans');
-    } else if (confirmedCardB) {
-      fetchMatchSummary(tokenA);
-      setView('match');
-    } else {
-      setView('invite');
-    }
+    await loadSessionData(tokenA, 'a');
   };
 
   const fetchMatchSummary = async (token) => {
+    if (!token) return null;
+    setRefreshingMatch(true);
     try {
       const summary = await api.getMatchSummary(token);
       setMatchSummary(summary);
-    } catch {
-      // ignore
+      setMatchRefreshError('');
+      if (summary.ready) {
+        setSession((current) => current ? {
+          ...current,
+          both_submitted: true,
+          partner_taste_submitted: true,
+        } : current);
+      }
+      return summary;
+    } catch (err) {
+      setMatchRefreshError(err.message || 'Could not refresh partner status.');
+      return null;
+    } finally {
+      setRefreshingMatch(false);
     }
   };
 
@@ -220,7 +269,7 @@ export default function App() {
 
           <div className="flex items-center gap-2">
             {/* Quick Demo Switcher between Partner A and B */}
-            {tokenB && (
+            {tokenA && tokenB && (
               <div className="hidden sm:flex items-center bg-warm-100 rounded-lg p-0.5 text-[11px]">
                 <button
                   onClick={handleSwitchToPartnerA}
@@ -327,6 +376,9 @@ export default function App() {
             generating={generating}
             isPartnerA={activePartner === 'a'}
             partnerBSubmitted={Boolean(confirmedCardB || session?.partner_taste_submitted)}
+            onRefresh={() => fetchMatchSummary(activePartner === 'a' ? tokenA : tokenB)}
+            refreshing={refreshingMatch}
+            refreshError={matchRefreshError}
           />
         )}
 

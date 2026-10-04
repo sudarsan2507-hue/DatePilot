@@ -6,6 +6,9 @@ export default function MatchSummary({
   generating,
   isPartnerA,
   partnerBSubmitted,
+  onRefresh,
+  refreshing,
+  refreshError,
 }) {
   if (!summary?.ready) {
     return (
@@ -21,6 +24,19 @@ export default function MatchSummary({
             ? 'Partner B has submitted! Getting mutual overlap summary ready...'
             : 'Your taste card is confirmed! Once your partner opens her invite and enters her preferences, your mutual match summary will unlock here.'}
         </p>
+        <button
+          type="button"
+          onClick={onRefresh}
+          disabled={refreshing}
+          className="text-xs font-medium text-rose-600 hover:text-rose-800 underline underline-offset-2 disabled:opacity-50"
+        >
+          {refreshing ? 'Checking…' : 'Check again now'}
+        </button>
+        {refreshError && (
+          <p className="mt-3 text-xs text-red-600" role="alert">
+            {refreshError} We’ll keep retrying automatically.
+          </p>
+        )}
       </div>
     );
   }
