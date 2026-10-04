@@ -89,13 +89,13 @@ export default function SessionSetup({ onSessionCreated }) {
     <div className="max-w-xl mx-auto p-6 bg-white/90 backdrop-blur-md rounded-2xl shadow-xl border border-rose-100 animate-fade-in">
       <div className="text-center mb-6">
         <span className="text-xs uppercase tracking-widest text-rose-500 font-semibold">
-          Partner A • Step 1
+          THE FIRST LITTLE STEP
         </span>
         <h2 className="text-2xl font-serif text-warm-900 mt-1">
-          Plan Your Date in India
+          Make room for a lovely day.
         </h2>
         <p className="text-xs text-warm-500 mt-1 max-w-sm mx-auto">
-          Choose a city and starting place, then set your time and budget. We’ll build the route and generate your partner link.
+          Pick your city, your time, and your budget. We’ll take care of the possibilities.
         </p>
       </div>
 
@@ -284,7 +284,7 @@ export default function SessionSetup({ onSessionCreated }) {
           disabled={loading}
           className="w-full py-3 px-4 bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white font-medium rounded-xl shadow-md shadow-rose-200 transition-all text-sm disabled:opacity-50"
         >
-          {loading ? 'Creating Date Pilot Session...' : 'Create Date & Get Partner Share Link →'}
+          {loading ? 'Making space for your day…' : 'Let’s plan something lovely ↗'}
         </button>
       </form>
     </div>

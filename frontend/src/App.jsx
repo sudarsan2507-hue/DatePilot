@@ -263,18 +263,18 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-radial from-rose-50/70 via-warm-50 to-warm-100/80 text-warm-900 pb-16">
+    <div className="datepilot-shell min-h-screen text-warm-900 pb-16">
       {/* Navigation Header */}
       <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-rose-100">
         <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2 cursor-pointer" onClick={() => setView('setup')}>
-            <span className="text-2xl">🌹</span>
+            <span className="brand-mark" aria-hidden="true">d.</span>
             <div>
               <h1 className="text-lg font-serif font-bold text-warm-900 tracking-tight leading-none">
                 DatePilot
               </h1>
               <span className="text-[10px] text-warm-500 uppercase tracking-widest block font-medium">
-                India AI Date Optimizer
+                A little more together
               </span>
             </div>
           </div>
@@ -315,15 +315,25 @@ export default function App() {
       </header>
 
       {/* Hero Subheader */}
-      <div className="max-w-xl mx-auto px-4 pt-6 pb-2 text-center">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-rose-100/80 text-rose-700 text-[11px] font-semibold rounded-full mb-3">
-          <span>✨</span>
-          <span>Open-Weight AI • Gemma & Ollama • Private Taste</span>
+      <section className={`editorial-hero ${view === 'setup' ? '' : 'editorial-hero--compact'}`}>
+        <div className="hero-copy">
+          <div className="hero-eyebrow"><span className="status-dot" /> MADE FOR TWO · INDIA</div>
+          <h2>Less planning.<br />More <em> butterflies.</em></h2>
+          <p>Two tastes. One lovely day. Find the places you’ll both love, with every little detail taken care of.</p>
+          <div className="hero-assurances"><span>↗ Thoughtful local places</span><span>♡ Your preferences stay private</span></div>
         </div>
-      </div>
+        {view === 'setup' && <div className="date-preview" aria-label="Example date inspiration">
+          <div className="preview-top"><span>A DAY WORTH KEEPING</span><span>01 / 03</span></div>
+          <div className="preview-art" aria-hidden="true"><div className="sun-disc" /><div className="arch arch-one" /><div className="arch arch-two" /><span className="art-caption">the good kind of<br /><em>getting lost.</em></span></div>
+          <div className="preview-bottom"><div><span>YOUR NEXT CHAPTER</span><strong>Coffee. A walk. You two.</strong></div><span className="preview-arrow">↗</span></div>
+        </div>}
+      </section>
+      <nav className="journey-steps" aria-label="Planning progress">
+        {[['01', 'Your day', ['setup']], ['02', 'Your tastes', ['taste', 'review', 'limits', 'invite']], ['03', 'Your together', ['match', 'plans']]].map(([number, label, views]) => <div key={number} className={views.includes(view) ? 'journey-step is-current' : 'journey-step'}><span>{number}</span>{label}</div>)}
+      </nav>
 
       {/* Main App Flow */}
-      <main className="max-w-3xl mx-auto px-4 mt-2">
+      <main className="planner-content max-w-3xl mx-auto px-4 mt-2">
         {/* Step 1: Session Setup */}
         {view === 'setup' && (
           <SessionSetup onSessionCreated={handleSessionCreated} />
@@ -408,6 +418,7 @@ export default function App() {
           />
         )}
       </main>
+      <footer className="site-footer"><span>DatePilot</span><p>Good company. Thoughtful plans. A day that feels like you.</p><small>India · Currently exploring Chennai, Coimbatore & Madurai</small></footer>
 
       {/* Stop Swap Diff Modal */}
       {swapTarget && (
