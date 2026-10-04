@@ -123,3 +123,29 @@ def test_rain_mode_plan():
     # Every stop in rain plan should be indoor
     for stop in rain_plan.stops:
         assert stop.venue.indoor is True, f"Rain stop {stop.venue.name} should be indoor"
+
+
+def test_low_budget_adapts_to_a_valid_two_stop_date():
+    session = SessionDB(
+        token_a="budget_a",
+        token_b="budget_b",
+        date="2026-10-04",
+        time_start="12:00",
+        time_end="22:30",
+        budget_inr=5000,
+        budget_b_inr=3000,
+        start_area="Alwarpet",
+        max_travel_min=35,
+        surprise_mode=False,
+        slots_enabled=json.dumps(["lunch", "activity", "cafe", "sunset", "dinner"]),
+    )
+    plans = plan_date(
+        session,
+        TasteCard(cuisines=["cafe-bakery"], dislikes=["loud", "rush"]),
+        TasteCard(cuisines=["cafe-bakery"], dislikes=["loud", "rush"]),
+    )
+
+    assert plans, "Planner should reduce the itinerary instead of returning no plan"
+    assert all(2 <= len(plan.stops) < 5 for plan in plans)
+    assert all(plan.total_cost <= 3000 for plan in plans)
+    assert all(all(plan.constraints_ok.values()) for plan in plans)

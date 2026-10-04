@@ -361,18 +361,17 @@ def plan_date(
     # Try full requested slots first
     plans = solve_for_slots(requested_slots)
 
-    # If full slots don't fit within time or budget, adapt to 4 or 3 slot subsets
-    if not plans and len(requested_slots) > 3:
-        # Try subsets without sunset or cafe
-        subsets = [
-            [s for s in requested_slots if s != SlotType.sunset],
-            [s for s in requested_slots if s != SlotType.activity],
-            [s for s in requested_slots if s in (SlotType.lunch, SlotType.cafe, SlotType.dinner)],
-            [s for s in requested_slots if s in (SlotType.lunch, SlotType.activity, SlotType.dinner)],
-        ]
-        for sub in subsets:
-            plans = solve_for_slots(sub)
-            if plans:
+    # If the full template is infeasible, exhaustively try smaller order-preserving
+    # subsets. Prefer the greatest stop count and never reduce below a real date
+    # of two stops. This avoids food-heavy hard-coded fallbacks that can miss a
+    # valid activity + sunset or cafe + activity plan on a tight budget.
+    if not plans and len(requested_slots) > 2:
+        for subset_size in range(len(requested_slots) - 1, 1, -1):
+            reduced_plans: list[DatePlan] = []
+            for subset in itertools.combinations(requested_slots, subset_size):
+                reduced_plans.extend(solve_for_slots(list(subset)))
+            if reduced_plans:
+                plans = reduced_plans
                 break
 
     # Score and rank plans: balance quality ratings + travel efficiency + budget reserve
