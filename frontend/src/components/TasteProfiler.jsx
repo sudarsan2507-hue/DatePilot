@@ -156,7 +156,7 @@ export default function TasteProfiler({ sessionToken, partnerLabel, onTasteExtra
           {/* Cuisines */}
           <div>
             <label className="block text-xs font-medium text-warm-800 mb-1.5">
-              Cuisines & Flavors you enjoy in Tamil Nadu
+              Cuisines & Flavors you enjoy in India
             </label>
             <div className="flex flex-wrap gap-1.5">
               {SAMPLE_CUISINES.map((c) => {

@@ -92,7 +92,7 @@ export default function SessionSetup({ onSessionCreated }) {
           Partner A • Step 1
         </span>
         <h2 className="text-2xl font-serif text-warm-900 mt-1">
-          Plan Your Date in Tamil Nadu
+          Plan Your Date in India
         </h2>
         <p className="text-xs text-warm-500 mt-1 max-w-sm mx-auto">
           Choose a city and starting place, then set your time and budget. We’ll build the route and generate your partner link.

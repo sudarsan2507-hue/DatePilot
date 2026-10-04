@@ -129,7 +129,7 @@ def get_memory_insights(session_token: str) -> dict[str, Any]:
 
     high_rated_venues = [f.venue_name for f in feedbacks if f.rating >= 4]
     if high_rated_venues:
-        insights.append(f"Favorite Tamil Nadu venues to remember: {', '.join(set(high_rated_venues))}.")
+        insights.append(f"Favorite India venues to remember: {', '.join(set(high_rated_venues))}.")
 
     return {
         "total_reviews": total,

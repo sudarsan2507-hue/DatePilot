@@ -96,7 +96,7 @@ class SessionCreate(BaseModel):
     def supported_city(cls, value: str) -> str:
         canonical = {name.lower(): name for name in ("Chennai", "Coimbatore", "Madurai")}
         if value.lower() not in canonical:
-            raise ValueError("Choose a supported Tamil Nadu city: Chennai, Coimbatore, or Madurai")
+            raise ValueError("Choose a supported Indian city: Chennai, Coimbatore, or Madurai")
         return canonical[value.lower()]
 
     @field_validator("slots_enabled")
