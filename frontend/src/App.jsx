@@ -34,6 +34,8 @@ export default function App() {
   const [generating, setGenerating] = useState(false);
   const [rainModeActive, setRainModeActive] = useState(false);
   const [rainTriggerNote, setRainTriggerNote] = useState('');
+  const [liveWeather, setLiveWeather] = useState(null);
+  const [liveRoutes, setLiveRoutes] = useState(null);
 
   // Modals state
   const [swapTarget, setSwapTarget] = useState(null); // { planIndex, stopIndex, stop }
@@ -188,6 +190,14 @@ export default function App() {
     try {
       const generated = await api.generatePlan(tokenA);
       setPlans(generated);
+      const city = session?.city || 'Chennai';
+      const forecastDate = session?.date;
+      const [weatherResult, routesResult] = await Promise.allSettled([
+        forecastDate ? api.getWeather(city, forecastDate) : Promise.reject(new Error('No forecast date')),
+        api.getLiveRoutes(tokenA, 0),
+      ]);
+      setLiveWeather(weatherResult.status === 'fulfilled' ? weatherResult.value : null);
+      setLiveRoutes(routesResult.status === 'fulfilled' ? routesResult.value : null);
       setView('plans');
     } catch (err) {
       alert(err.message || 'Failed to generate plan');
@@ -246,6 +256,8 @@ export default function App() {
     setConfirmedCardB(null);
     setMatchSummary(null);
     setPlans([]);
+    setLiveWeather(null);
+    setLiveRoutes(null);
     setView('setup');
     window.location.hash = '';
   };
@@ -391,6 +403,8 @@ export default function App() {
             onRateClick={() => setShowRatingModal(true)}
             rainModeActive={rainModeActive}
             rainTriggerNote={rainTriggerNote}
+            liveWeather={liveWeather}
+            liveRoutes={liveRoutes}
           />
         )}
       </main>

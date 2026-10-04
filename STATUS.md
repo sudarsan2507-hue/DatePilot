@@ -26,6 +26,7 @@
   - Strict exclusion of dislikes from either partner.
 - [x] **Soft Scoring & Variety**: Optimizes for taste overlap, venue ratings, travel efficiency, budget reserve, and cuisine variety.
 - [x] **Ranked Backup Venues**: Automatically computes and assigns the second-best open venue for each stop.
+- [x] **Keyless Live Enrichment**: OSRM road estimates, Open-Meteo rain forecasts, and OpenStreetMap Overpass nearby discovery with deterministic fallbacks and unverified-result safeguards.
 - [x] **Rain Mode Protocol Generator (`planner.py`)**: Generates Plan B with indoor weather-proof substitutions and dynamic trigger notes.
 
 ### Open-Model AI Layer & Consent-Based Extraction

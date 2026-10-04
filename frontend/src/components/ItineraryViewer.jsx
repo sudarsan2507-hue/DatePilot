@@ -15,6 +15,8 @@ export default function ItineraryViewer({
   onRateClick,
   rainModeActive,
   rainTriggerNote,
+  liveWeather,
+  liveRoutes,
 }) {
   const [selectedPlanIndex, setSelectedPlanIndex] = useState(0);
   const [showStaySuggestion, setShowStaySuggestion] = useState(false);
@@ -69,6 +71,21 @@ export default function ItineraryViewer({
                 {rainTriggerNote || 'Outdoor stops have been replaced with weather-proof indoor sanctuaries.'}
               </p>
             </div>
+          </div>
+        )}
+
+        {liveWeather && (
+          <div className={`p-3 rounded-xl mb-5 text-xs border ${liveWeather.rain_expected ? 'bg-blue-50 border-blue-200 text-blue-900' : 'bg-emerald-50 border-emerald-200 text-emerald-900'}`}>
+            <span className="font-semibold block">☁️ Live weather check · {liveWeather.city}</span>
+            <span className="text-[11px]">{liveWeather.summary} {liveWeather.rain_probability != null ? `Rain chance: ${liveWeather.rain_probability}%.` : ''}</span>
+            <span className="block text-[10px] opacity-60 mt-1">Source: {liveWeather.source}</span>
+          </div>
+        )}
+
+        {liveRoutes && (
+          <div className="p-3 bg-sky-50 border border-sky-200 text-sky-900 text-xs rounded-xl mb-5">
+            <span className="font-semibold block">🚗 Live route check</span>
+            <span className="text-[11px]">Road estimates refreshed for {liveRoutes.legs.length} legs. {liveRoutes.legs[0]?.source}.</span>
           </div>
         )}
 

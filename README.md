@@ -4,6 +4,16 @@ DatePilot builds a real, constraint-checked Tamil Nadu date for two people. Part
 
 The launch dataset supports Chennai, Coimbatore, and Madurai. Every venue is tagged by city so plans, backups, swaps, and rain alternatives cannot cross city boundaries. More Tamil Nadu cities can be added by extending the locality map and curated venue data.
 
+## Keyless live data
+
+DatePilot optionally enriches a generated plan with free public services:
+
+- OSRM provides live driving distance/time per itinerary leg (`/plan/{token}/routes/{plan_index}`), with the deterministic Haversine estimate as fallback.
+- Open-Meteo provides the selected city’s forecast and rain signal (`/live/weather`).
+- OpenStreetMap Overpass provides nearby discovery suggestions (`/live/nearby`). Discovery results are marked unverified and never enter a plan automatically; only the curated venue file is used for hard constraints.
+
+These integrations require no API keys and use short timeouts so a provider outage never blocks planning.
+
 ## Run locally
 
 Backend (Python 3.11):

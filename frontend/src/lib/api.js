@@ -97,6 +97,9 @@ export const api = {
       method: 'POST',
     }),
 
+  getLiveRoutes: (token, planIndex = 0) =>
+    request(`/plan/${token}/routes/${planIndex}`),
+
   // Memory & Feedback
   rateStop: (token, feedback) =>
     request(`/memory/${token}/rate`, {
@@ -106,4 +109,11 @@ export const api = {
     }),
 
   getMemoryInsights: (token) => request(`/memory/${token}/insights`),
+
+  // Optional keyless live data
+  getWeather: (city, forecastDate) =>
+    request(`/live/weather?city=${encodeURIComponent(city)}&forecast_date=${encodeURIComponent(forecastDate)}`),
+
+  discoverNearby: (city, query = 'restaurant') =>
+    request(`/live/nearby?city=${encodeURIComponent(city)}&query=${encodeURIComponent(query)}`),
 };

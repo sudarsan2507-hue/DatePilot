@@ -40,6 +40,7 @@ def create_session(data: SessionCreate):
         "token_a": token_a,
         "token_b": token_b,
         "session_id": row.id,
+        "city": row.city,
         "invite_link": f"/invite/{token_b}",
     }
 

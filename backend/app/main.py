@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 from app.db import create_db_and_tables
-from app.routers import sessions, taste, plan, memory_router
+from app.routers import sessions, taste, plan, memory_router, live_data
 
 load_dotenv()
 
@@ -35,6 +35,7 @@ app.include_router(sessions.router)
 app.include_router(taste.router)
 app.include_router(plan.router)
 app.include_router(memory_router.router)
+app.include_router(live_data.router)
 
 
 @app.get("/health")

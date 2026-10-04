@@ -23,11 +23,45 @@ from app.services.planner import (
     DEFAULT_DURATIONS,
     merge_constraints,
     apply_venue_replacement,
+    start_coordinates,
 )
 from app.services.writer import write_why_picked, write_itinerary
+from app.services.live_data import get_osrm_route
 
 router = APIRouter(prefix="/plan", tags=["plan"])
 IST = timezone(timedelta(hours=5, minutes=30))
+
+
+@router.get("/{token}/routes/{plan_index}")
+async def live_route_estimates(token: str, plan_index: int):
+    """Return advisory OSRM driving legs for a saved plan.
+
+    The deterministic planner remains authoritative; this endpoint only gives
+    users a live road estimate when the public OSRM service responds.
+    """
+    with DBSession(engine) as db:
+        row = db.exec(select(SessionDB).where(
+            (SessionDB.token_a == token) | (SessionDB.token_b == token)
+        )).first()
+    if not row or not row.plan_json:
+        raise HTTPException(status_code=404, detail="Plan not found")
+    plans = json.loads(row.plan_json)
+    if plan_index < 0 or plan_index >= len(plans):
+        raise HTTPException(status_code=400, detail="Invalid plan index")
+    plan = DatePlan.model_validate(plans[plan_index])
+    previous = start_coordinates(row.city, row.start_area)
+    legs = []
+    for stop in plan.stops:
+        current = (stop.venue.lat, stop.venue.lng)
+        route = await get_osrm_route([previous, current])
+        legs.append({
+            "venue_name": stop.venue.name,
+            "distance_km": route["distance_km"] if route else stop.distance_from_prev_km,
+            "duration_min": route["duration_min"] if route else stop.travel_from_prev_min,
+            "source": route["source"] if route else "Haversine estimate (OSRM unavailable)",
+        })
+        previous = current
+    return {"plan_index": plan_index, "legs": legs, "source": "OSRM with deterministic fallback"}
 
 
 def _surprise_is_hidden(row: SessionDB, token: str) -> bool:
