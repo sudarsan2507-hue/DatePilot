@@ -1,43 +1,39 @@
 services:
+  # ── FastAPI backend ──────────────────────────────────────────────────────
   - type: web
     name: datepilot-api
     runtime: python
-    plan: free
     region: singapore
+    plan: free
     rootDir: backend
     buildCommand: pip install -r requirements.txt
     startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
-    healthCheckPath: /health
-    autoDeploy: true
     envVars:
-      - key: PYTHON_VERSION
-        value: 3.11.9
-      - key: DB_PATH
-        value: /tmp/datepilot.db
       - key: CORS_ORIGINS
-        value: "*"
+        value: https://datepilot.onrender.com
+      - key: OLLAMA_BASE_URL
+        # Point to a hosted open-weight endpoint (e.g. Groq or OpenRouter that
+        # accepts /v1/chat/completions), or leave as localhost for local dev
+        value: https://api.groq.com/openai/v1
       - key: LLM_MODEL
-        value: gemma3:4b
+        value: gemma2-9b-it
       - key: VISION_MODEL
-        value: llava:7b
-      - key: OPENAI_BASE_URL
-        sync: false
-      - key: OPENAI_API_KEY
-        sync: false
+        value: llava-v1.5-7b-4096-preview
+      - key: SECRET_KEY
+        generateValue: true
 
+  # ── React / Vite static frontend ────────────────────────────────────────
   - type: web
-    name: datepilot-web
+    name: datepilot
     runtime: static
+    region: singapore
+    plan: free
     rootDir: frontend
-    buildCommand: npm ci && npm run build
-    staticPublishPath: ./dist
-    autoDeploy: true
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
     envVars:
       - key: VITE_API_URL
-        fromService:
-          name: datepilot-api
-          type: web
-          property: host
+        value: https://datepilot-api.onrender.com
     routes:
       - type: rewrite
         source: /*

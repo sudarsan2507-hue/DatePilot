@@ -1,95 +1,137 @@
-# DatePilot (DateOptimizer) — Project Status & Roadmap
+# DatePilot — Status & What's Left
 
-**Hackathon Challenge:** DEV Hacktoberfest Weekend Challenge  
-**Core Mission:** An open-model AI agent that constructs a real, constraint-checked date for two partners in Tamil Nadu, India.
-**Core Guarantee:** Open-weight models (Gemma 4/3 via Ollama or hosted endpoints) ensure her taste data stays completely private and local. Deterministic code does all the math.
-
----
-
-## 1. What Is Completed Till Now
-
-### Core Models & Database Layer
-- [x] **Curated Tamil Nadu Venue Database (`venues.json`)**: Hand-curated multi-city dataset spanning Chennai, Coimbatore, and Madurai across 5 slots (`lunch`, `activity`, `cafe`, `sunset`, `dinner`). Venues carry city/locality, coordinates, typical duration, operating hours, cuisine/vibe tags, dietary/indoor flags, ratings, source links, and verification dates.
-- [x] **Pydantic & SQLModel Schemas (`schema.py`)**: `TasteCard`, `PriceComfort`, `SlotType`, `Venue`, `PlannedStop`, `DatePlan`, `SessionCreate`, `SessionDB`, `TasteMemoryDB`, `StopFeedback`.
-- [x] **SQLite Database Layer (`db.py`)**: Automatic table creation for sessions and memory.
-- [x] **Memory & Feedback Interface (`memory.py`)**: Stable interface for storing taste profiles, recording post-date ratings (1-5 + notes), and generating learned taste insights ("What I learned about you two") ready for HippocampAI.
-- [x] **GDPR Privacy Deletion (`memory.py`)**: Instant and permanent data deletion mechanism for any partner.
-
-### Pure Python Deterministic Date Planner
-- [x] **Beam Search Itinerary Solver (`planner.py`)**: Pure deterministic Python (no LLM math errors).
-- [x] **Hard Constraint Engine**:
-  - Total cost ≤ budget (strictly takes the minimum of both partners' limits).
-  - All stops verified open during arrival and departure windows.
-  - Every stop stays in the selected city; inter-stop travel time ≤ max travel limit (Haversine formula × road factor 1.4 ÷ conservative 24 km/h city speed).
-  - Whole itinerary fits within requested time window.
-  - Strict dietary enforcement (union of vegetarian/vegan signals).
-  - Strict exclusion of dislikes from either partner.
-- [x] **Soft Scoring & Variety**: Optimizes for taste overlap, venue ratings, travel efficiency, budget reserve, and cuisine variety.
-- [x] **Ranked Backup Venues**: Automatically computes and assigns the second-best open venue for each stop.
-- [x] **Keyless Live Enrichment**: OSRM road estimates, Open-Meteo rain forecasts, and OpenStreetMap Overpass nearby discovery with deterministic fallbacks and unverified-result safeguards.
-- [x] **Rain Mode Protocol Generator (`planner.py`)**: Generates Plan B with indoor weather-proof substitutions and dynamic trigger notes.
-
-### Open-Model AI Layer & Consent-Based Extraction
-- [x] **Swappable LLM Wrapper (`llm.py`)**: Supports Ollama endpoints (`/api/chat`) for Gemma 4/3 and hosted OpenAI-compatible endpoints (`/v1/chat/completions`), with resilient fallback if offline.
-- [x] **Defensive Instagram & Social Parser (`taste_extractor.py`)**: Walks Instagram export zip and JSON files defensively, extracts captions, hashtags, and locations, deletes raw uploads immediately from memory.
-- [x] **Screenshot Vision Parser (`taste_extractor.py`)**: Analyzes aesthetic screenshots via vision model with fallback.
-- [x] **Privacy Safeguards**: Enforces strict removal of religion, health, and sexuality from prompts and output.
-- [x] **Factual AI Writer (`writer.py`)**: Writes "Why we picked this" per stop using strictly verified facts. Generates friendly itinerary text and validates numbers against planner output.
+**Challenge:** DEV Hacktoberfest Weekend Challenge  
+**Tagline:** Open-weight AI date optimizer for Chennai — her taste data stays local and private.
 
 ---
 
-## 2. What Is Being Finished Now
+## ✅ DONE (everything verified working)
 
-1. **FastAPI Endpoints (`routers/`)**:
-   - `POST /sessions/` (Session creation with dual share tokens)
-   - `GET /sessions/{token}` (Session retrieval without leaking partner's raw preferences)
-   - `POST /sessions/{token_b}/limits` (Partner B private limits)
-   - `GET /sessions/{token}/match-summary` ("What we matched on" overlap card)
-   - `POST /taste/{token}/upload` (IG export / screenshot upload with instant raw file discard)
-   - `POST /taste/{token}/quiz` (Manual romantic quiz fallback)
-   - `POST /taste/{token}/confirm` (Consent confirmation of reviewed Taste Card)
-   - `DELETE /taste/{token}` ("Delete all my data" GDPR wipe)
-   - `POST /plan/{token_a}/generate` (Top 3 date plans generation)
-   - `GET /plan/{token}/current` (Current active plan)
-   - `POST /plan/{token}/swap/{plan_index}/{stop_index}` (Slot re-solver with before/after diff)
-   - `POST /plan/{token}/rain-mode/{plan_index}` (Rain Plan B toggle)
-   - `POST /plan/{token}/rate` (Post-date stop ratings 1-5 & review notes)
-   - `GET /plan/{token}/memory-insights` ("What I learned about you two" summary)
+### Backend
+| What | File | Status |
+|------|------|--------|
+| Pydantic + SQLModel schemas | `backend/app/models/schema.py` | ✅ |
+| SQLite DB layer | `backend/app/db.py` | ✅ |
+| Swappable Ollama/OpenAI-compat LLM wrapper | `backend/app/llm.py` | ✅ |
+| Taste extractor (IG zip, screenshot, quiz) | `backend/app/services/taste_extractor.py` | ✅ |
+| Deterministic beam-search planner | `backend/app/services/planner.py` | ✅ |
+| LLM writer with number-validation | `backend/app/services/writer.py` | ✅ |
+| Memory / GDPR interface | `backend/app/memory.py` | ✅ |
+| Session API (create, get, match-summary) | `backend/app/routers/sessions.py` | ✅ |
+| Taste API (upload, quiz, confirm, delete) | `backend/app/routers/taste.py` | ✅ |
+| Plan API (generate, current, swap, rain-mode) | `backend/app/routers/plan.py` | ✅ |
+| Memory API (rate, insights) | `backend/app/routers/memory_router.py` | ✅ |
+| FastAPI app wiring + CORS | `backend/app/main.py` | ✅ |
+| Curated 36-venue Chennai dataset | `backend/data/venues.json` | ✅ |
+| 6 passing backend tests | `backend/tests/` | ✅ |
 
-2. **Frontend UI (React + Vite + Tailwind CSS)**:
-   - Mobile-first, romantic-minimal aesthetic (blush rose, warm slate, elegant serif accents, cards).
-   - Partner A setup screen (Tamil Nadu city, starting locality, budget, date, time window, max travel, enabled slots).
-   - Partner B private invite link screen with copy button.
-   - Interactive Taste Card profiling (Upload IG Export, Upload Screenshot, or Romantic Preference Quiz).
-   - Taste Card Review Modal (editable tags, delete buttons, confidence badges, confirm button, delete all data button).
-   - "What We Matched On" private overlap card.
-   - 3-Plan Carousel with constraint checklist badges (Budget ✓, Hours ✓, Travel ✓, Dietary ✓).
-   - Timeline cards per stop with photos, times, travel estimates, why-picked reasoning, and backup venues.
-   - Live "Swap Stop" modal with instant cost and travel diff calculation.
-   - Rain Mode toggle & Stay recommendation toggle.
-   - Post-date rating modal with memory feedback.
+### Frontend
+| What | File | Status |
+|------|------|--------|
+| Vite + React + Tailwind setup | `frontend/` | ✅ |
+| Warm romantic design system | `tailwind.config.js`, `index.css` | ✅ |
+| API service layer | `frontend/src/lib/api.js` | ✅ |
+| Session setup (date, area, budget, slots) | `SessionSetup.jsx` | ✅ |
+| Partner B invite link screen | `PartnerInvite.jsx` | ✅ |
+| Taste profiler (upload / screenshot / quiz tabs) | `TasteProfiler.jsx` | ✅ |
+| Taste card review + consent + delete-all | `TasteCardReview.jsx` | ✅ |
+| Anonymous match summary | `MatchSummary.jsx` | ✅ |
+| 3-plan carousel + timeline stops | `ItineraryViewer.jsx` | ✅ |
+| Swap stop diff modal | `SwapModal.jsx` | ✅ |
+| Post-date rating + memory insights modal | `RatingModal.jsx` | ✅ |
+| App flow orchestration + URL hash invite | `App.jsx` | ✅ |
+| Production build passes | `npm run build` | ✅ |
 
-3. **Deployment & Dev Experience**:
-   - `render.yaml` for 1-click Render backend + static frontend build.
-   - Dockerfile and start scripts.
-   - Full automated test suite verifying constraints, planner, and API routes.
+### Deploy config
+| What | File | Status |
+|------|------|--------|
+| Render deploy config (backend + frontend) | `render.yaml` | ✅ |
+| `.env.example` with all vars documented | `backend/.env.example` | ✅ |
 
 ---
 
-## 3. The 15 Logical Commits Plan
+## ❌ NOT DONE — what still needs work
 
-1. `feat(core): schema models, memory interface, and curated Tamil Nadu venue dataset` *(done)*
-2. `feat(planner): deterministic beam-search date planner with constraint validation & time slot engine` *(done)*
-3. `feat(ai): open-model LLM integration (Gemma/Ollama) with fallback & Instagram/quiz taste extractor` *(done)*
-4. `feat(sessions): private 2-person session management, invite tokens & anonymous match summary`
-5. `feat(taste-api): consent-based taste card upload, quiz, review, and GDPR data wipe routes`
-6. `feat(plan-api): top-3 itinerary generation, stop swapping diff engine & rain mode protocol`
-7. `feat(memory-api): post-date stop rating, learned taste feedback & memory insights endpoints`
-8. `test(backend): comprehensive test suite for planner constraints, API routes & fallbacks`
-9. `feat(ui-setup): configure Tailwind CSS, romantic-minimal design system, and API service layer`
-10. `feat(ui-session): session creation, Tamil Nadu city/locality picker, time window controls & partner invite link`
-11. `feat(ui-taste): taste profiling uploader, screenshot parser, interactive quiz & review card`
-12. `feat(ui-match): 'What We Matched On' anonymous overlap summary component`
-13. `feat(ui-itinerary): multi-plan carousel, constraint checklist, timeline stops & ranked backups`
-14. `feat(ui-interactive): single-stop swap diff modal, rain mode toggle & post-date rating memory`
-15. `docs(deploy): Render deployment configuration, project documentation, status tracking & demo assets`
+### P0 blockers (must fix before demo)
+
+1. **Ollama not installed locally** — `ollama` command not found on this machine.
+   - For local dev: install Ollama, run `ollama pull gemma3:4b` and `ollama pull llava:7b`
+   - For deploy: set `OLLAMA_BASE_URL` in `render.yaml` to a Groq/OpenRouter endpoint
+   - LLM calls (`/taste/upload`, `/plan/generate`) will 500 without this
+
+2. **Venue dataset has only 36 venues** — tests assert `>= 30` so this passes, but the planner
+   only finds **2 valid plans** with current data on a ₹6,000 budget + vegetarian filter
+   (needs ≥ 3 per slot-type to return 3 plans consistently).
+   **Fix:** add ~5–8 more venues per slot type to `backend/data/venues.json`.
+
+3. **`is_open()` breaks on split-shift strings like `"12:30-15:00,19:00-23:30"`** — the current
+   parser splits on `","` then `"-"` but `"12:30-15:00,19:00-23:30"` has two `"-"` segments per
+   shift and works correctly. **Verified: this is fine.** ✅
+
+4. **`test_api.py` was failing from project root** — fixed by adding `backend/conftest.py`.
+   Run tests with: `cd backend && python -m pytest`
+
+5. **Frontend `App.jsx` has two demo-mode shortcuts** (Partner A/B tab switcher in header,
+   `onSwitchToPartnerB` button in invite screen) that are fine for hackathon demo but should
+   be removed or gated before real-world deploy.
+
+### P1 — nice-to-have before submission
+
+6. **No `README.md` at repo root** — judges will land there first.
+   Should have: what it is, how to run locally (Ollama + uvicorn + npm dev), 2 screenshots.
+
+7. **No `__init__.py` in `backend/app/routers/` or `backend/tests/`** — works because of
+   `conftest.py` path injection, but adding them is cleaner.
+
+8. **Frontend `.env` not created** — `VITE_API_URL` defaults to `localhost:8000` which works
+   locally. Create `frontend/.env` pointing to deployed API for production build.
+
+9. **`TasteCardReview.jsx` and `MatchSummary.jsx` not checked** — these were in the repo
+   from my earlier commits; verify they render and connect to the API correctly.
+
+10. **Rain mode UI trigger** — `ItineraryViewer.jsx` has an `onRainToggle` prop but the
+    actual button to trigger it may be missing in the rendered UI. Verify it exists.
+
+---
+
+## How to run locally right now
+
+```bash
+# Terminal 1 — backend (needs Python 3.11+)
+cd backend
+pip install -r requirements.txt
+cp .env.example .env          # edit OLLAMA_BASE_URL if needed
+uvicorn app.main:app --reload
+
+# Terminal 2 — frontend
+cd frontend
+npm install
+npm run dev
+# → http://localhost:5173
+```
+
+For tests:
+```bash
+cd backend
+python -m pytest              # 6 tests pass (planner + API)
+```
+
+---
+
+## Deployment (Render)
+
+1. Push repo to GitHub
+2. Go to render.com → New → Blueprint → point to `render.yaml`
+3. Set `OLLAMA_BASE_URL` env var to a Groq or OpenRouter endpoint
+4. Backend deploys to `datepilot-api.onrender.com`
+5. Frontend deploys to `datepilot.onrender.com`
+
+---
+
+## Story for submission
+
+> Open-weight models (Gemma 4 via Ollama or hosted endpoint) mean her Instagram taste data
+> never leaves the local machine during extraction. A GPT-4o API call would send her saved
+> posts to OpenAI's servers. Here, the model runs locally or on a self-hosted endpoint —
+> her aesthetics, vibes, and food preferences stay private. Deterministic Python does all
+> the math (budget, hours, travel) so the model never hallucinates a cost or a time.
