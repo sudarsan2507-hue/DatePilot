@@ -57,3 +57,6 @@ pnpm-debug.log*
 *.swo
 .DS_Store
 Thumbs.db
+
+# Local Claude Code skills
+.claude/skills/
