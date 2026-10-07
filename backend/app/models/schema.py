@@ -162,6 +162,10 @@ class Venue(BaseModel):
     rating: float = 4.0
     source_url: str = ""
     last_verified: str = "2024-12-15"
+    # Freely licensed photo from Wikimedia Commons (see scripts/add_venue_images.py).
+    image_url: Optional[str] = None
+    image_page: Optional[str] = None     # Commons file page: author and licence
+    image_kind: Optional[str] = None     # "place" (the venue itself) or "representative"
 
 
 # ── Plan ─────────────────────────────────────────────────────────────────────

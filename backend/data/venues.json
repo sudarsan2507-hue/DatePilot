@@ -9,16 +9,37 @@
     "avg_cost_for_two": 900,
     "typical_duration_min": 60,
     "open_hours": {
-      "monday": "10:00-22:30", "tuesday": "10:00-22:30", "wednesday": "10:00-22:30",
-      "thursday": "10:00-22:30", "friday": "10:00-22:30", "saturday": "10:00-22:30", "sunday": "10:00-22:30"
+      "monday": "10:00-22:30",
+      "tuesday": "10:00-22:30",
+      "wednesday": "10:00-22:30",
+      "thursday": "10:00-22:30",
+      "friday": "10:00-22:30",
+      "saturday": "10:00-22:30",
+      "sunday": "10:00-22:30"
     },
-    "cuisine_tags": ["cafe", "continental", "desserts", "salads"],
-    "vibe_tags": ["garden", "quiet", "artsy", "vintage", "pastel", "romantic"],
+    "cuisine_tags": [
+      "cafe",
+      "continental",
+      "desserts",
+      "salads"
+    ],
+    "vibe_tags": [
+      "garden",
+      "quiet",
+      "artsy",
+      "vintage",
+      "pastel",
+      "romantic"
+    ],
     "veg_friendly": true,
     "indoor": false,
     "rating": 4.6,
     "source_url": "https://maps.google.com/?cid=amethystchennai",
-    "last_verified": "2024-12-15"
+    "last_verified": "2024-12-15",
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ab/Desserts.jpg/500px-Desserts.jpg",
+    "image_page": "https://commons.wikimedia.org/wiki/File:Desserts.jpg",
+    "image_title": "Dessert",
+    "image_kind": "representative"
   },
   {
     "id": "chn-02",
@@ -30,16 +51,36 @@
     "avg_cost_for_two": 1100,
     "typical_duration_min": 60,
     "open_hours": {
-      "monday": "08:00-23:00", "tuesday": "08:00-23:00", "wednesday": "08:00-23:00",
-      "thursday": "08:00-23:00", "friday": "08:00-23:00", "saturday": "08:00-23:00", "sunday": "08:00-23:00"
+      "monday": "08:00-23:00",
+      "tuesday": "08:00-23:00",
+      "wednesday": "08:00-23:00",
+      "thursday": "08:00-23:00",
+      "friday": "08:00-23:00",
+      "saturday": "08:00-23:00",
+      "sunday": "08:00-23:00"
     },
-    "cuisine_tags": ["cafe", "continental", "breakfast", "pastries"],
-    "vibe_tags": ["vintage", "pastel", "cozy", "aesthetic", "romantic"],
+    "cuisine_tags": [
+      "cafe",
+      "continental",
+      "breakfast",
+      "pastries"
+    ],
+    "vibe_tags": [
+      "vintage",
+      "pastel",
+      "cozy",
+      "aesthetic",
+      "romantic"
+    ],
     "veg_friendly": true,
     "indoor": true,
     "rating": 4.5,
     "source_url": "https://maps.google.com/?cid=chamierscafe",
-    "last_verified": "2024-12-15"
+    "last_verified": "2024-12-15",
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/51/Filter_kaapi.JPG/500px-Filter_kaapi.JPG",
+    "image_page": "https://commons.wikimedia.org/wiki/File:Filter_kaapi.JPG",
+    "image_title": "Indian filter coffee",
+    "image_kind": "representative"
   },
   {
     "id": "chn-03",
@@ -51,16 +92,36 @@
     "avg_cost_for_two": 1000,
     "typical_duration_min": 60,
     "open_hours": {
-      "monday": "08:00-23:00", "tuesday": "08:00-23:00", "wednesday": "08:00-23:00",
-      "thursday": "08:00-23:00", "friday": "08:00-23:00", "saturday": "08:00-23:00", "sunday": "08:00-23:00"
+      "monday": "08:00-23:00",
+      "tuesday": "08:00-23:00",
+      "wednesday": "08:00-23:00",
+      "thursday": "08:00-23:00",
+      "friday": "08:00-23:00",
+      "saturday": "08:00-23:00",
+      "sunday": "08:00-23:00"
     },
-    "cuisine_tags": ["coffee", "desserts", "european", "sandwiches"],
-    "vibe_tags": ["garden", "glasshouse", "quiet", "romantic", "peaceful"],
+    "cuisine_tags": [
+      "coffee",
+      "desserts",
+      "european",
+      "sandwiches"
+    ],
+    "vibe_tags": [
+      "garden",
+      "glasshouse",
+      "quiet",
+      "romantic",
+      "peaceful"
+    ],
     "veg_friendly": true,
     "indoor": false,
     "rating": 4.4,
     "source_url": "https://maps.google.com/?cid=thebrewroom",
-    "last_verified": "2024-12-15"
+    "last_verified": "2024-12-15",
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/51/Filter_kaapi.JPG/500px-Filter_kaapi.JPG",
+    "image_page": "https://commons.wikimedia.org/wiki/File:Filter_kaapi.JPG",
+    "image_title": "Indian filter coffee",
+    "image_kind": "representative"
   },
   {
     "id": "chn-04",
@@ -72,16 +133,35 @@
     "avg_cost_for_two": 1200,
     "typical_duration_min": 60,
     "open_hours": {
-      "monday": "11:00-23:00", "tuesday": "11:00-23:00", "wednesday": "11:00-23:00",
-      "thursday": "11:00-23:00", "friday": "11:00-23:00", "saturday": "11:00-23:00", "sunday": "11:00-23:00"
+      "monday": "11:00-23:00",
+      "tuesday": "11:00-23:00",
+      "wednesday": "11:00-23:00",
+      "thursday": "11:00-23:00",
+      "friday": "11:00-23:00",
+      "saturday": "11:00-23:00",
+      "sunday": "11:00-23:00"
     },
-    "cuisine_tags": ["italian", "cafe", "pizza", "desserts"],
-    "vibe_tags": ["quirky", "active", "modern", "casual"],
+    "cuisine_tags": [
+      "italian",
+      "cafe",
+      "pizza",
+      "desserts"
+    ],
+    "vibe_tags": [
+      "quirky",
+      "active",
+      "modern",
+      "casual"
+    ],
     "veg_friendly": true,
     "indoor": true,
     "rating": 4.3,
     "source_url": "https://maps.google.com/?cid=ciclocafechennai",
-    "last_verified": "2024-12-15"
+    "last_verified": "2024-12-15",
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/91/Pizza-3007395.jpg/500px-Pizza-3007395.jpg",
+    "image_page": "https://commons.wikimedia.org/wiki/File:Pizza-3007395.jpg",
+    "image_title": "Pizza",
+    "image_kind": "representative"
   },
   {
     "id": "chn-05",
@@ -89,20 +169,40 @@
     "type": "cafe",
     "area": "Gopalapuram",
     "lat": 13.0519,
-    "lng": 80.2520,
+    "lng": 80.252,
     "avg_cost_for_two": 700,
     "typical_duration_min": 60,
     "open_hours": {
-      "monday": "09:30-22:30", "tuesday": "09:30-22:30", "wednesday": "09:30-22:30",
-      "thursday": "09:30-22:30", "friday": "09:30-22:30", "saturday": "09:30-22:30", "sunday": "09:30-22:30"
+      "monday": "09:30-22:30",
+      "tuesday": "09:30-22:30",
+      "wednesday": "09:30-22:30",
+      "thursday": "09:30-22:30",
+      "friday": "09:30-22:30",
+      "saturday": "09:30-22:30",
+      "sunday": "09:30-22:30"
     },
-    "cuisine_tags": ["cafe", "bakery", "pasta", "desserts"],
-    "vibe_tags": ["quiet", "books", "artsy", "cozy", "warm"],
+    "cuisine_tags": [
+      "cafe",
+      "bakery",
+      "pasta",
+      "desserts"
+    ],
+    "vibe_tags": [
+      "quiet",
+      "books",
+      "artsy",
+      "cozy",
+      "warm"
+    ],
     "veg_friendly": true,
     "indoor": true,
     "rating": 4.5,
     "source_url": "https://maps.google.com/?cid=writerscafechennai",
-    "last_verified": "2024-12-15"
+    "last_verified": "2024-12-15",
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3f/%28Pasta%29_by_David_Adam_Kess_%28pic.2%29.jpg/500px-%28Pasta%29_by_David_Adam_Kess_%28pic.2%29.jpg",
+    "image_page": "https://commons.wikimedia.org/wiki/File:%28Pasta%29_by_David_Adam_Kess_%28pic.2%29.jpg",
+    "image_title": "Pasta",
+    "image_kind": "representative"
   },
   {
     "id": "chn-06",
@@ -114,16 +214,35 @@
     "avg_cost_for_two": 1000,
     "typical_duration_min": 45,
     "open_hours": {
-      "monday": "11:00-23:00", "tuesday": "11:00-23:00", "wednesday": "11:00-23:00",
-      "thursday": "11:00-23:00", "friday": "11:00-23:00", "saturday": "11:00-23:00", "sunday": "11:00-23:00"
+      "monday": "11:00-23:00",
+      "tuesday": "11:00-23:00",
+      "wednesday": "11:00-23:00",
+      "thursday": "11:00-23:00",
+      "friday": "11:00-23:00",
+      "saturday": "11:00-23:00",
+      "sunday": "11:00-23:00"
     },
-    "cuisine_tags": ["desserts", "chocolate", "cafe", "bistro"],
-    "vibe_tags": ["fun", "sweet", "cozy", "quirky"],
+    "cuisine_tags": [
+      "desserts",
+      "chocolate",
+      "cafe",
+      "bistro"
+    ],
+    "vibe_tags": [
+      "fun",
+      "sweet",
+      "cozy",
+      "quirky"
+    ],
     "veg_friendly": true,
     "indoor": true,
     "rating": 4.4,
     "source_url": "https://maps.google.com/?cid=sandyschennai",
-    "last_verified": "2024-12-15"
+    "last_verified": "2024-12-15",
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/55/Chocolate_fudge_cake.jpg/500px-Chocolate_fudge_cake.jpg",
+    "image_page": "https://commons.wikimedia.org/wiki/File:Chocolate_fudge_cake.jpg",
+    "image_title": "Chocolate cake",
+    "image_kind": "representative"
   },
   {
     "id": "chn-07",
@@ -135,16 +254,35 @@
     "avg_cost_for_two": 650,
     "typical_duration_min": 45,
     "open_hours": {
-      "monday": "09:00-23:00", "tuesday": "09:00-23:00", "wednesday": "09:00-23:00",
-      "thursday": "09:00-23:00", "friday": "09:00-23:00", "saturday": "09:00-23:00", "sunday": "09:00-23:00"
+      "monday": "09:00-23:00",
+      "tuesday": "09:00-23:00",
+      "wednesday": "09:00-23:00",
+      "thursday": "09:00-23:00",
+      "friday": "09:00-23:00",
+      "saturday": "09:00-23:00",
+      "sunday": "09:00-23:00"
     },
-    "cuisine_tags": ["bakery", "cupcakes", "cafe", "desserts"],
-    "vibe_tags": ["courtyard", "cozy", "sweet", "pastel"],
+    "cuisine_tags": [
+      "bakery",
+      "cupcakes",
+      "cafe",
+      "desserts"
+    ],
+    "vibe_tags": [
+      "courtyard",
+      "cozy",
+      "sweet",
+      "pastel"
+    ],
     "veg_friendly": true,
     "indoor": false,
     "rating": 4.3,
     "source_url": "https://maps.google.com/?cid=glensbakehousealwarpet",
-    "last_verified": "2024-12-15"
+    "last_verified": "2024-12-15",
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c6/Cupcakes%2C_chocolate_and_strawberry_flavour.jpg/500px-Cupcakes%2C_chocolate_and_strawberry_flavour.jpg",
+    "image_page": "https://commons.wikimedia.org/wiki/File:Cupcakes%2C_chocolate_and_strawberry_flavour.jpg",
+    "image_title": "Cupcake",
+    "image_kind": "representative"
   },
   {
     "id": "chn-08",
@@ -152,20 +290,38 @@
     "type": "cafe",
     "area": "Besant Nagar",
     "lat": 12.9995,
-    "lng": 80.2690,
+    "lng": 80.269,
     "avg_cost_for_two": 500,
     "typical_duration_min": 45,
     "open_hours": {
-      "monday": "11:00-23:00", "tuesday": "11:00-23:00", "wednesday": "11:00-23:00",
-      "thursday": "11:00-23:00", "friday": "11:00-23:30", "saturday": "11:00-23:30", "sunday": "11:00-23:30"
+      "monday": "11:00-23:00",
+      "tuesday": "11:00-23:00",
+      "wednesday": "11:00-23:00",
+      "thursday": "11:00-23:00",
+      "friday": "11:00-23:30",
+      "saturday": "11:00-23:30",
+      "sunday": "11:00-23:30"
     },
-    "cuisine_tags": ["desserts", "ice-cream", "mocktails"],
-    "vibe_tags": ["playful", "modern", "beachside", "casual"],
+    "cuisine_tags": [
+      "desserts",
+      "ice-cream",
+      "mocktails"
+    ],
+    "vibe_tags": [
+      "playful",
+      "modern",
+      "beachside",
+      "casual"
+    ],
     "veg_friendly": true,
     "indoor": true,
     "rating": 4.2,
     "source_url": "https://maps.google.com/?cid=blindchymistry",
-    "last_verified": "2024-12-15"
+    "last_verified": "2024-12-15",
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3a/Delicious_Gelato_on_display.jpg/500px-Delicious_Gelato_on_display.jpg",
+    "image_page": "https://commons.wikimedia.org/wiki/File:Delicious_Gelato_on_display.jpg",
+    "image_title": "Gelato",
+    "image_kind": "representative"
   },
   {
     "id": "chn-09",
@@ -173,20 +329,40 @@
     "type": "cafe",
     "area": "Alwarpet",
     "lat": 13.0371,
-    "lng": 80.2520,
+    "lng": 80.252,
     "avg_cost_for_two": 950,
     "typical_duration_min": 60,
     "open_hours": {
-      "monday": "11:00-22:30", "tuesday": "11:00-22:30", "wednesday": "11:00-22:30",
-      "thursday": "11:00-22:30", "friday": "11:00-22:30", "saturday": "11:00-22:30", "sunday": "11:00-22:30"
+      "monday": "11:00-22:30",
+      "tuesday": "11:00-22:30",
+      "wednesday": "11:00-22:30",
+      "thursday": "11:00-22:30",
+      "friday": "11:00-22:30",
+      "saturday": "11:00-22:30",
+      "sunday": "11:00-22:30"
     },
-    "cuisine_tags": ["cafe", "pizza", "pasta", "desserts"],
-    "vibe_tags": ["bohemian", "artsy", "outdoor", "peaceful", "romantic"],
+    "cuisine_tags": [
+      "cafe",
+      "pizza",
+      "pasta",
+      "desserts"
+    ],
+    "vibe_tags": [
+      "bohemian",
+      "artsy",
+      "outdoor",
+      "peaceful",
+      "romantic"
+    ],
     "veg_friendly": true,
     "indoor": false,
     "rating": 4.4,
     "source_url": "https://maps.google.com/?cid=ashvitabistro",
-    "last_verified": "2024-12-15"
+    "last_verified": "2024-12-15",
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/91/Pizza-3007395.jpg/500px-Pizza-3007395.jpg",
+    "image_page": "https://commons.wikimedia.org/wiki/File:Pizza-3007395.jpg",
+    "image_title": "Pizza",
+    "image_kind": "representative"
   },
   {
     "id": "chn-10",
@@ -198,16 +374,35 @@
     "avg_cost_for_two": 2600,
     "typical_duration_min": 80,
     "open_hours": {
-      "monday": "12:30-15:00", "tuesday": "12:30-15:00", "wednesday": "12:30-15:00",
-      "thursday": "12:30-15:00", "friday": "12:30-15:00", "saturday": "12:30-15:00", "sunday": "12:30-15:00"
+      "monday": "12:30-15:00",
+      "tuesday": "12:30-15:00",
+      "wednesday": "12:30-15:00",
+      "thursday": "12:30-15:00",
+      "friday": "12:30-15:00",
+      "saturday": "12:30-15:00",
+      "sunday": "12:30-15:00"
     },
-    "cuisine_tags": ["south-indian", "coastal", "seafood", "cheltinad"],
-    "vibe_tags": ["fine-dining", "traditional", "heritage", "romantic"],
+    "cuisine_tags": [
+      "south-indian",
+      "coastal",
+      "seafood",
+      "cheltinad"
+    ],
+    "vibe_tags": [
+      "fine-dining",
+      "traditional",
+      "heritage",
+      "romantic"
+    ],
     "veg_friendly": true,
     "indoor": true,
     "rating": 4.7,
     "source_url": "https://maps.google.com/?cid=dakshinalwarpet",
-    "last_verified": "2024-12-15"
+    "last_verified": "2024-12-15",
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/49/Vegetarian_Curry.jpeg/500px-Vegetarian_Curry.jpeg",
+    "image_page": "https://commons.wikimedia.org/wiki/File:Vegetarian_Curry.jpeg",
+    "image_title": "Thali",
+    "image_kind": "representative"
   },
   {
     "id": "chn-11",
@@ -219,16 +414,35 @@
     "avg_cost_for_two": 1400,
     "typical_duration_min": 75,
     "open_hours": {
-      "monday": "12:00-15:00", "tuesday": "12:00-15:00", "wednesday": "12:00-15:00",
-      "thursday": "12:00-15:00", "friday": "12:00-15:00", "saturday": "12:00-15:00", "sunday": "12:00-15:00"
+      "monday": "12:00-15:00",
+      "tuesday": "12:00-15:00",
+      "wednesday": "12:00-15:00",
+      "thursday": "12:00-15:00",
+      "friday": "12:00-15:00",
+      "saturday": "12:00-15:00",
+      "sunday": "12:00-15:00"
     },
-    "cuisine_tags": ["south-indian", "vegetarian", "thali", "traditional"],
-    "vibe_tags": ["peaceful", "heritage", "serene", "cultural"],
+    "cuisine_tags": [
+      "south-indian",
+      "vegetarian",
+      "thali",
+      "traditional"
+    ],
+    "vibe_tags": [
+      "peaceful",
+      "heritage",
+      "serene",
+      "cultural"
+    ],
     "veg_friendly": true,
     "indoor": true,
     "rating": 4.6,
     "source_url": "https://maps.google.com/?cid=annalakshmiegmore",
-    "last_verified": "2024-12-15"
+    "last_verified": "2024-12-15",
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/49/Vegetarian_Curry.jpeg/500px-Vegetarian_Curry.jpeg",
+    "image_page": "https://commons.wikimedia.org/wiki/File:Vegetarian_Curry.jpeg",
+    "image_title": "Thali",
+    "image_kind": "representative"
   },
   {
     "id": "chn-12",
@@ -240,16 +454,35 @@
     "avg_cost_for_two": 350,
     "typical_duration_min": 45,
     "open_hours": {
-      "monday": "07:00-11:30", "tuesday": "07:00-11:30", "wednesday": "07:00-11:30",
-      "thursday": "07:00-11:30", "friday": "07:00-11:30", "saturday": "07:00-11:30", "sunday": "07:00-11:30"
+      "monday": "07:00-11:30",
+      "tuesday": "07:00-11:30",
+      "wednesday": "07:00-11:30",
+      "thursday": "07:00-11:30",
+      "friday": "07:00-11:30",
+      "saturday": "07:00-11:30",
+      "sunday": "07:00-11:30"
     },
-    "cuisine_tags": ["south-indian", "tiffin", "traditional", "filter-coffee"],
-    "vibe_tags": ["heritage", "authentic", "bustling", "nostalgic"],
+    "cuisine_tags": [
+      "south-indian",
+      "tiffin",
+      "traditional",
+      "filter-coffee"
+    ],
+    "vibe_tags": [
+      "heritage",
+      "authentic",
+      "bustling",
+      "nostalgic"
+    ],
     "veg_friendly": true,
     "indoor": true,
     "rating": 4.5,
     "source_url": "https://maps.google.com/?cid=rayarsmess",
-    "last_verified": "2024-12-15"
+    "last_verified": "2024-12-15",
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/11/Idli_Sambar.JPG/500px-Idli_Sambar.JPG",
+    "image_page": "https://commons.wikimedia.org/wiki/File:Idli_Sambar.JPG",
+    "image_title": "Idli",
+    "image_kind": "representative"
   },
   {
     "id": "chn-13",
@@ -257,20 +490,40 @@
     "type": "lunch",
     "area": "Alwarpet",
     "lat": 13.0315,
-    "lng": 80.2530,
+    "lng": 80.253,
     "avg_cost_for_two": 1700,
     "typical_duration_min": 75,
     "open_hours": {
-      "monday": "07:00-22:30", "tuesday": "07:00-22:30", "wednesday": "07:00-22:30",
-      "thursday": "07:00-22:30", "friday": "07:00-22:30", "saturday": "07:00-22:30", "sunday": "07:00-22:30"
+      "monday": "07:00-22:30",
+      "tuesday": "07:00-22:30",
+      "wednesday": "07:00-22:30",
+      "thursday": "07:00-22:30",
+      "friday": "07:00-22:30",
+      "saturday": "07:00-22:30",
+      "sunday": "07:00-22:30"
     },
-    "cuisine_tags": ["continental", "healthy", "brunch", "asian"],
-    "vibe_tags": ["modern", "bright", "cozy", "pastel", "friendly"],
+    "cuisine_tags": [
+      "continental",
+      "healthy",
+      "brunch",
+      "asian"
+    ],
+    "vibe_tags": [
+      "modern",
+      "bright",
+      "cozy",
+      "pastel",
+      "friendly"
+    ],
     "veg_friendly": true,
     "indoor": true,
     "rating": 4.6,
     "source_url": "https://maps.google.com/?cid=pumpkintales",
-    "last_verified": "2024-12-15"
+    "last_verified": "2024-12-15",
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5b/Waffles_with_Strawberries.jpg/500px-Waffles_with_Strawberries.jpg",
+    "image_page": "https://commons.wikimedia.org/wiki/File:Waffles_with_Strawberries.jpg",
+    "image_title": "Waffle",
+    "image_kind": "representative"
   },
   {
     "id": "chn-14",
@@ -282,16 +535,35 @@
     "avg_cost_for_two": 1500,
     "typical_duration_min": 75,
     "open_hours": {
-      "monday": "12:00-15:30", "tuesday": "12:00-15:30", "wednesday": "12:00-15:30",
-      "thursday": "12:00-15:30", "friday": "12:00-15:30", "saturday": "12:00-15:30", "sunday": "12:00-15:30"
+      "monday": "12:00-15:30",
+      "tuesday": "12:00-15:30",
+      "wednesday": "12:00-15:30",
+      "thursday": "12:00-15:30",
+      "friday": "12:00-15:30",
+      "saturday": "12:00-15:30",
+      "sunday": "12:00-15:30"
     },
-    "cuisine_tags": ["north-indian", "mughlai", "biryani", "kebabs"],
-    "vibe_tags": ["warm", "classic", "comforting", "spacious"],
+    "cuisine_tags": [
+      "north-indian",
+      "mughlai",
+      "biryani",
+      "kebabs"
+    ],
+    "vibe_tags": [
+      "warm",
+      "classic",
+      "comforting",
+      "spacious"
+    ],
     "veg_friendly": true,
     "indoor": true,
     "rating": 4.4,
     "source_url": "https://maps.google.com/?cid=copperchimneychennai",
-    "last_verified": "2024-12-15"
+    "last_verified": "2024-12-15",
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5a/%22Hyderabadi_Dum_Biryani%22.jpg/500px-%22Hyderabadi_Dum_Biryani%22.jpg",
+    "image_page": "https://commons.wikimedia.org/wiki/File:%22Hyderabadi_Dum_Biryani%22.jpg",
+    "image_title": "Biryani",
+    "image_kind": "representative"
   },
   {
     "id": "chn-15",
@@ -303,16 +575,36 @@
     "avg_cost_for_two": 1800,
     "typical_duration_min": 90,
     "open_hours": {
-      "monday": "11:00-17:00", "tuesday": "11:00-17:00", "wednesday": "11:00-17:00",
-      "thursday": "11:00-17:00", "friday": "11:00-18:00", "saturday": "08:30-18:00", "sunday": "08:30-18:00"
+      "monday": "11:00-17:00",
+      "tuesday": "11:00-17:00",
+      "wednesday": "11:00-17:00",
+      "thursday": "11:00-17:00",
+      "friday": "11:00-18:00",
+      "saturday": "08:30-18:00",
+      "sunday": "08:30-18:00"
     },
-    "cuisine_tags": ["organic", "farm-to-table", "pizza", "salads"],
-    "vibe_tags": ["farm", "outdoors", "green", "rustic", "peaceful"],
+    "cuisine_tags": [
+      "organic",
+      "farm-to-table",
+      "pizza",
+      "salads"
+    ],
+    "vibe_tags": [
+      "farm",
+      "outdoors",
+      "green",
+      "rustic",
+      "peaceful"
+    ],
     "veg_friendly": true,
     "indoor": false,
     "rating": 4.5,
     "source_url": "https://maps.google.com/?cid=thefarmchennai",
-    "last_verified": "2024-12-15"
+    "last_verified": "2024-12-15",
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4e/Vegetarian_diet.jpg/500px-Vegetarian_diet.jpg",
+    "image_page": "https://commons.wikimedia.org/wiki/File:Vegetarian_diet.jpg",
+    "image_title": "Vegetarian cuisine",
+    "image_kind": "representative"
   },
   {
     "id": "chn-16",
@@ -324,16 +616,36 @@
     "avg_cost_for_two": 1600,
     "typical_duration_min": 75,
     "open_hours": {
-      "monday": "11:00-22:30", "tuesday": "11:00-22:30", "wednesday": "11:00-22:30",
-      "thursday": "11:00-22:30", "friday": "11:00-22:30", "saturday": "11:00-22:30", "sunday": "11:00-22:30"
+      "monday": "11:00-22:30",
+      "tuesday": "11:00-22:30",
+      "wednesday": "11:00-22:30",
+      "thursday": "11:00-22:30",
+      "friday": "11:00-22:30",
+      "saturday": "11:00-22:30",
+      "sunday": "11:00-22:30"
     },
-    "cuisine_tags": ["mediterranean", "italian", "continental", "cafe"],
-    "vibe_tags": ["courtyard", "garden", "romantic", "peaceful", "breezy"],
+    "cuisine_tags": [
+      "mediterranean",
+      "italian",
+      "continental",
+      "cafe"
+    ],
+    "vibe_tags": [
+      "courtyard",
+      "garden",
+      "romantic",
+      "peaceful",
+      "breezy"
+    ],
     "veg_friendly": true,
     "indoor": false,
     "rating": 4.5,
     "source_url": "https://maps.google.com/?cid=eastcoastmadrassquare",
-    "last_verified": "2024-12-15"
+    "last_verified": "2024-12-15",
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3f/%28Pasta%29_by_David_Adam_Kess_%28pic.2%29.jpg/500px-%28Pasta%29_by_David_Adam_Kess_%28pic.2%29.jpg",
+    "image_page": "https://commons.wikimedia.org/wiki/File:%28Pasta%29_by_David_Adam_Kess_%28pic.2%29.jpg",
+    "image_title": "Pasta",
+    "image_kind": "representative"
   },
   {
     "id": "chn-17",
@@ -345,16 +657,35 @@
     "avg_cost_for_two": 1300,
     "typical_duration_min": 75,
     "open_hours": {
-      "monday": "12:00-15:30", "tuesday": "12:00-15:30", "wednesday": "12:00-15:30",
-      "thursday": "12:00-15:30", "friday": "12:00-15:30", "saturday": "12:00-15:30", "sunday": "12:00-15:30"
+      "monday": "12:00-15:30",
+      "tuesday": "12:00-15:30",
+      "wednesday": "12:00-15:30",
+      "thursday": "12:00-15:30",
+      "friday": "12:00-15:30",
+      "saturday": "12:00-15:30",
+      "sunday": "12:00-15:30"
     },
-    "cuisine_tags": ["north-indian", "italian", "mexican", "vegetarian"],
-    "vibe_tags": ["quirky", "themed", "fun", "casual"],
+    "cuisine_tags": [
+      "north-indian",
+      "italian",
+      "mexican",
+      "vegetarian"
+    ],
+    "vibe_tags": [
+      "quirky",
+      "themed",
+      "fun",
+      "casual"
+    ],
     "veg_friendly": true,
     "indoor": true,
     "rating": 4.2,
     "source_url": "https://maps.google.com/?cid=kaidikitchen",
-    "last_verified": "2024-12-15"
+    "last_verified": "2024-12-15",
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5b/Lula_kebab_2.jpg/500px-Lula_kebab_2.jpg",
+    "image_page": "https://commons.wikimedia.org/wiki/File:Lula_kebab_2.jpg",
+    "image_title": "Kebab",
+    "image_kind": "representative"
   },
   {
     "id": "chn-18",
@@ -366,16 +697,31 @@
     "avg_cost_for_two": 400,
     "typical_duration_min": 90,
     "open_hours": {
-      "monday": "10:00-18:00", "tuesday": "closed", "wednesday": "10:00-18:00",
-      "thursday": "10:00-18:00", "friday": "10:00-18:00", "saturday": "10:00-18:00", "sunday": "10:00-18:00"
+      "monday": "10:00-18:00",
+      "tuesday": "closed",
+      "wednesday": "10:00-18:00",
+      "thursday": "10:00-18:00",
+      "friday": "10:00-18:00",
+      "saturday": "10:00-18:00",
+      "sunday": "10:00-18:00"
     },
     "cuisine_tags": [],
-    "vibe_tags": ["artsy", "heritage", "outdoors", "culture", "peaceful"],
+    "vibe_tags": [
+      "artsy",
+      "heritage",
+      "outdoors",
+      "culture",
+      "peaceful"
+    ],
     "veg_friendly": true,
     "indoor": false,
     "rating": 4.6,
     "source_url": "https://maps.google.com/?cid=dakshinachitra",
-    "last_verified": "2024-12-15"
+    "last_verified": "2024-12-15",
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9a/Craft_fair_and_folk_festival_Bangladesh_2024_at_Sonargaon_museum_35.jpg/500px-Craft_fair_and_folk_festival_Bangladesh_2024_at_Sonargaon_museum_35.jpg",
+    "image_page": "https://commons.wikimedia.org/wiki/File:Craft_fair_and_folk_festival_Bangladesh_2024_at_Sonargaon_museum_35.jpg",
+    "image_title": "Craft",
+    "image_kind": "representative"
   },
   {
     "id": "chn-19",
@@ -387,16 +733,31 @@
     "avg_cost_for_two": 200,
     "typical_duration_min": 75,
     "open_hours": {
-      "monday": "09:30-18:30", "tuesday": "09:30-18:30", "wednesday": "09:30-18:30",
-      "thursday": "09:30-18:30", "friday": "09:30-18:30", "saturday": "09:30-18:30", "sunday": "09:30-18:30"
+      "monday": "09:30-18:30",
+      "tuesday": "09:30-18:30",
+      "wednesday": "09:30-18:30",
+      "thursday": "09:30-18:30",
+      "friday": "09:30-18:30",
+      "saturday": "09:30-18:30",
+      "sunday": "09:30-18:30"
     },
     "cuisine_tags": [],
-    "vibe_tags": ["artsy", "quiet", "sculpture", "bohemian", "peaceful"],
+    "vibe_tags": [
+      "artsy",
+      "quiet",
+      "sculpture",
+      "bohemian",
+      "peaceful"
+    ],
     "veg_friendly": true,
     "indoor": false,
     "rating": 4.4,
     "source_url": "https://maps.google.com/?cid=cholamandalartistsvillage",
-    "last_verified": "2024-12-15"
+    "last_verified": "2024-12-15",
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/ce/Asia-Society-Gallery.jpg/500px-Asia-Society-Gallery.jpg",
+    "image_page": "https://commons.wikimedia.org/wiki/File:Asia-Society-Gallery.jpg",
+    "image_title": "Art gallery",
+    "image_kind": "representative"
   },
   {
     "id": "chn-20",
@@ -408,16 +769,31 @@
     "avg_cost_for_two": 1600,
     "typical_duration_min": 90,
     "open_hours": {
-      "monday": "10:00-18:00", "tuesday": "10:00-18:00", "wednesday": "10:00-18:00",
-      "thursday": "10:00-18:00", "friday": "10:00-18:00", "saturday": "10:00-19:00", "sunday": "10:00-19:00"
+      "monday": "10:00-18:00",
+      "tuesday": "10:00-18:00",
+      "wednesday": "10:00-18:00",
+      "thursday": "10:00-18:00",
+      "friday": "10:00-18:00",
+      "saturday": "10:00-19:00",
+      "sunday": "10:00-19:00"
     },
     "cuisine_tags": [],
-    "vibe_tags": ["hands-on", "artsy", "creative", "intimate", "playful"],
+    "vibe_tags": [
+      "hands-on",
+      "artsy",
+      "creative",
+      "intimate",
+      "playful"
+    ],
     "veg_friendly": true,
     "indoor": true,
     "rating": 4.8,
     "source_url": "https://maps.google.com/?cid=lifeandartacademy",
-    "last_verified": "2024-12-15"
+    "last_verified": "2024-12-15",
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f2/Traditional_pottery_in_Nigeria_%28Ikpu_ite%29_19.jpg/500px-Traditional_pottery_in_Nigeria_%28Ikpu_ite%29_19.jpg",
+    "image_page": "https://commons.wikimedia.org/wiki/File:Traditional_pottery_in_Nigeria_%28Ikpu_ite%29_19.jpg",
+    "image_title": "Pottery",
+    "image_kind": "representative"
   },
   {
     "id": "chn-21",
@@ -429,16 +805,34 @@
     "avg_cost_for_two": 400,
     "typical_duration_min": 90,
     "open_hours": {
-      "monday": "13:00-22:00", "tuesday": "13:00-22:00", "wednesday": "13:00-22:00",
-      "thursday": "13:00-22:00", "friday": "13:00-23:00", "saturday": "11:00-23:00", "sunday": "11:00-23:00"
+      "monday": "13:00-22:00",
+      "tuesday": "13:00-22:00",
+      "wednesday": "13:00-22:00",
+      "thursday": "13:00-22:00",
+      "friday": "13:00-23:00",
+      "saturday": "11:00-23:00",
+      "sunday": "11:00-23:00"
     },
-    "cuisine_tags": ["snacks", "coffee"],
-    "vibe_tags": ["fun", "playful", "cozy", "indoor", "interactive"],
+    "cuisine_tags": [
+      "snacks",
+      "coffee"
+    ],
+    "vibe_tags": [
+      "fun",
+      "playful",
+      "cozy",
+      "indoor",
+      "interactive"
+    ],
     "veg_friendly": true,
     "indoor": true,
     "rating": 4.7,
     "source_url": "https://maps.google.com/?cid=boardgameloungechennai",
-    "last_verified": "2024-12-15"
+    "last_verified": "2024-12-15",
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/97/US_Navy_110713-N-NT881-124_Personnel_Specialist_2nd_Class_James_Vail%2C_left%2C_and_Boatswain%27s_Mate_2nd_Class_Nathaniel_Eaton_play_board_games_with_ch.jpg/500px-US_Navy_110713-N-NT881-124_Personnel_Specialist_2nd_Class_James_Vail%2C_left%2C_and_Boatswain%27s_Mate_2nd_Class_Nathaniel_Eaton_play_board_games_with_ch.jpg",
+    "image_page": "https://commons.wikimedia.org/wiki/File:US_Navy_110713-N-NT881-124_Personnel_Specialist_2nd_Class_James_Vail%2C_left%2C_and_Boatswain%27s_Mate_2nd_Class_Nathaniel_Eaton_play_board_games_with_ch.jpg",
+    "image_title": "Board game",
+    "image_kind": "representative"
   },
   {
     "id": "chn-22",
@@ -450,16 +844,31 @@
     "avg_cost_for_two": 100,
     "typical_duration_min": 60,
     "open_hours": {
-      "monday": "10:00-17:00", "tuesday": "10:00-17:00", "wednesday": "10:00-17:00",
-      "thursday": "10:00-17:00", "friday": "10:00-17:00", "saturday": "10:00-17:00", "sunday": "closed"
+      "monday": "10:00-17:00",
+      "tuesday": "10:00-17:00",
+      "wednesday": "10:00-17:00",
+      "thursday": "10:00-17:00",
+      "friday": "10:00-17:00",
+      "saturday": "10:00-17:00",
+      "sunday": "closed"
     },
     "cuisine_tags": [],
-    "vibe_tags": ["quiet", "books", "heritage", "vintage", "architecture"],
+    "vibe_tags": [
+      "quiet",
+      "books",
+      "heritage",
+      "vintage",
+      "architecture"
+    ],
     "veg_friendly": true,
     "indoor": true,
     "rating": 4.6,
     "source_url": "https://maps.google.com/?cid=madrasliterarysociety",
-    "last_verified": "2024-12-15"
+    "last_verified": "2024-12-15",
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/62/Madras_Literary_society_grounds.png/500px-Madras_Literary_society_grounds.png",
+    "image_page": "https://commons.wikimedia.org/wiki/File:Madras_Literary_society_grounds.png",
+    "image_title": "Madras Literary Society",
+    "image_kind": "place"
   },
   {
     "id": "chn-23",
@@ -471,16 +880,31 @@
     "avg_cost_for_two": 300,
     "typical_duration_min": 75,
     "open_hours": {
-      "monday": "09:30-17:30", "tuesday": "09:30-17:30", "wednesday": "09:30-17:30",
-      "thursday": "09:30-17:30", "friday": "09:30-17:30", "saturday": "09:30-13:00", "sunday": "closed"
+      "monday": "09:30-17:30",
+      "tuesday": "09:30-17:30",
+      "wednesday": "09:30-17:30",
+      "thursday": "09:30-17:30",
+      "friday": "09:30-17:30",
+      "saturday": "09:30-13:00",
+      "sunday": "closed"
     },
     "cuisine_tags": [],
-    "vibe_tags": ["peaceful", "green", "serene", "heritage", "traditional"],
+    "vibe_tags": [
+      "peaceful",
+      "green",
+      "serene",
+      "heritage",
+      "traditional"
+    ],
     "veg_friendly": true,
     "indoor": false,
     "rating": 4.6,
     "source_url": "https://maps.google.com/?cid=kalakshetra",
-    "last_verified": "2024-12-15"
+    "last_verified": "2024-12-15",
+    "image_url": "https://upload.wikimedia.org/wikipedia/en/d/da/Kalakshetra_logo.jpg",
+    "image_page": "https://commons.wikimedia.org/wiki/File:Kalakshetra_logo.jpg",
+    "image_title": "Kalakshetra Foundation",
+    "image_kind": "place"
   },
   {
     "id": "chn-24",
@@ -488,20 +912,35 @@
     "type": "activity",
     "area": "Egmore",
     "lat": 13.0694,
-    "lng": 80.2570,
+    "lng": 80.257,
     "avg_cost_for_two": 200,
     "typical_duration_min": 75,
     "open_hours": {
-      "monday": "09:30-17:00", "tuesday": "09:30-17:00", "wednesday": "09:30-17:00",
-      "thursday": "09:30-17:00", "friday": "closed", "saturday": "09:30-17:00", "sunday": "09:30-17:00"
+      "monday": "09:30-17:00",
+      "tuesday": "09:30-17:00",
+      "wednesday": "09:30-17:00",
+      "thursday": "09:30-17:00",
+      "friday": "closed",
+      "saturday": "09:30-17:00",
+      "sunday": "09:30-17:00"
     },
     "cuisine_tags": [],
-    "vibe_tags": ["vintage", "artsy", "heritage", "grand", "indoor"],
+    "vibe_tags": [
+      "vintage",
+      "artsy",
+      "heritage",
+      "grand",
+      "indoor"
+    ],
     "veg_friendly": true,
     "indoor": true,
     "rating": 4.5,
     "source_url": "https://maps.google.com/?cid=connemaralibrary",
-    "last_verified": "2024-12-15"
+    "last_verified": "2024-12-15",
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3e/Connemara_Public_Library.jpg/500px-Connemara_Public_Library.jpg",
+    "image_page": "https://commons.wikimedia.org/wiki/File:Connemara_Public_Library.jpg",
+    "image_title": "Connemara Public Library",
+    "image_kind": "place"
   },
   {
     "id": "chn-25",
@@ -509,41 +948,75 @@
     "type": "activity",
     "area": "Kovalam",
     "lat": 12.7915,
-    "lng": 80.2520,
+    "lng": 80.252,
     "avg_cost_for_two": 1800,
     "typical_duration_min": 90,
     "open_hours": {
-      "monday": "07:00-19:00", "tuesday": "07:00-19:00", "wednesday": "07:00-19:00",
-      "thursday": "07:00-19:00", "friday": "07:00-19:00", "saturday": "07:00-19:00", "sunday": "07:00-19:00"
+      "monday": "07:00-19:00",
+      "tuesday": "07:00-19:00",
+      "wednesday": "07:00-19:00",
+      "thursday": "07:00-19:00",
+      "friday": "07:00-19:00",
+      "saturday": "07:00-19:00",
+      "sunday": "07:00-19:00"
     },
-    "cuisine_tags": ["cafe", "seafood"],
-    "vibe_tags": ["beach", "adventure", "outdoors", "breezy", "coastal"],
+    "cuisine_tags": [
+      "cafe",
+      "seafood"
+    ],
+    "vibe_tags": [
+      "beach",
+      "adventure",
+      "outdoors",
+      "breezy",
+      "coastal"
+    ],
     "veg_friendly": true,
     "indoor": false,
     "rating": 4.6,
     "source_url": "https://maps.google.com/?cid=surfturfchennai",
-    "last_verified": "2024-12-15"
+    "last_verified": "2024-12-15",
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/43/J%C3%A9r%C3%A9my-Massi%C3%A8re_stand-up-paddle_biscarrosse-2.JPG/500px-J%C3%A9r%C3%A9my-Massi%C3%A8re_stand-up-paddle_biscarrosse-2.JPG",
+    "image_page": "https://commons.wikimedia.org/wiki/File:J%C3%A9r%C3%A9my-Massi%C3%A8re_stand-up-paddle_biscarrosse-2.JPG",
+    "image_title": "Standup paddleboarding",
+    "image_kind": "representative"
   },
   {
     "id": "chn-26",
     "name": "Marina Beach Sunset Promenade",
     "type": "sunset",
     "area": "Marina",
-    "lat": 13.0500,
+    "lat": 13.05,
     "lng": 80.2824,
     "avg_cost_for_two": 0,
     "typical_duration_min": 45,
     "open_hours": {
-      "monday": "05:00-21:30", "tuesday": "05:00-21:30", "wednesday": "05:00-21:30",
-      "thursday": "05:00-21:30", "friday": "05:00-21:30", "saturday": "05:00-21:30", "sunday": "05:00-21:30"
+      "monday": "05:00-21:30",
+      "tuesday": "05:00-21:30",
+      "wednesday": "05:00-21:30",
+      "thursday": "05:00-21:30",
+      "friday": "05:00-21:30",
+      "saturday": "05:00-21:30",
+      "sunday": "05:00-21:30"
     },
     "cuisine_tags": [],
-    "vibe_tags": ["outdoors", "romantic", "free", "breezy", "coastal", "nostalgic"],
+    "vibe_tags": [
+      "outdoors",
+      "romantic",
+      "free",
+      "breezy",
+      "coastal",
+      "nostalgic"
+    ],
     "veg_friendly": true,
     "indoor": false,
     "rating": 4.5,
     "source_url": "https://maps.google.com/?cid=marinabeachchennai",
-    "last_verified": "2024-12-15"
+    "last_verified": "2024-12-15",
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d9/Chennai_-_bird%27s-eye_view.jpg/500px-Chennai_-_bird%27s-eye_view.jpg",
+    "image_page": "https://commons.wikimedia.org/wiki/File:Chennai_-_bird%27s-eye_view.jpg",
+    "image_title": "Marina Beach",
+    "image_kind": "place"
   },
   {
     "id": "chn-27",
@@ -555,16 +1028,31 @@
     "avg_cost_for_two": 0,
     "typical_duration_min": 45,
     "open_hours": {
-      "monday": "05:00-22:00", "tuesday": "05:00-22:00", "wednesday": "05:00-22:00",
-      "thursday": "05:00-22:00", "friday": "05:00-22:00", "saturday": "05:00-22:00", "sunday": "05:00-22:00"
+      "monday": "05:00-22:00",
+      "tuesday": "05:00-22:00",
+      "wednesday": "05:00-22:00",
+      "thursday": "05:00-22:00",
+      "friday": "05:00-22:00",
+      "saturday": "05:00-22:00",
+      "sunday": "05:00-22:00"
     },
     "cuisine_tags": [],
-    "vibe_tags": ["coastal", "breezy", "romantic", "free", "casual"],
+    "vibe_tags": [
+      "coastal",
+      "breezy",
+      "romantic",
+      "free",
+      "casual"
+    ],
     "veg_friendly": true,
     "indoor": false,
     "rating": 4.6,
     "source_url": "https://maps.google.com/?cid=elliotsbeach",
-    "last_verified": "2024-12-15"
+    "last_verified": "2024-12-15",
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/52/Elliots_Beach_at_Besant_Nagar%2C_Chennai.JPG/500px-Elliots_Beach_at_Besant_Nagar%2C_Chennai.JPG",
+    "image_page": "https://commons.wikimedia.org/wiki/File:Elliots_Beach_at_Besant_Nagar%2C_Chennai.JPG",
+    "image_title": "Edward Elliot's Beach",
+    "image_kind": "place"
   },
   {
     "id": "chn-28",
@@ -576,16 +1064,31 @@
     "avg_cost_for_two": 0,
     "typical_duration_min": 40,
     "open_hours": {
-      "monday": "06:00-18:30", "tuesday": "06:00-18:30", "wednesday": "06:00-18:30",
-      "thursday": "06:00-18:30", "friday": "06:00-18:30", "saturday": "06:00-18:30", "sunday": "06:00-18:30"
+      "monday": "06:00-18:30",
+      "tuesday": "06:00-18:30",
+      "wednesday": "06:00-18:30",
+      "thursday": "06:00-18:30",
+      "friday": "06:00-18:30",
+      "saturday": "06:00-18:30",
+      "sunday": "06:00-18:30"
     },
     "cuisine_tags": [],
-    "vibe_tags": ["quiet", "scenic", "romantic", "free", "estuary"],
+    "vibe_tags": [
+      "quiet",
+      "scenic",
+      "romantic",
+      "free",
+      "estuary"
+    ],
     "veg_friendly": true,
     "indoor": false,
     "rating": 4.4,
     "source_url": "https://maps.google.com/?cid=brokenbridgechennai",
-    "last_verified": "2024-12-15"
+    "last_verified": "2024-12-15",
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f6/Full_cycle_of_a_Sunset_on_the_high_plains_of_the_Mojave_Desert.jpg/500px-Full_cycle_of_a_Sunset_on_the_high_plains_of_the_Mojave_Desert.jpg",
+    "image_page": "https://commons.wikimedia.org/wiki/File:Full_cycle_of_a_Sunset_on_the_high_plains_of_the_Mojave_Desert.jpg",
+    "image_title": "Sunset",
+    "image_kind": "representative"
   },
   {
     "id": "chn-29",
@@ -597,16 +1100,31 @@
     "avg_cost_for_two": 300,
     "typical_duration_min": 50,
     "open_hours": {
-      "monday": "09:00-18:00", "tuesday": "09:00-18:00", "wednesday": "09:00-18:00",
-      "thursday": "09:00-18:00", "friday": "09:00-18:00", "saturday": "09:00-18:00", "sunday": "09:00-18:00"
+      "monday": "09:00-18:00",
+      "tuesday": "09:00-18:00",
+      "wednesday": "09:00-18:00",
+      "thursday": "09:00-18:00",
+      "friday": "09:00-18:00",
+      "saturday": "09:00-18:00",
+      "sunday": "09:00-18:00"
     },
     "cuisine_tags": [],
-    "vibe_tags": ["waterfront", "boating", "sunset", "outdoors", "peaceful"],
+    "vibe_tags": [
+      "waterfront",
+      "boating",
+      "sunset",
+      "outdoors",
+      "peaceful"
+    ],
     "veg_friendly": true,
     "indoor": false,
     "rating": 4.3,
     "source_url": "https://maps.google.com/?cid=muttukaduboathouse",
-    "last_verified": "2024-12-15"
+    "last_verified": "2024-12-15",
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ec/Topridge_Boathouse.jpg/500px-Topridge_Boathouse.jpg",
+    "image_page": "https://commons.wikimedia.org/wiki/File:Topridge_Boathouse.jpg",
+    "image_title": "Boathouse",
+    "image_kind": "representative"
   },
   {
     "id": "chn-30",
@@ -618,16 +1136,31 @@
     "avg_cost_for_two": 0,
     "typical_duration_min": 45,
     "open_hours": {
-      "monday": "05:00-20:00", "tuesday": "05:00-20:00", "wednesday": "05:00-20:00",
-      "thursday": "05:00-20:00", "friday": "05:00-20:00", "saturday": "05:00-20:00", "sunday": "05:00-20:00"
+      "monday": "05:00-20:00",
+      "tuesday": "05:00-20:00",
+      "wednesday": "05:00-20:00",
+      "thursday": "05:00-20:00",
+      "friday": "05:00-20:00",
+      "saturday": "05:00-20:00",
+      "sunday": "05:00-20:00"
     },
     "cuisine_tags": [],
-    "vibe_tags": ["beach", "golden-hour", "romantic", "peaceful", "free"],
+    "vibe_tags": [
+      "beach",
+      "golden-hour",
+      "romantic",
+      "peaceful",
+      "free"
+    ],
     "veg_friendly": true,
     "indoor": false,
     "rating": 4.6,
     "source_url": "https://maps.google.com/?cid=covelongpoint",
-    "last_verified": "2024-12-15"
+    "last_verified": "2024-12-15",
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3b/Covelong_beach.jpg/500px-Covelong_beach.jpg",
+    "image_page": "https://commons.wikimedia.org/wiki/File:Covelong_beach.jpg",
+    "image_title": "Covelong",
+    "image_kind": "place"
   },
   {
     "id": "chn-31",
@@ -639,16 +1172,31 @@
     "avg_cost_for_two": 60,
     "typical_duration_min": 45,
     "open_hours": {
-      "monday": "10:00-19:30", "tuesday": "closed", "wednesday": "10:00-19:30",
-      "thursday": "10:00-19:30", "friday": "10:00-19:30", "saturday": "10:00-19:30", "sunday": "10:00-19:30"
+      "monday": "10:00-19:30",
+      "tuesday": "closed",
+      "wednesday": "10:00-19:30",
+      "thursday": "10:00-19:30",
+      "friday": "10:00-19:30",
+      "saturday": "10:00-19:30",
+      "sunday": "10:00-19:30"
     },
     "cuisine_tags": [],
-    "vibe_tags": ["garden", "green", "peaceful", "outdoors", "botanical"],
+    "vibe_tags": [
+      "garden",
+      "green",
+      "peaceful",
+      "outdoors",
+      "botanical"
+    ],
     "veg_friendly": true,
     "indoor": false,
     "rating": 4.3,
     "source_url": "https://maps.google.com/?cid=semmozhipoonga",
-    "last_verified": "2024-12-15"
+    "last_verified": "2024-12-15",
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/99/Semmozhi_poonga.jpg/500px-Semmozhi_poonga.jpg",
+    "image_page": "https://commons.wikimedia.org/wiki/File:Semmozhi_poonga.jpg",
+    "image_title": "Semmozhi Poonga",
+    "image_kind": "place"
   },
   {
     "id": "chn-32",
@@ -660,16 +1208,36 @@
     "avg_cost_for_two": 4200,
     "typical_duration_min": 90,
     "open_hours": {
-      "monday": "19:00-23:30", "tuesday": "19:00-23:30", "wednesday": "19:00-23:30",
-      "thursday": "19:00-23:30", "friday": "19:00-23:30", "saturday": "19:00-23:30", "sunday": "19:00-23:30"
+      "monday": "19:00-23:30",
+      "tuesday": "19:00-23:30",
+      "wednesday": "19:00-23:30",
+      "thursday": "19:00-23:30",
+      "friday": "19:00-23:30",
+      "saturday": "19:00-23:30",
+      "sunday": "19:00-23:30"
     },
-    "cuisine_tags": ["north-indian", "tandoor", "mughlai", "dal-bukhara"],
-    "vibe_tags": ["fine-dining", "upscale", "romantic", "intimate", "indoor"],
+    "cuisine_tags": [
+      "north-indian",
+      "tandoor",
+      "mughlai",
+      "dal-bukhara"
+    ],
+    "vibe_tags": [
+      "fine-dining",
+      "upscale",
+      "romantic",
+      "intimate",
+      "indoor"
+    ],
     "veg_friendly": true,
     "indoor": true,
     "rating": 4.8,
     "source_url": "https://maps.google.com/?cid=peshawritcgrandchola",
-    "last_verified": "2024-12-15"
+    "last_verified": "2024-12-15",
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/68/ITC-Grand-Chola-Chennai-2.JPG/500px-ITC-Grand-Chola-Chennai-2.JPG",
+    "image_page": "https://commons.wikimedia.org/wiki/File:ITC-Grand-Chola-Chennai-2.JPG",
+    "image_title": "ITC Grand Chola Hotel",
+    "image_kind": "place"
   },
   {
     "id": "chn-33",
@@ -681,16 +1249,36 @@
     "avg_cost_for_two": 3800,
     "typical_duration_min": 90,
     "open_hours": {
-      "monday": "19:00-23:00", "tuesday": "19:00-23:00", "wednesday": "19:00-23:00",
-      "thursday": "19:00-23:00", "friday": "19:00-23:00", "saturday": "19:00-23:00", "sunday": "19:00-23:00"
+      "monday": "19:00-23:00",
+      "tuesday": "19:00-23:00",
+      "wednesday": "19:00-23:00",
+      "thursday": "19:00-23:00",
+      "friday": "19:00-23:00",
+      "saturday": "19:00-23:00",
+      "sunday": "19:00-23:00"
     },
-    "cuisine_tags": ["seafood", "coastal", "grill", "continental"],
-    "vibe_tags": ["candlelight", "seaside", "ocean-view", "romantic", "upscale"],
+    "cuisine_tags": [
+      "seafood",
+      "coastal",
+      "grill",
+      "continental"
+    ],
+    "vibe_tags": [
+      "candlelight",
+      "seaside",
+      "ocean-view",
+      "romantic",
+      "upscale"
+    ],
     "veg_friendly": true,
     "indoor": false,
     "rating": 4.8,
     "source_url": "https://maps.google.com/?cid=bayviewtajfishermanscove",
-    "last_verified": "2024-12-15"
+    "last_verified": "2024-12-15",
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ae/Plateau_van_zeevruchten.jpg/500px-Plateau_van_zeevruchten.jpg",
+    "image_page": "https://commons.wikimedia.org/wiki/File:Plateau_van_zeevruchten.jpg",
+    "image_title": "Seafood",
+    "image_kind": "representative"
   },
   {
     "id": "chn-34",
@@ -702,16 +1290,36 @@
     "avg_cost_for_two": 1700,
     "typical_duration_min": 75,
     "open_hours": {
-      "monday": "18:30-22:30", "tuesday": "18:30-22:30", "wednesday": "18:30-22:30",
-      "thursday": "18:30-22:30", "friday": "18:30-22:30", "saturday": "18:30-22:30", "sunday": "18:30-22:30"
+      "monday": "18:30-22:30",
+      "tuesday": "18:30-22:30",
+      "wednesday": "18:30-22:30",
+      "thursday": "18:30-22:30",
+      "friday": "18:30-22:30",
+      "saturday": "18:30-22:30",
+      "sunday": "18:30-22:30"
     },
-    "cuisine_tags": ["persian", "iranian", "kebabs", "middle-eastern"],
-    "vibe_tags": ["beachfront", "artsy", "cozy", "romantic", "intimate"],
+    "cuisine_tags": [
+      "persian",
+      "iranian",
+      "kebabs",
+      "middle-eastern"
+    ],
+    "vibe_tags": [
+      "beachfront",
+      "artsy",
+      "cozy",
+      "romantic",
+      "intimate"
+    ],
     "veg_friendly": true,
     "indoor": false,
     "rating": 4.5,
     "source_url": "https://maps.google.com/?cid=shirazartcafechennai",
-    "last_verified": "2024-12-15"
+    "last_verified": "2024-12-15",
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5b/Lula_kebab_2.jpg/500px-Lula_kebab_2.jpg",
+    "image_page": "https://commons.wikimedia.org/wiki/File:Lula_kebab_2.jpg",
+    "image_title": "Kebab",
+    "image_kind": "representative"
   },
   {
     "id": "chn-35",
@@ -723,16 +1331,36 @@
     "avg_cost_for_two": 2200,
     "typical_duration_min": 80,
     "open_hours": {
-      "monday": "19:00-23:00", "tuesday": "19:00-23:00", "wednesday": "19:00-23:00",
-      "thursday": "19:00-23:00", "friday": "19:00-23:00", "saturday": "19:00-23:00", "sunday": "19:00-23:00"
+      "monday": "19:00-23:00",
+      "tuesday": "19:00-23:00",
+      "wednesday": "19:00-23:00",
+      "thursday": "19:00-23:00",
+      "friday": "19:00-23:00",
+      "saturday": "19:00-23:00",
+      "sunday": "19:00-23:00"
     },
-    "cuisine_tags": ["south-indian", "thali", "chettinad", "kerala"],
-    "vibe_tags": ["royal", "classical", "live-music", "heritage", "fine-dining"],
+    "cuisine_tags": [
+      "south-indian",
+      "thali",
+      "chettinad",
+      "kerala"
+    ],
+    "vibe_tags": [
+      "royal",
+      "classical",
+      "live-music",
+      "heritage",
+      "fine-dining"
+    ],
     "veg_friendly": true,
     "indoor": true,
     "rating": 4.6,
     "source_url": "https://maps.google.com/?cid=royalindianaaccord",
-    "last_verified": "2024-12-15"
+    "last_verified": "2024-12-15",
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c6/ChickenChettinad.JPG/500px-ChickenChettinad.JPG",
+    "image_page": "https://commons.wikimedia.org/wiki/File:ChickenChettinad.JPG",
+    "image_title": "Chettinad cuisine",
+    "image_kind": "representative"
   },
   {
     "id": "chn-36",
@@ -744,155 +1372,813 @@
     "avg_cost_for_two": 2000,
     "typical_duration_min": 75,
     "open_hours": {
-      "monday": "19:00-23:00", "tuesday": "19:00-23:00", "wednesday": "19:00-23:00",
-      "thursday": "19:00-23:00", "friday": "19:00-23:00", "saturday": "19:00-23:00", "sunday": "19:00-23:00"
+      "monday": "19:00-23:00",
+      "tuesday": "19:00-23:00",
+      "wednesday": "19:00-23:00",
+      "thursday": "19:00-23:00",
+      "friday": "19:00-23:00",
+      "saturday": "19:00-23:00",
+      "sunday": "19:00-23:00"
     },
-    "cuisine_tags": ["european", "italian", "pasta", "risotto", "steaks"],
-    "vibe_tags": ["candlelight", "intimate", "romantic", "quiet", "indoor"],
+    "cuisine_tags": [
+      "european",
+      "italian",
+      "pasta",
+      "risotto",
+      "steaks"
+    ],
+    "vibe_tags": [
+      "candlelight",
+      "intimate",
+      "romantic",
+      "quiet",
+      "indoor"
+    ],
     "veg_friendly": true,
     "indoor": true,
     "rating": 4.5,
     "source_url": "https://maps.google.com/?cid=basilwithatwist",
-    "last_verified": "2024-12-15"
+    "last_verified": "2024-12-15",
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3f/%28Pasta%29_by_David_Adam_Kess_%28pic.2%29.jpg/500px-%28Pasta%29_by_David_Adam_Kess_%28pic.2%29.jpg",
+    "image_page": "https://commons.wikimedia.org/wiki/File:%28Pasta%29_by_David_Adam_Kess_%28pic.2%29.jpg",
+    "image_title": "Pasta",
+    "image_kind": "representative"
   },
   {
-    "id": "cbe-01", "name": "Sree Annapoorna - R.S. Puram", "type": "lunch", "city": "Coimbatore", "area": "R.S. Puram",
-    "lat": 11.0067, "lng": 76.9502, "avg_cost_for_two": 500, "typical_duration_min": 60,
-    "open_hours": {"monday":"07:00-22:30","tuesday":"07:00-22:30","wednesday":"07:00-22:30","thursday":"07:00-22:30","friday":"07:00-22:30","saturday":"07:00-22:30","sunday":"07:00-22:30"},
-    "cuisine_tags": ["south-indian","vegetarian","dosa","meals"], "vibe_tags": ["local","classic","casual"],
-    "veg_friendly": true, "indoor": true, "rating": 4.5, "source_url": "https://www.sreeannapoorna.com/pages/restaurants", "last_verified": "2026-10-04"
+    "id": "cbe-01",
+    "name": "Sree Annapoorna - R.S. Puram",
+    "type": "lunch",
+    "city": "Coimbatore",
+    "area": "R.S. Puram",
+    "lat": 11.0067,
+    "lng": 76.9502,
+    "avg_cost_for_two": 500,
+    "typical_duration_min": 60,
+    "open_hours": {
+      "monday": "07:00-22:30",
+      "tuesday": "07:00-22:30",
+      "wednesday": "07:00-22:30",
+      "thursday": "07:00-22:30",
+      "friday": "07:00-22:30",
+      "saturday": "07:00-22:30",
+      "sunday": "07:00-22:30"
+    },
+    "cuisine_tags": [
+      "south-indian",
+      "vegetarian",
+      "dosa",
+      "meals"
+    ],
+    "vibe_tags": [
+      "local",
+      "classic",
+      "casual"
+    ],
+    "veg_friendly": true,
+    "indoor": true,
+    "rating": 4.5,
+    "source_url": "https://www.sreeannapoorna.com/pages/restaurants",
+    "last_verified": "2026-10-04",
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/11/Idli_Sambar.JPG/500px-Idli_Sambar.JPG",
+    "image_page": "https://commons.wikimedia.org/wiki/File:Idli_Sambar.JPG",
+    "image_title": "Idli",
+    "image_kind": "representative"
   },
   {
-    "id": "cbe-02", "name": "Sree Annapoorna - Peoples Park", "type": "lunch", "city": "Coimbatore", "area": "Gandhipuram",
-    "lat": 11.0180, "lng": 76.9670, "avg_cost_for_two": 550, "typical_duration_min": 60,
-    "open_hours": {"monday":"07:00-22:30","tuesday":"07:00-22:30","wednesday":"07:00-22:30","thursday":"07:00-22:30","friday":"07:00-22:30","saturday":"07:00-22:30","sunday":"07:00-22:30"},
-    "cuisine_tags": ["south-indian","vegetarian","tiffin","meals"], "vibe_tags": ["local","bright","casual"],
-    "veg_friendly": true, "indoor": true, "rating": 4.4, "source_url": "https://www.sreeannapoorna.com/pages/restaurants", "last_verified": "2026-10-04"
+    "id": "cbe-02",
+    "name": "Sree Annapoorna - Peoples Park",
+    "type": "lunch",
+    "city": "Coimbatore",
+    "area": "Gandhipuram",
+    "lat": 11.018,
+    "lng": 76.967,
+    "avg_cost_for_two": 550,
+    "typical_duration_min": 60,
+    "open_hours": {
+      "monday": "07:00-22:30",
+      "tuesday": "07:00-22:30",
+      "wednesday": "07:00-22:30",
+      "thursday": "07:00-22:30",
+      "friday": "07:00-22:30",
+      "saturday": "07:00-22:30",
+      "sunday": "07:00-22:30"
+    },
+    "cuisine_tags": [
+      "south-indian",
+      "vegetarian",
+      "tiffin",
+      "meals"
+    ],
+    "vibe_tags": [
+      "local",
+      "bright",
+      "casual"
+    ],
+    "veg_friendly": true,
+    "indoor": true,
+    "rating": 4.4,
+    "source_url": "https://www.sreeannapoorna.com/pages/restaurants",
+    "last_verified": "2026-10-04",
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/49/Vegetarian_Curry.jpeg/500px-Vegetarian_Curry.jpeg",
+    "image_page": "https://commons.wikimedia.org/wiki/File:Vegetarian_Curry.jpeg",
+    "image_title": "Thali",
+    "image_kind": "representative"
   },
   {
-    "id": "cbe-03", "name": "Gedee Car Museum", "type": "activity", "city": "Coimbatore", "area": "Race Course",
-    "lat": 11.0018, "lng": 76.9810, "avg_cost_for_two": 400, "typical_duration_min": 75,
-    "open_hours": {"monday":"09:00-18:30","tuesday":"09:00-18:30","wednesday":"09:00-18:30","thursday":"09:00-18:30","friday":"09:00-18:30","saturday":"09:00-18:30","sunday":"09:00-18:30"},
-    "cuisine_tags": [], "vibe_tags": ["museum","retro","curious","indoor"],
-    "veg_friendly": true, "indoor": true, "rating": 4.6, "source_url": "https://gedeecarmuseum.com/explore/", "last_verified": "2026-10-04"
+    "id": "cbe-03",
+    "name": "Gedee Car Museum",
+    "type": "activity",
+    "city": "Coimbatore",
+    "area": "Race Course",
+    "lat": 11.0018,
+    "lng": 76.981,
+    "avg_cost_for_two": 400,
+    "typical_duration_min": 75,
+    "open_hours": {
+      "monday": "09:00-18:30",
+      "tuesday": "09:00-18:30",
+      "wednesday": "09:00-18:30",
+      "thursday": "09:00-18:30",
+      "friday": "09:00-18:30",
+      "saturday": "09:00-18:30",
+      "sunday": "09:00-18:30"
+    },
+    "cuisine_tags": [],
+    "vibe_tags": [
+      "museum",
+      "retro",
+      "curious",
+      "indoor"
+    ],
+    "veg_friendly": true,
+    "indoor": true,
+    "rating": 4.6,
+    "source_url": "https://gedeecarmuseum.com/explore/",
+    "last_verified": "2026-10-04",
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/02/1956_Plymouth_Plaza%2C_Gedee_Car_Museum%2C_Coimbatore%2C_IND_%281%29.jpg/500px-1956_Plymouth_Plaza%2C_Gedee_Car_Museum%2C_Coimbatore%2C_IND_%281%29.jpg",
+    "image_page": "https://commons.wikimedia.org/wiki/File:1956_Plymouth_Plaza%2C_Gedee_Car_Museum%2C_Coimbatore%2C_IND_%281%29.jpg",
+    "image_title": "Gedee Car Museum",
+    "image_kind": "place"
   },
   {
-    "id": "cbe-04", "name": "Tamil Nadu Police Museum", "type": "activity", "city": "Coimbatore", "area": "Gandhipuram",
-    "lat": 11.0176, "lng": 76.9634, "avg_cost_for_two": 100, "typical_duration_min": 60,
-    "open_hours": {"monday":"10:00-17:30","tuesday":"10:00-17:30","wednesday":"10:00-17:30","thursday":"10:00-17:30","friday":"10:00-17:30","saturday":"10:00-17:30","sunday":"10:00-17:30"},
-    "cuisine_tags": [], "vibe_tags": ["museum","history","quiet","indoor"],
-    "veg_friendly": true, "indoor": true, "rating": 4.5, "source_url": "https://coimbatore.nic.in/tourist-places/", "last_verified": "2026-10-04"
+    "id": "cbe-04",
+    "name": "Tamil Nadu Police Museum",
+    "type": "activity",
+    "city": "Coimbatore",
+    "area": "Gandhipuram",
+    "lat": 11.0176,
+    "lng": 76.9634,
+    "avg_cost_for_two": 100,
+    "typical_duration_min": 60,
+    "open_hours": {
+      "monday": "10:00-17:30",
+      "tuesday": "10:00-17:30",
+      "wednesday": "10:00-17:30",
+      "thursday": "10:00-17:30",
+      "friday": "10:00-17:30",
+      "saturday": "10:00-17:30",
+      "sunday": "10:00-17:30"
+    },
+    "cuisine_tags": [],
+    "vibe_tags": [
+      "museum",
+      "history",
+      "quiet",
+      "indoor"
+    ],
+    "veg_friendly": true,
+    "indoor": true,
+    "rating": 4.5,
+    "source_url": "https://coimbatore.nic.in/tourist-places/",
+    "last_verified": "2026-10-04",
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d9/Museo_Chileno_de_Arte_Precolombino_-_2020_-_10.jpg/500px-Museo_Chileno_de_Arte_Precolombino_-_2020_-_10.jpg",
+    "image_page": "https://commons.wikimedia.org/wiki/File:Museo_Chileno_de_Arte_Precolombino_-_2020_-_10.jpg",
+    "image_title": "Museum",
+    "image_kind": "representative"
   },
   {
-    "id": "cbe-05", "name": "The French Door Cafe & Restaurant", "type": "cafe", "city": "Coimbatore", "area": "R.S. Puram",
-    "lat": 11.0088, "lng": 76.9495, "avg_cost_for_two": 1000, "typical_duration_min": 55,
-    "open_hours": {"monday":"11:00-22:30","tuesday":"11:00-22:30","wednesday":"11:00-22:30","thursday":"11:00-22:30","friday":"11:00-22:30","saturday":"11:00-22:30","sunday":"11:00-22:30"},
-    "cuisine_tags": ["cafe","continental","desserts","coffee"], "vibe_tags": ["romantic","garden","cozy","aesthetic"],
-    "veg_friendly": true, "indoor": true, "rating": 4.3, "source_url": "https://www.google.com/maps/search/?api=1&query=The+French+Door+Cafe+Coimbatore", "last_verified": "2026-10-04"
+    "id": "cbe-05",
+    "name": "The French Door Cafe & Restaurant",
+    "type": "cafe",
+    "city": "Coimbatore",
+    "area": "R.S. Puram",
+    "lat": 11.0088,
+    "lng": 76.9495,
+    "avg_cost_for_two": 1000,
+    "typical_duration_min": 55,
+    "open_hours": {
+      "monday": "11:00-22:30",
+      "tuesday": "11:00-22:30",
+      "wednesday": "11:00-22:30",
+      "thursday": "11:00-22:30",
+      "friday": "11:00-22:30",
+      "saturday": "11:00-22:30",
+      "sunday": "11:00-22:30"
+    },
+    "cuisine_tags": [
+      "cafe",
+      "continental",
+      "desserts",
+      "coffee"
+    ],
+    "vibe_tags": [
+      "romantic",
+      "garden",
+      "cozy",
+      "aesthetic"
+    ],
+    "veg_friendly": true,
+    "indoor": true,
+    "rating": 4.3,
+    "source_url": "https://www.google.com/maps/search/?api=1&query=The+French+Door+Cafe+Coimbatore",
+    "last_verified": "2026-10-04",
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ab/Desserts.jpg/500px-Desserts.jpg",
+    "image_page": "https://commons.wikimedia.org/wiki/File:Desserts.jpg",
+    "image_title": "Dessert",
+    "image_kind": "representative"
   },
   {
-    "id": "cbe-06", "name": "Cafe Totaram", "type": "cafe", "city": "Coimbatore", "area": "Race Course",
-    "lat": 11.0015, "lng": 76.9778, "avg_cost_for_two": 800, "typical_duration_min": 50,
-    "open_hours": {"monday":"10:00-22:30","tuesday":"10:00-22:30","wednesday":"10:00-22:30","thursday":"10:00-22:30","friday":"10:00-22:30","saturday":"10:00-22:30","sunday":"10:00-22:30"},
-    "cuisine_tags": ["cafe","coffee","desserts","snacks"], "vibe_tags": ["cozy","artsy","quiet","casual"],
-    "veg_friendly": true, "indoor": true, "rating": 4.3, "source_url": "https://www.google.com/maps/search/?api=1&query=Cafe+Totaram+Coimbatore", "last_verified": "2026-10-04"
+    "id": "cbe-06",
+    "name": "Cafe Totaram",
+    "type": "cafe",
+    "city": "Coimbatore",
+    "area": "Race Course",
+    "lat": 11.0015,
+    "lng": 76.9778,
+    "avg_cost_for_two": 800,
+    "typical_duration_min": 50,
+    "open_hours": {
+      "monday": "10:00-22:30",
+      "tuesday": "10:00-22:30",
+      "wednesday": "10:00-22:30",
+      "thursday": "10:00-22:30",
+      "friday": "10:00-22:30",
+      "saturday": "10:00-22:30",
+      "sunday": "10:00-22:30"
+    },
+    "cuisine_tags": [
+      "cafe",
+      "coffee",
+      "desserts",
+      "snacks"
+    ],
+    "vibe_tags": [
+      "cozy",
+      "artsy",
+      "quiet",
+      "casual"
+    ],
+    "veg_friendly": true,
+    "indoor": true,
+    "rating": 4.3,
+    "source_url": "https://www.google.com/maps/search/?api=1&query=Cafe+Totaram+Coimbatore",
+    "last_verified": "2026-10-04",
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/51/Filter_kaapi.JPG/500px-Filter_kaapi.JPG",
+    "image_page": "https://commons.wikimedia.org/wiki/File:Filter_kaapi.JPG",
+    "image_title": "Indian filter coffee",
+    "image_kind": "representative"
   },
   {
-    "id": "cbe-07", "name": "Ukkadam Valankulam Lake Walk", "type": "sunset", "city": "Coimbatore", "area": "Ukkadam",
-    "lat": 10.9944, "lng": 76.9704, "avg_cost_for_two": 0, "typical_duration_min": 45,
-    "open_hours": {"monday":"06:00-21:00","tuesday":"06:00-21:00","wednesday":"06:00-21:00","thursday":"06:00-21:00","friday":"06:00-21:00","saturday":"06:00-21:00","sunday":"06:00-21:00"},
-    "cuisine_tags": [], "vibe_tags": ["outdoors","lake","sunset","walk","free"],
-    "veg_friendly": true, "indoor": false, "rating": 4.4, "source_url": "https://www.google.com/maps/search/?api=1&query=Ukkadam+Valankulam+Lake", "last_verified": "2026-10-04"
+    "id": "cbe-07",
+    "name": "Ukkadam Valankulam Lake Walk",
+    "type": "sunset",
+    "city": "Coimbatore",
+    "area": "Ukkadam",
+    "lat": 10.9944,
+    "lng": 76.9704,
+    "avg_cost_for_two": 0,
+    "typical_duration_min": 45,
+    "open_hours": {
+      "monday": "06:00-21:00",
+      "tuesday": "06:00-21:00",
+      "wednesday": "06:00-21:00",
+      "thursday": "06:00-21:00",
+      "friday": "06:00-21:00",
+      "saturday": "06:00-21:00",
+      "sunday": "06:00-21:00"
+    },
+    "cuisine_tags": [],
+    "vibe_tags": [
+      "outdoors",
+      "lake",
+      "sunset",
+      "walk",
+      "free"
+    ],
+    "veg_friendly": true,
+    "indoor": false,
+    "rating": 4.4,
+    "source_url": "https://www.google.com/maps/search/?api=1&query=Ukkadam+Valankulam+Lake",
+    "last_verified": "2026-10-04",
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fb/Valankulam_Lake_at_Sunset.jpg/500px-Valankulam_Lake_at_Sunset.jpg",
+    "image_page": "https://commons.wikimedia.org/wiki/File:Valankulam_Lake_at_Sunset.jpg",
+    "image_title": "Valankulam Lake",
+    "image_kind": "place"
   },
   {
-    "id": "cbe-08", "name": "Race Course Evening Walk", "type": "sunset", "city": "Coimbatore", "area": "Race Course",
-    "lat": 11.0012, "lng": 76.9770, "avg_cost_for_two": 0, "typical_duration_min": 40,
-    "open_hours": {"monday":"05:00-22:00","tuesday":"05:00-22:00","wednesday":"05:00-22:00","thursday":"05:00-22:00","friday":"05:00-22:00","saturday":"05:00-22:00","sunday":"05:00-22:00"},
-    "cuisine_tags": [], "vibe_tags": ["outdoors","walk","city-lights","free"],
-    "veg_friendly": true, "indoor": false, "rating": 4.4, "source_url": "https://www.google.com/maps/search/?api=1&query=Race+Course+Coimbatore", "last_verified": "2026-10-04"
+    "id": "cbe-08",
+    "name": "Race Course Evening Walk",
+    "type": "sunset",
+    "city": "Coimbatore",
+    "area": "Race Course",
+    "lat": 11.0012,
+    "lng": 76.977,
+    "avg_cost_for_two": 0,
+    "typical_duration_min": 40,
+    "open_hours": {
+      "monday": "05:00-22:00",
+      "tuesday": "05:00-22:00",
+      "wednesday": "05:00-22:00",
+      "thursday": "05:00-22:00",
+      "friday": "05:00-22:00",
+      "saturday": "05:00-22:00",
+      "sunday": "05:00-22:00"
+    },
+    "cuisine_tags": [],
+    "vibe_tags": [
+      "outdoors",
+      "walk",
+      "city-lights",
+      "free"
+    ],
+    "veg_friendly": true,
+    "indoor": false,
+    "rating": 4.4,
+    "source_url": "https://www.google.com/maps/search/?api=1&query=Race+Course+Coimbatore",
+    "last_verified": "2026-10-04",
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f6/Full_cycle_of_a_Sunset_on_the_high_plains_of_the_Mojave_Desert.jpg/500px-Full_cycle_of_a_Sunset_on_the_high_plains_of_the_Mojave_Desert.jpg",
+    "image_page": "https://commons.wikimedia.org/wiki/File:Full_cycle_of_a_Sunset_on_the_high_plains_of_the_Mojave_Desert.jpg",
+    "image_title": "Sunset",
+    "image_kind": "representative"
   },
   {
-    "id": "cbe-09", "name": "Pavilion - The Residency Towers", "type": "dinner", "city": "Coimbatore", "area": "Race Course",
-    "lat": 11.0060, "lng": 76.9820, "avg_cost_for_two": 2200, "typical_duration_min": 75,
-    "open_hours": {"monday":"19:00-23:00","tuesday":"19:00-23:00","wednesday":"19:00-23:00","thursday":"19:00-23:00","friday":"19:00-23:00","saturday":"19:00-23:00","sunday":"19:00-23:00"},
-    "cuisine_tags": ["multi-cuisine","indian","continental","buffet"], "vibe_tags": ["elegant","romantic","fine-dining","indoor"],
-    "veg_friendly": true, "indoor": true, "rating": 4.5, "source_url": "https://www.theresidency.com/towers-coimbatore/dining-options-in-coimbatore.html", "last_verified": "2026-10-04"
+    "id": "cbe-09",
+    "name": "Pavilion - The Residency Towers",
+    "type": "dinner",
+    "city": "Coimbatore",
+    "area": "Race Course",
+    "lat": 11.006,
+    "lng": 76.982,
+    "avg_cost_for_two": 2200,
+    "typical_duration_min": 75,
+    "open_hours": {
+      "monday": "19:00-23:00",
+      "tuesday": "19:00-23:00",
+      "wednesday": "19:00-23:00",
+      "thursday": "19:00-23:00",
+      "friday": "19:00-23:00",
+      "saturday": "19:00-23:00",
+      "sunday": "19:00-23:00"
+    },
+    "cuisine_tags": [
+      "multi-cuisine",
+      "indian",
+      "continental",
+      "buffet"
+    ],
+    "vibe_tags": [
+      "elegant",
+      "romantic",
+      "fine-dining",
+      "indoor"
+    ],
+    "veg_friendly": true,
+    "indoor": true,
+    "rating": 4.5,
+    "source_url": "https://www.theresidency.com/towers-coimbatore/dining-options-in-coimbatore.html",
+    "last_verified": "2026-10-04",
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/94/The_Fat_Duck_restaurant_dining_room.JPG/500px-The_Fat_Duck_restaurant_dining_room.JPG",
+    "image_page": "https://commons.wikimedia.org/wiki/File:The_Fat_Duck_restaurant_dining_room.JPG",
+    "image_title": "Fine dining",
+    "image_kind": "representative"
   },
   {
-    "id": "cbe-10", "name": "That's Y Food", "type": "dinner", "city": "Coimbatore", "area": "R.S. Puram",
-    "lat": 11.0092, "lng": 76.9512, "avg_cost_for_two": 1500, "typical_duration_min": 75,
-    "open_hours": {"monday":"19:00-23:00","tuesday":"19:00-23:00","wednesday":"19:00-23:00","thursday":"19:00-23:00","friday":"19:00-23:00","saturday":"19:00-23:00","sunday":"19:00-23:00"},
-    "cuisine_tags": ["indian","continental","asian","desserts"], "vibe_tags": ["romantic","cozy","modern","indoor"],
-    "veg_friendly": true, "indoor": true, "rating": 4.3, "source_url": "https://www.google.com/maps/search/?api=1&query=Thats+Y+Food+Coimbatore", "last_verified": "2026-10-04"
+    "id": "cbe-10",
+    "name": "That's Y Food",
+    "type": "dinner",
+    "city": "Coimbatore",
+    "area": "R.S. Puram",
+    "lat": 11.0092,
+    "lng": 76.9512,
+    "avg_cost_for_two": 1500,
+    "typical_duration_min": 75,
+    "open_hours": {
+      "monday": "19:00-23:00",
+      "tuesday": "19:00-23:00",
+      "wednesday": "19:00-23:00",
+      "thursday": "19:00-23:00",
+      "friday": "19:00-23:00",
+      "saturday": "19:00-23:00",
+      "sunday": "19:00-23:00"
+    },
+    "cuisine_tags": [
+      "indian",
+      "continental",
+      "asian",
+      "desserts"
+    ],
+    "vibe_tags": [
+      "romantic",
+      "cozy",
+      "modern",
+      "indoor"
+    ],
+    "veg_friendly": true,
+    "indoor": true,
+    "rating": 4.3,
+    "source_url": "https://www.google.com/maps/search/?api=1&query=Thats+Y+Food+Coimbatore",
+    "last_verified": "2026-10-04",
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/54/Murgh_Musallam_Steamed.JPG/500px-Murgh_Musallam_Steamed.JPG",
+    "image_page": "https://commons.wikimedia.org/wiki/File:Murgh_Musallam_Steamed.JPG",
+    "image_title": "Mughlai cuisine",
+    "image_kind": "representative"
   },
   {
-    "id": "mdu-01", "name": "Murugan Idli Shop - West Masi Street", "type": "lunch", "city": "Madurai", "area": "Town Hall Road",
-    "lat": 9.9175, "lng": 78.1138, "avg_cost_for_two": 450, "typical_duration_min": 55,
-    "open_hours": {"monday":"07:00-23:00","tuesday":"07:00-23:00","wednesday":"07:00-23:00","thursday":"07:00-23:00","friday":"07:00-23:00","saturday":"07:00-23:00","sunday":"07:00-23:00"},
-    "cuisine_tags": ["south-indian","vegetarian","idli","dosa"], "vibe_tags": ["iconic","local","casual"],
-    "veg_friendly": true, "indoor": true, "rating": 4.4, "source_url": "https://www.google.com/maps/search/?api=1&query=Murugan+Idli+Shop+West+Masi+Street+Madurai", "last_verified": "2026-10-04"
+    "id": "mdu-01",
+    "name": "Murugan Idli Shop - West Masi Street",
+    "type": "lunch",
+    "city": "Madurai",
+    "area": "Town Hall Road",
+    "lat": 9.9175,
+    "lng": 78.1138,
+    "avg_cost_for_two": 450,
+    "typical_duration_min": 55,
+    "open_hours": {
+      "monday": "07:00-23:00",
+      "tuesday": "07:00-23:00",
+      "wednesday": "07:00-23:00",
+      "thursday": "07:00-23:00",
+      "friday": "07:00-23:00",
+      "saturday": "07:00-23:00",
+      "sunday": "07:00-23:00"
+    },
+    "cuisine_tags": [
+      "south-indian",
+      "vegetarian",
+      "idli",
+      "dosa"
+    ],
+    "vibe_tags": [
+      "iconic",
+      "local",
+      "casual"
+    ],
+    "veg_friendly": true,
+    "indoor": true,
+    "rating": 4.4,
+    "source_url": "https://www.google.com/maps/search/?api=1&query=Murugan+Idli+Shop+West+Masi+Street+Madurai",
+    "last_verified": "2026-10-04",
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2d/Murugan_Idly_kadai.jpg/500px-Murugan_Idly_kadai.jpg",
+    "image_page": "https://commons.wikimedia.org/wiki/File:Murugan_Idly_kadai.jpg",
+    "image_title": "Murugan Idli Shop",
+    "image_kind": "place"
   },
   {
-    "id": "mdu-02", "name": "Sree Sabarees", "type": "lunch", "city": "Madurai", "area": "Town Hall Road",
-    "lat": 9.9162, "lng": 78.1157, "avg_cost_for_two": 500, "typical_duration_min": 60,
-    "open_hours": {"monday":"06:30-22:30","tuesday":"06:30-22:30","wednesday":"06:30-22:30","thursday":"06:30-22:30","friday":"06:30-22:30","saturday":"06:30-22:30","sunday":"06:30-22:30"},
-    "cuisine_tags": ["south-indian","vegetarian","meals","tiffin"], "vibe_tags": ["local","family","casual"],
-    "veg_friendly": true, "indoor": true, "rating": 4.4, "source_url": "https://www.google.com/maps/search/?api=1&query=Sree+Sabarees+Madurai", "last_verified": "2026-10-04"
+    "id": "mdu-02",
+    "name": "Sree Sabarees",
+    "type": "lunch",
+    "city": "Madurai",
+    "area": "Town Hall Road",
+    "lat": 9.9162,
+    "lng": 78.1157,
+    "avg_cost_for_two": 500,
+    "typical_duration_min": 60,
+    "open_hours": {
+      "monday": "06:30-22:30",
+      "tuesday": "06:30-22:30",
+      "wednesday": "06:30-22:30",
+      "thursday": "06:30-22:30",
+      "friday": "06:30-22:30",
+      "saturday": "06:30-22:30",
+      "sunday": "06:30-22:30"
+    },
+    "cuisine_tags": [
+      "south-indian",
+      "vegetarian",
+      "meals",
+      "tiffin"
+    ],
+    "vibe_tags": [
+      "local",
+      "family",
+      "casual"
+    ],
+    "veg_friendly": true,
+    "indoor": true,
+    "rating": 4.4,
+    "source_url": "https://www.google.com/maps/search/?api=1&query=Sree+Sabarees+Madurai",
+    "last_verified": "2026-10-04",
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/49/Vegetarian_Curry.jpeg/500px-Vegetarian_Curry.jpeg",
+    "image_page": "https://commons.wikimedia.org/wiki/File:Vegetarian_Curry.jpeg",
+    "image_title": "Thali",
+    "image_kind": "representative"
   },
   {
-    "id": "mdu-03", "name": "Gandhi Memorial Museum", "type": "activity", "city": "Madurai", "area": "Goripalayam",
-    "lat": 9.9383, "lng": 78.1387, "avg_cost_for_two": 0, "typical_duration_min": 75,
-    "open_hours": {"monday":"10:00-17:00","tuesday":"10:00-17:00","wednesday":"10:00-17:00","thursday":"10:00-17:00","friday":"10:00-17:00","saturday":"10:00-17:00","sunday":"closed"},
-    "cuisine_tags": [], "vibe_tags": ["museum","history","quiet","indoor"],
-    "veg_friendly": true, "indoor": true, "rating": 4.5, "source_url": "https://gandhimmm.org/", "last_verified": "2026-10-04"
+    "id": "mdu-03",
+    "name": "Gandhi Memorial Museum",
+    "type": "activity",
+    "city": "Madurai",
+    "area": "Goripalayam",
+    "lat": 9.9383,
+    "lng": 78.1387,
+    "avg_cost_for_two": 0,
+    "typical_duration_min": 75,
+    "open_hours": {
+      "monday": "10:00-17:00",
+      "tuesday": "10:00-17:00",
+      "wednesday": "10:00-17:00",
+      "thursday": "10:00-17:00",
+      "friday": "10:00-17:00",
+      "saturday": "10:00-17:00",
+      "sunday": "closed"
+    },
+    "cuisine_tags": [],
+    "vibe_tags": [
+      "museum",
+      "history",
+      "quiet",
+      "indoor"
+    ],
+    "veg_friendly": true,
+    "indoor": true,
+    "rating": 4.5,
+    "source_url": "https://gandhimmm.org/",
+    "last_verified": "2026-10-04",
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e1/Gandhi_Memorial_Museum.jpg/500px-Gandhi_Memorial_Museum.jpg",
+    "image_page": "https://commons.wikimedia.org/wiki/File:Gandhi_Memorial_Museum.jpg",
+    "image_title": "Gandhi Memorial Museum, Madurai",
+    "image_kind": "place"
   },
   {
-    "id": "mdu-04", "name": "Thirumalai Nayakkar Palace", "type": "activity", "city": "Madurai", "area": "Town Hall Road",
-    "lat": 9.9153, "lng": 78.1246, "avg_cost_for_two": 120, "typical_duration_min": 70,
-    "open_hours": {"monday":"09:00-17:00","tuesday":"09:00-17:00","wednesday":"09:00-17:00","thursday":"09:00-17:00","friday":"09:00-17:00","saturday":"09:00-17:00","sunday":"09:00-17:00"},
-    "cuisine_tags": [], "vibe_tags": ["heritage","architecture","artsy","history"],
-    "veg_friendly": true, "indoor": true, "rating": 4.4, "source_url": "https://madurai.nic.in/tourist-place/thirumalai-nayak-palace/", "last_verified": "2026-10-04"
+    "id": "mdu-04",
+    "name": "Thirumalai Nayakkar Palace",
+    "type": "activity",
+    "city": "Madurai",
+    "area": "Town Hall Road",
+    "lat": 9.9153,
+    "lng": 78.1246,
+    "avg_cost_for_two": 120,
+    "typical_duration_min": 70,
+    "open_hours": {
+      "monday": "09:00-17:00",
+      "tuesday": "09:00-17:00",
+      "wednesday": "09:00-17:00",
+      "thursday": "09:00-17:00",
+      "friday": "09:00-17:00",
+      "saturday": "09:00-17:00",
+      "sunday": "09:00-17:00"
+    },
+    "cuisine_tags": [],
+    "vibe_tags": [
+      "heritage",
+      "architecture",
+      "artsy",
+      "history"
+    ],
+    "veg_friendly": true,
+    "indoor": true,
+    "rating": 4.4,
+    "source_url": "https://madurai.nic.in/tourist-place/thirumalai-nayak-palace/",
+    "last_verified": "2026-10-04",
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/87/Madurai_Nayak_Palace_Collage.jpg/500px-Madurai_Nayak_Palace_Collage.jpg",
+    "image_page": "https://commons.wikimedia.org/wiki/File:Madurai_Nayak_Palace_Collage.jpg",
+    "image_title": "Thirumalai Nayakkar Mahal",
+    "image_kind": "place"
   },
   {
-    "id": "mdu-05", "name": "MLounge - Courtyard Madurai", "type": "cafe", "city": "Madurai", "area": "KK Nagar",
-    "lat": 9.9350, "lng": 78.1428, "avg_cost_for_two": 1100, "typical_duration_min": 50,
-    "open_hours": {"monday":"08:00-23:00","tuesday":"08:00-23:00","wednesday":"08:00-23:00","thursday":"08:00-23:00","friday":"08:00-23:00","saturday":"08:00-23:00","sunday":"08:00-23:00"},
-    "cuisine_tags": ["cafe","coffee","pastries","sandwiches"], "vibe_tags": ["quiet","modern","cozy","indoor"],
-    "veg_friendly": true, "indoor": true, "rating": 4.5, "source_url": "https://www.marriott.com/en-us/hotels/ixmcy-courtyard-madurai/dining/", "last_verified": "2026-10-04"
+    "id": "mdu-05",
+    "name": "MLounge - Courtyard Madurai",
+    "type": "cafe",
+    "city": "Madurai",
+    "area": "KK Nagar",
+    "lat": 9.935,
+    "lng": 78.1428,
+    "avg_cost_for_two": 1100,
+    "typical_duration_min": 50,
+    "open_hours": {
+      "monday": "08:00-23:00",
+      "tuesday": "08:00-23:00",
+      "wednesday": "08:00-23:00",
+      "thursday": "08:00-23:00",
+      "friday": "08:00-23:00",
+      "saturday": "08:00-23:00",
+      "sunday": "08:00-23:00"
+    },
+    "cuisine_tags": [
+      "cafe",
+      "coffee",
+      "pastries",
+      "sandwiches"
+    ],
+    "vibe_tags": [
+      "quiet",
+      "modern",
+      "cozy",
+      "indoor"
+    ],
+    "veg_friendly": true,
+    "indoor": true,
+    "rating": 4.5,
+    "source_url": "https://www.marriott.com/en-us/hotels/ixmcy-courtyard-madurai/dining/",
+    "last_verified": "2026-10-04",
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/51/Filter_kaapi.JPG/500px-Filter_kaapi.JPG",
+    "image_page": "https://commons.wikimedia.org/wiki/File:Filter_kaapi.JPG",
+    "image_title": "Indian filter coffee",
+    "image_kind": "representative"
   },
   {
-    "id": "mdu-06", "name": "Famous Jigarthanda - East Marret Street", "type": "cafe", "city": "Madurai", "area": "Town Hall Road",
-    "lat": 9.9168, "lng": 78.1210, "avg_cost_for_two": 250, "typical_duration_min": 40,
-    "open_hours": {"monday":"10:00-23:00","tuesday":"10:00-23:00","wednesday":"10:00-23:00","thursday":"10:00-23:00","friday":"10:00-23:00","saturday":"10:00-23:00","sunday":"10:00-23:00"},
-    "cuisine_tags": ["desserts","jigarthanda","local","drinks"], "vibe_tags": ["iconic","local","casual"],
-    "veg_friendly": true, "indoor": true, "rating": 4.4, "source_url": "https://www.google.com/maps/search/?api=1&query=Famous+Jigarthanda+East+Marret+Street+Madurai", "last_verified": "2026-10-04"
+    "id": "mdu-06",
+    "name": "Famous Jigarthanda - East Marret Street",
+    "type": "cafe",
+    "city": "Madurai",
+    "area": "Town Hall Road",
+    "lat": 9.9168,
+    "lng": 78.121,
+    "avg_cost_for_two": 250,
+    "typical_duration_min": 40,
+    "open_hours": {
+      "monday": "10:00-23:00",
+      "tuesday": "10:00-23:00",
+      "wednesday": "10:00-23:00",
+      "thursday": "10:00-23:00",
+      "friday": "10:00-23:00",
+      "saturday": "10:00-23:00",
+      "sunday": "10:00-23:00"
+    },
+    "cuisine_tags": [
+      "desserts",
+      "jigarthanda",
+      "local",
+      "drinks"
+    ],
+    "vibe_tags": [
+      "iconic",
+      "local",
+      "casual"
+    ],
+    "veg_friendly": true,
+    "indoor": true,
+    "rating": 4.4,
+    "source_url": "https://www.google.com/maps/search/?api=1&query=Famous+Jigarthanda+East+Marret+Street+Madurai",
+    "last_verified": "2026-10-04",
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/85/Faluda.JPG/500px-Faluda.JPG",
+    "image_page": "https://commons.wikimedia.org/wiki/File:Faluda.JPG",
+    "image_title": "Falooda",
+    "image_kind": "representative"
   },
   {
-    "id": "mdu-07", "name": "Vandiyur Mariamman Teppakulam Walk", "type": "sunset", "city": "Madurai", "area": "Vandiyur",
-    "lat": 9.9103, "lng": 78.1488, "avg_cost_for_two": 0, "typical_duration_min": 45,
-    "open_hours": {"monday":"06:00-21:00","tuesday":"06:00-21:00","wednesday":"06:00-21:00","thursday":"06:00-21:00","friday":"06:00-21:00","saturday":"06:00-21:00","sunday":"06:00-21:00"},
-    "cuisine_tags": [], "vibe_tags": ["outdoors","heritage","sunset","walk","free"],
-    "veg_friendly": true, "indoor": false, "rating": 4.5, "source_url": "https://madurai.nic.in/tourist-place/mariamman-teppakulam/", "last_verified": "2026-10-04"
+    "id": "mdu-07",
+    "name": "Vandiyur Mariamman Teppakulam Walk",
+    "type": "sunset",
+    "city": "Madurai",
+    "area": "Vandiyur",
+    "lat": 9.9103,
+    "lng": 78.1488,
+    "avg_cost_for_two": 0,
+    "typical_duration_min": 45,
+    "open_hours": {
+      "monday": "06:00-21:00",
+      "tuesday": "06:00-21:00",
+      "wednesday": "06:00-21:00",
+      "thursday": "06:00-21:00",
+      "friday": "06:00-21:00",
+      "saturday": "06:00-21:00",
+      "sunday": "06:00-21:00"
+    },
+    "cuisine_tags": [],
+    "vibe_tags": [
+      "outdoors",
+      "heritage",
+      "sunset",
+      "walk",
+      "free"
+    ],
+    "veg_friendly": true,
+    "indoor": false,
+    "rating": 4.5,
+    "source_url": "https://madurai.nic.in/tourist-place/mariamman-teppakulam/",
+    "last_verified": "2026-10-04",
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/19/Vandiyur_Mariamman_Temple_34.jpg/500px-Vandiyur_Mariamman_Temple_34.jpg",
+    "image_page": "https://commons.wikimedia.org/wiki/File:Vandiyur_Mariamman_Temple_34.jpg",
+    "image_title": "Vandiyur Mariamman Temple",
+    "image_kind": "place"
   },
   {
-    "id": "mdu-08", "name": "Madurai Corporation Eco Park", "type": "sunset", "city": "Madurai", "area": "KK Nagar",
-    "lat": 9.9367, "lng": 78.1451, "avg_cost_for_two": 60, "typical_duration_min": 45,
-    "open_hours": {"monday":"16:00-21:00","tuesday":"16:00-21:00","wednesday":"16:00-21:00","thursday":"16:00-21:00","friday":"16:00-21:00","saturday":"16:00-21:00","sunday":"16:00-21:00"},
-    "cuisine_tags": [], "vibe_tags": ["outdoors","garden","walk","relaxed"],
-    "veg_friendly": true, "indoor": false, "rating": 4.1, "source_url": "https://www.google.com/maps/search/?api=1&query=Madurai+Corporation+Eco+Park", "last_verified": "2026-10-04"
+    "id": "mdu-08",
+    "name": "Madurai Corporation Eco Park",
+    "type": "sunset",
+    "city": "Madurai",
+    "area": "KK Nagar",
+    "lat": 9.9367,
+    "lng": 78.1451,
+    "avg_cost_for_two": 60,
+    "typical_duration_min": 45,
+    "open_hours": {
+      "monday": "16:00-21:00",
+      "tuesday": "16:00-21:00",
+      "wednesday": "16:00-21:00",
+      "thursday": "16:00-21:00",
+      "friday": "16:00-21:00",
+      "saturday": "16:00-21:00",
+      "sunday": "16:00-21:00"
+    },
+    "cuisine_tags": [],
+    "vibe_tags": [
+      "outdoors",
+      "garden",
+      "walk",
+      "relaxed"
+    ],
+    "veg_friendly": true,
+    "indoor": false,
+    "rating": 4.1,
+    "source_url": "https://www.google.com/maps/search/?api=1&query=Madurai+Corporation+Eco+Park",
+    "last_verified": "2026-10-04",
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/41/Brooklyn_Botanic_Garden_New_York_May_2015_010.jpg/500px-Brooklyn_Botanic_Garden_New_York_May_2015_010.jpg",
+    "image_page": "https://commons.wikimedia.org/wiki/File:Brooklyn_Botanic_Garden_New_York_May_2015_010.jpg",
+    "image_title": "Garden",
+    "image_kind": "representative"
   },
   {
-    "id": "mdu-09", "name": "Madurai Kitchen - Courtyard Madurai", "type": "dinner", "city": "Madurai", "area": "KK Nagar",
-    "lat": 9.9350, "lng": 78.1428, "avg_cost_for_two": 2200, "typical_duration_min": 75,
-    "open_hours": {"monday":"18:30-23:00","tuesday":"18:30-23:00","wednesday":"18:30-23:00","thursday":"18:30-23:00","friday":"18:30-23:00","saturday":"18:30-23:00","sunday":"18:30-23:00"},
-    "cuisine_tags": ["south-indian","multi-cuisine","international","local"], "vibe_tags": ["elegant","romantic","modern","indoor"],
-    "veg_friendly": true, "indoor": true, "rating": 4.5, "source_url": "https://www.marriott.com/en-us/hotels/ixmcy-courtyard-madurai/dining/", "last_verified": "2026-10-04"
+    "id": "mdu-09",
+    "name": "Madurai Kitchen - Courtyard Madurai",
+    "type": "dinner",
+    "city": "Madurai",
+    "area": "KK Nagar",
+    "lat": 9.935,
+    "lng": 78.1428,
+    "avg_cost_for_two": 2200,
+    "typical_duration_min": 75,
+    "open_hours": {
+      "monday": "18:30-23:00",
+      "tuesday": "18:30-23:00",
+      "wednesday": "18:30-23:00",
+      "thursday": "18:30-23:00",
+      "friday": "18:30-23:00",
+      "saturday": "18:30-23:00",
+      "sunday": "18:30-23:00"
+    },
+    "cuisine_tags": [
+      "south-indian",
+      "multi-cuisine",
+      "international",
+      "local"
+    ],
+    "vibe_tags": [
+      "elegant",
+      "romantic",
+      "modern",
+      "indoor"
+    ],
+    "veg_friendly": true,
+    "indoor": true,
+    "rating": 4.5,
+    "source_url": "https://www.marriott.com/en-us/hotels/ixmcy-courtyard-madurai/dining/",
+    "last_verified": "2026-10-04",
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/49/Vegetarian_Curry.jpeg/500px-Vegetarian_Curry.jpeg",
+    "image_page": "https://commons.wikimedia.org/wiki/File:Vegetarian_Curry.jpeg",
+    "image_title": "Thali",
+    "image_kind": "representative"
   },
   {
-    "id": "mdu-10", "name": "Phil's Bistro", "type": "dinner", "city": "Madurai", "area": "KK Nagar",
-    "lat": 9.9312, "lng": 78.1452, "avg_cost_for_two": 1200, "typical_duration_min": 75,
-    "open_hours": {"monday":"18:00-23:00","tuesday":"18:00-23:00","wednesday":"18:00-23:00","thursday":"18:00-23:00","friday":"18:00-23:00","saturday":"18:00-23:00","sunday":"18:00-23:00"},
-    "cuisine_tags": ["italian","continental","pizza","pasta"], "vibe_tags": ["cozy","casual","modern","indoor"],
-    "veg_friendly": true, "indoor": true, "rating": 4.3, "source_url": "https://www.marriott.com/en-us/hotels/ixmcy-courtyard-madurai/dining/", "last_verified": "2026-10-04"
+    "id": "mdu-10",
+    "name": "Phil's Bistro",
+    "type": "dinner",
+    "city": "Madurai",
+    "area": "KK Nagar",
+    "lat": 9.9312,
+    "lng": 78.1452,
+    "avg_cost_for_two": 1200,
+    "typical_duration_min": 75,
+    "open_hours": {
+      "monday": "18:00-23:00",
+      "tuesday": "18:00-23:00",
+      "wednesday": "18:00-23:00",
+      "thursday": "18:00-23:00",
+      "friday": "18:00-23:00",
+      "saturday": "18:00-23:00",
+      "sunday": "18:00-23:00"
+    },
+    "cuisine_tags": [
+      "italian",
+      "continental",
+      "pizza",
+      "pasta"
+    ],
+    "vibe_tags": [
+      "cozy",
+      "casual",
+      "modern",
+      "indoor"
+    ],
+    "veg_friendly": true,
+    "indoor": true,
+    "rating": 4.3,
+    "source_url": "https://www.marriott.com/en-us/hotels/ixmcy-courtyard-madurai/dining/",
+    "last_verified": "2026-10-04",
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/91/Pizza-3007395.jpg/500px-Pizza-3007395.jpg",
+    "image_page": "https://commons.wikimedia.org/wiki/File:Pizza-3007395.jpg",
+    "image_title": "Pizza",
+    "image_kind": "representative"
   }
 ]
