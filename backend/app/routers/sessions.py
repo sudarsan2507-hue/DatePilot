@@ -76,6 +76,8 @@ def get_session(token: str):
         "partner_taste_submitted": other_submitted,
         "both_submitted": row.taste_a is not None and row.taste_b is not None,
         "has_plan": row.plan_json is not None,
+        # Only Partner A gets the invite token, so they can resume after a reload.
+        **({"token_b": row.token_b} if partner == "a" else {}),
     }
 
 

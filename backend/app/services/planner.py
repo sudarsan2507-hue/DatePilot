@@ -64,6 +64,15 @@ DEFAULT_DURATIONS: dict[SlotType, int] = {
 }
 
 
+# Arrival windows so stops happen at sensible times of day. Tamil Nadu sunset is
+# roughly 17:50-18:30 all year, so a sunset walk starts between 17:00 and 18:15.
+SLOT_WINDOWS: dict[SlotType, tuple[str, str]] = {
+    SlotType.lunch: ("12:00", "14:30"),
+    SlotType.sunset: ("17:00", "18:15"),
+    SlotType.dinner: ("19:00", "21:30"),
+}
+
+
 def load_venues() -> list[Venue]:
     with open(VENUES_PATH, encoding="utf-8") as f:
         return [Venue.model_validate(v) for v in json.load(f)]
@@ -119,11 +128,23 @@ def next_open_visit(
     day_name: str,
     earliest_arrival: datetime,
     duration_minutes: int,
+    slot: SlotType | None = None,
 ) -> tuple[datetime, datetime] | None:
-    """Return the earliest same-day visit that fits fully within an opening shift."""
+    """Return the earliest same-day visit that fits fully within an opening shift
+    and, when a slot is given, starts inside that slot's time-of-day window."""
     hours = venue.open_hours.get(day_name.lower())
     if not hours or hours.lower() == "closed":
         return None
+
+    window_start = window_end = None
+    if slot in SLOT_WINDOWS:
+        start_s, end_s = SLOT_WINDOWS[slot]
+        window_start = datetime.combine(earliest_arrival.date(), datetime.strptime(start_s, "%H:%M").time())
+        window_end = datetime.combine(earliest_arrival.date(), datetime.strptime(end_s, "%H:%M").time())
+        if earliest_arrival > window_end:
+            return None
+        earliest_arrival = max(earliest_arrival, window_start)
+
     for shift in hours.split(","):
         try:
             open_s, close_s = shift.strip().split("-", 1)
@@ -136,6 +157,8 @@ def next_open_visit(
         if close_dt < open_dt:
             close_dt += timedelta(days=1)
         arrival = max(earliest_arrival, open_dt)
+        if window_end is not None and arrival > window_end:
+            continue
         departure = arrival + timedelta(minutes=duration_minutes)
         if departure <= close_dt:
             return arrival, departure
@@ -215,7 +238,7 @@ def apply_venue_replacement(
             return None
         earliest_arrival = current_time + timedelta(minutes=leg)
         duration = venue.typical_duration_min or DEFAULT_DURATIONS.get(stop.slot, 60)
-        visit = next_open_visit(venue, day_name, earliest_arrival, duration)
+        visit = next_open_visit(venue, day_name, earliest_arrival, duration, stop.slot)
         if not visit:
             return None
         arrival, departure = visit
@@ -319,11 +342,12 @@ def plan_date(
                     valid = False
                     break
 
-                earliest_arrival = cur_t + timedelta(minutes=int(round(travel_min)))
-                total_travel += int(travel_min)
+                leg_min = int(round(travel_min))
+                earliest_arrival = cur_t + timedelta(minutes=leg_min)
+                total_travel += leg_min
 
                 dur = venue.typical_duration_min or DEFAULT_DURATIONS.get(slot, 60)
-                visit = next_open_visit(venue, day_name, earliest_arrival, dur)
+                visit = next_open_visit(venue, day_name, earliest_arrival, dur, slot)
                 if not visit:
                     valid = False
                     break
@@ -361,7 +385,7 @@ def plan_date(
                     constraints_ok={
                         "budget": total_cost <= budget,
                         "hours": True,
-                        "travel": total_travel <= (session.max_travel_min * len(stops)),
+                        "travel": True,  # each leg is checked against max_travel_min above
                         "dietary": True,
                     },
                     matched_vibes=constraints["shared_vibes"],
