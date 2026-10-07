@@ -1,267 +1,358 @@
 import React, { useState } from 'react';
+import { useCountUp } from '../lib/motion';
+import { directionsTo, downloadCalendar, fullRouteUrl, shareText } from '../lib/dayTools';
+import RouteMap from './RouteMap';
+import {
+  ArrowUpRight, BedDouble, CalendarPlus, Car, Check, CloudSun, Coffee, MapPin, Navigation,
+  Palette, RefreshCw, Share2, Star, Sunset, Umbrella, Utensils, Wine, X,
+} from 'lucide-react';
 
 const SLOT_ICONS = {
-  lunch: '🍽️',
-  activity: '🎨',
-  cafe: '☕',
-  sunset: '🌅',
-  dinner: '🍷',
+  lunch: Utensils,
+  activity: Palette,
+  cafe: Coffee,
+  sunset: Sunset,
+  dinner: Wine,
 };
+
+const SLOT_LABELS = {
+  lunch: 'Lunch',
+  activity: 'Activity',
+  cafe: 'Café',
+  sunset: 'Sunset walk',
+  dinner: 'Dinner',
+};
+
+const PLAN_LABELS = ['Best match', 'Alternative', 'Lowest cost'];
+
+const inr = (n) => `₹${Number(n || 0).toLocaleString('en-IN')}`;
+
+function StopPhoto({ venue }) {
+  const [failed, setFailed] = useState(false);
+  if (!venue.image_url || failed) return null;
+  const representative = venue.image_kind === 'representative';
+  return (
+    <figure className="relative -mx-4 -mt-4 mb-4 overflow-hidden rounded-t-xl md:-mx-5 md:-mt-5">
+      <img
+        src={venue.image_url}
+        alt={representative ? `Representative photo for ${venue.name}` : venue.name}
+        loading="lazy"
+        decoding="async"
+        onError={() => setFailed(true)}
+        className="photo-in h-44 w-full object-cover md:h-52"
+      />
+      <figcaption className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-2 bg-gradient-to-t from-ink/60 to-transparent px-3 pb-2 pt-8 text-xs text-cream">
+        <span>{representative ? 'Representative photo' : ''}</span>
+        {venue.image_page && (
+          <a href={venue.image_page} target="_blank" rel="noopener noreferrer" className="-mb-2 inline-flex min-h-11 items-end pb-2 underline underline-offset-2 hover:text-white">
+            Photo: Wikimedia Commons
+          </a>
+        )}
+      </figcaption>
+    </figure>
+  );
+}
 
 export default function ItineraryViewer({
   plans,
+  date,
+  selectedPlanIndex,
+  onSelectPlan,
   onSwapClick,
   onRainToggle,
   onRateClick,
-  rainModeActive,
+  rainPlanIndex,
   rainTriggerNote,
   liveWeather,
   liveRoutes,
 }) {
-  const [selectedPlanIndex, setSelectedPlanIndex] = useState(0);
   const [showStaySuggestion, setShowStaySuggestion] = useState(false);
+  const [shared, setShared] = useState(false);
 
-  if (!plans || plans.length === 0) {
+  const activePlan = plans?.[selectedPlanIndex] || plans?.[0];
+  const shownTotal = useCountUp(activePlan?.total_cost || 0);
+  const shownLeft = useCountUp(activePlan?.budget_remaining || 0);
+  const shownDrive = useCountUp(activePlan?.total_travel_min || 0);
+
+  if (!activePlan) {
     return null;
   }
 
-  const activePlan = plans[selectedPlanIndex] || plans[0];
+  const rainModeActive = rainPlanIndex === selectedPlanIndex;
+  const stops = activePlan.stops || [];
+  const city = stops[0]?.venue?.city || 'Tamil Nadu';
+  const isSurprise = stops.length > 0 && stops.every((s) => !s.venue.lat && !s.venue.lng);
+  const start = liveRoutes?.start;
+  const ok = activePlan.constraints_ok || {};
+  const checks = [
+    ['budget', 'Within budget'],
+    ['hours', 'Open at every stop'],
+    ['travel', 'Drives within your limit'],
+    ['dietary', 'Dietary needs met'],
+  ];
+
+  const handleShare = async () => {
+    const text = shareText(stops, date, activePlan.total_cost, start);
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: 'Our day out', text });
+        return;
+      }
+      await navigator.clipboard.writeText(text);
+      setShared(true);
+      setTimeout(() => setShared(false), 2500);
+    } catch {
+      // share sheet dismissed
+    }
+  };
 
   return (
-    <div className="max-w-2xl mx-auto space-y-5 animate-fade-in text-left">
-      {/* Plan Carousel / Selector */}
-      <div className="flex items-center justify-between bg-white/80 backdrop-blur-md p-1.5 rounded-2xl border border-rose-100 shadow-sm">
-        {plans.map((p, idx) => (
-          <button
-            key={idx}
-            type="button"
-            onClick={() => setSelectedPlanIndex(idx)}
-            className={`flex-1 py-2 px-3 text-xs font-medium rounded-xl transition-all ${
-              selectedPlanIndex === idx
-                ? 'bg-rose-500 text-white shadow-md shadow-rose-200 font-semibold'
-                : 'text-warm-600 hover:text-warm-900 hover:bg-warm-100/50'
-            }`}
-          >
-            {idx === 0 ? 'Plan A (Top Match)' : idx === 1 ? 'Plan B (Alternative)' : 'Plan C (Budget Saver)'}
-          </button>
-        ))}
+    <div className="dp-screen mx-auto max-w-5xl animate-enter">
+      <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+        <div>
+          <p className="dp-eyebrow">Your day</p>
+          <h2 className="mt-2 text-3xl leading-tight md:text-4xl">Three ways to spend it</h2>
+        </div>
+        <div role="tablist" aria-label="Plans" className="grid grid-cols-3 gap-1 rounded-lg border border-line bg-well p-1 md:w-[420px]">
+          {plans.map((_, idx) => (
+            <button
+              key={idx}
+              type="button"
+              role="tab"
+              aria-selected={selectedPlanIndex === idx}
+              onClick={() => onSelectPlan(idx)}
+              className={`min-h-11 rounded-md px-2 text-sm ${
+                selectedPlanIndex === idx ? 'bg-paper text-ink shadow-sm' : 'text-ink-3 hover:text-ink-2'
+              }`}
+            >
+              {PLAN_LABELS[idx] || `Plan ${idx + 1}`}
+            </button>
+          ))}
+        </div>
       </div>
 
-      {/* Main Card */}
-      <div className="p-6 bg-white/95 backdrop-blur-md rounded-2xl shadow-xl border border-rose-100">
-        {/* Friendly AI Itinerary Text */}
-        {activePlan.itinerary_text && (
-          <div className="p-4 bg-gradient-to-r from-rose-50/80 via-pink-50/50 to-warm-50/80 rounded-xl border border-rose-100/80 mb-5">
-            <span className="text-[10px] uppercase font-bold tracking-widest text-rose-500 block mb-1">
-              Curated Narrative
-            </span>
-            <p className="text-xs text-warm-800 leading-relaxed font-serif italic">
-              "{activePlan.itinerary_text}"
+      <div className="grid gap-6 lg:grid-cols-[1fr_320px] lg:items-start">
+        {/* Timeline */}
+        <div className="space-y-6">
+          {activePlan.itinerary_text && (
+            <p className="reveal border-l-2 border-accent-soft pl-5 font-serif text-lg italic leading-relaxed text-ink-2">
+              {activePlan.itinerary_text}
             </p>
-          </div>
-        )}
+          )}
 
-        {/* Rain Protocol Banner if active */}
-        {rainModeActive && (
-          <div className="p-3 bg-blue-50 border border-blue-200 text-blue-900 text-xs rounded-xl mb-5 flex items-start gap-2.5">
-            <span className="text-base">☔</span>
-            <div>
-              <span className="font-semibold block">Rain Protocol Engaged</span>
-              <p className="text-[11px] text-blue-700 mt-0.5 leading-normal">
-                {rainTriggerNote || 'Outdoor stops have been replaced with weather-proof indoor sanctuaries.'}
-              </p>
-            </div>
-          </div>
-        )}
+          {rainModeActive && (
+            <p className="flex gap-3 rounded-lg border border-line bg-well px-4 py-3 text-sm text-ink-2">
+              <Umbrella size={18} strokeWidth={1.5} className="mt-0.5 shrink-0 text-ink-3" aria-hidden="true" />
+              <span><span className="text-ink">Rain plan on.</span> {rainTriggerNote || 'Outdoor stops are swapped for indoor ones.'}</span>
+            </p>
+          )}
 
-        {liveWeather && (
-          <div className={`p-3 rounded-xl mb-5 text-xs border ${liveWeather.rain_expected ? 'bg-blue-50 border-blue-200 text-blue-900' : 'bg-emerald-50 border-emerald-200 text-emerald-900'}`}>
-            <span className="font-semibold block">☁️ Live weather check · {liveWeather.city}</span>
-            <span className="text-[11px]">{liveWeather.summary} {liveWeather.rain_probability != null ? `Rain chance: ${liveWeather.rain_probability}%.` : ''}</span>
-            <span className="block text-[10px] opacity-60 mt-1">Source: {liveWeather.source}</span>
-          </div>
-        )}
+          {!isSurprise && (
+            <section className="reveal dp-card p-4 md:p-5" aria-labelledby="dp-route-title">
+              <div className="mb-3 flex items-baseline justify-between gap-3">
+                <h3 id="dp-route-title" className="text-xl">Your route</h3>
+                <p className="text-sm text-ink-3">
+                  {stops.length} stops · {activePlan.total_travel_min} min driving
+                </p>
+              </div>
+              <RouteMap key={`${selectedPlanIndex}-${rainModeActive}`} stops={stops} routes={rainModeActive ? null : liveRoutes} />
+              {!liveRoutes && !rainModeActive && (
+                <p className="mt-2 text-xs text-ink-3">Loading road directions…</p>
+              )}
+              <div className="mt-4 grid gap-2 sm:grid-cols-3">
+                <a
+                  href={fullRouteUrl(stops, start)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="dp-btn-primary text-sm"
+                >
+                  <Navigation size={16} strokeWidth={1.5} aria-hidden="true" />
+                  Start navigation
+                </a>
+                <button type="button" onClick={() => downloadCalendar(stops, date)} className="dp-btn-quiet text-sm" disabled={!date}>
+                  <CalendarPlus size={16} strokeWidth={1.5} aria-hidden="true" />
+                  Add to calendar
+                </button>
+                <button type="button" onClick={handleShare} className="dp-btn-quiet text-sm">
+                  {shared ? <Check size={16} strokeWidth={1.5} aria-hidden="true" /> : <Share2 size={16} strokeWidth={1.5} aria-hidden="true" />}
+                  {shared ? 'Copied' : 'Share plan'}
+                </button>
+              </div>
+            </section>
+          )}
 
-        {liveRoutes && (
-          <div className="p-3 bg-sky-50 border border-sky-200 text-sky-900 text-xs rounded-xl mb-5">
-            <span className="font-semibold block">🚗 Live route check</span>
-            <span className="text-[11px]">Road estimates refreshed for {liveRoutes.legs.length} legs. {liveRoutes.legs[0]?.source}.</span>
-          </div>
-        )}
+          <ol key={selectedPlanIndex} className="relative space-y-3 pl-5 md:pl-7">
+            <span className="timeline-line absolute bottom-6 left-[5px] top-6 w-px bg-accent-soft/40 md:left-[9px]" aria-hidden="true" />
+            {stops.map((stop, stopIdx) => {
+              const Icon = SLOT_ICONS[stop.slot] || MapPin;
+              return (
+                <li key={`${stop.slot}-${stop.venue.id}`} className="reveal dp-card lift relative p-4 md:p-5">
+                  <span className="absolute -left-[20px] top-6 h-[11px] w-[11px] rounded-full border-2 border-cream bg-accent-soft md:-left-[24px]" aria-hidden="true" />
+                  <StopPhoto venue={stop.venue} />
+                  <div className="flex gap-4">
+                    <div className="w-14 shrink-0 md:w-16">
+                      <p className="font-serif text-xl leading-none">{stop.arrival_time}</p>
+                      <p className="mt-1 text-xs text-ink-3">to {stop.departure_time}</p>
+                    </div>
 
-        {/* Summary Metrics Bar */}
-        <div className="grid grid-cols-3 gap-3 p-3 bg-warm-50/80 rounded-xl border border-warm-200/60 mb-5 text-center">
-          <div>
-            <span className="text-[10px] text-warm-400 uppercase tracking-wider block">
-              Total Spend
-            </span>
-            <span className="text-sm font-bold text-warm-900">
-              ₹{Number(activePlan.total_cost).toLocaleString('en-IN')}
-            </span>
-          </div>
-          <div>
-            <span className="text-[10px] text-warm-400 uppercase tracking-wider block">
-              Budget Buffer
-            </span>
-            <span className="text-sm font-bold text-emerald-600">
-              +₹{Number(activePlan.budget_remaining).toLocaleString('en-IN')}
-            </span>
-          </div>
-          <div>
-            <span className="text-[10px] text-warm-400 uppercase tracking-wider block">
-              Total Travel
-            </span>
-            <span className="text-sm font-bold text-warm-900">
-              {activePlan.total_travel_min} mins
-            </span>
-          </div>
-        </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="min-w-0">
+                          <p className="flex items-center gap-1.5 text-xs uppercase tracking-[0.12em] text-ink-3">
+                            <Icon size={14} strokeWidth={1.5} aria-hidden="true" />
+                            {stopIdx + 1} · {SLOT_LABELS[stop.slot] || stop.slot}
+                          </p>
+                          <h3 className="mt-1 break-words text-xl leading-snug">{stop.venue.name}</h3>
+                          <p className="mt-0.5 text-sm text-ink-3">
+                            {stop.venue.area}
+                            {stop.travel_from_prev_min > 0 && ` · ${stop.travel_from_prev_min} min drive (${stop.distance_from_prev_km} km)`}
+                          </p>
+                        </div>
+                        <p className="shrink-0 font-serif text-lg">{stop.cost > 0 ? inr(stop.cost) : 'Free'}</p>
+                      </div>
 
-        {/* Constraint Checklist Badges */}
-        <div className="flex flex-wrap gap-2 pb-4 mb-5 border-b border-warm-100">
-          <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-emerald-50 text-emerald-700 text-[11px] font-medium rounded-full border border-emerald-200">
-            ✓ Budget Ceiling (₹{activePlan.total_cost})
-          </span>
-          <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-emerald-50 text-emerald-700 text-[11px] font-medium rounded-full border border-emerald-200">
-            ✓ Operating Hours Verified
-          </span>
-          <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-emerald-50 text-emerald-700 text-[11px] font-medium rounded-full border border-emerald-200">
-            ✓ Travel Within Limit
-          </span>
-          <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-emerald-50 text-emerald-700 text-[11px] font-medium rounded-full border border-emerald-200">
-            ✓ Dietary Constraints
-          </span>
-        </div>
+                      {stop.why_picked && (
+                        <p className="mt-3 text-sm leading-relaxed text-ink-2">{stop.why_picked}</p>
+                      )}
 
-        {/* Timeline Stops */}
-        <div className="space-y-4">
-          {activePlan.stops.map((stop, stopIdx) => {
-            const icon = SLOT_ICONS[stop.slot] || '📍';
-            return (
-              <div
-                key={stopIdx}
-                className="relative pl-6 pb-4 border-l-2 border-rose-200 last:border-l-0 last:pb-0"
-              >
-                {/* Timeline node */}
-                <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-rose-500 border-2 border-white shadow-xs"></div>
-
-                <div className="bg-warm-50/60 p-4 rounded-xl border border-warm-200/80 hover:border-rose-200 transition-all">
-                  <div className="flex items-start justify-between gap-2 mb-1.5">
-                    <div className="flex items-center gap-2">
-                      <span className="text-lg">{icon}</span>
-                      <div>
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-rose-600 block">
-                          {stop.slot} • {stop.arrival_time} - {stop.departure_time}
-                        </span>
-                        <h4 className="text-sm font-semibold text-warm-900 leading-snug">
-                          {stop.venue.name}
-                        </h4>
+                      <div className="mt-4 flex flex-col gap-3 border-t border-line pt-3">
+                        <p className="text-sm text-ink-3">
+                          {stop.backup_venue
+                            ? <>Backup: <span className="text-ink-2">{stop.backup_venue.name}</span></>
+                            : 'No backup that fits every limit'}
+                        </p>
+                        <div className="flex flex-wrap gap-2">
+                          {!isSurprise && (
+                            <a
+                              href={directionsTo(stop.venue)}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="dp-btn-quiet px-3.5 text-sm"
+                            >
+                              <Navigation size={16} strokeWidth={1.5} aria-hidden="true" />
+                              Directions
+                            </a>
+                          )}
+                          {rainModeActive ? (
+                            <p className="self-center text-xs text-ink-3">Turn off the rain plan to swap</p>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={() => onSwapClick(selectedPlanIndex, stopIdx)}
+                              className="dp-btn-quiet px-3.5 text-sm"
+                            >
+                              <RefreshCw size={16} strokeWidth={1.5} aria-hidden="true" />
+                              Swap stop
+                            </button>
+                          )}
+                        </div>
                       </div>
                     </div>
-
-                    <div className="text-right shrink-0">
-                      <span className="text-xs font-semibold text-warm-900 block">
-                        ₹{stop.cost}
-                      </span>
-                      <span className="text-[10px] text-warm-500">
-                        {stop.travel_from_prev_min > 0
-                          ? `${stop.travel_from_prev_min}m drive (${stop.distance_from_prev_km}km)`
-                          : 'Starting point'}
-                      </span>
-                    </div>
                   </div>
-
-                  {/* Why Picked */}
-                  {stop.why_picked && (
-                    <p className="text-[11px] text-warm-600 bg-white/80 p-2 rounded-lg border border-warm-100 my-2 leading-relaxed">
-                      💡 {stop.why_picked}
-                    </p>
-                  )}
-
-                  {/* Backup Venue & Swap Action */}
-                  <div className="flex items-center justify-between pt-2 border-t border-warm-100 text-[11px]">
-                    <div className="text-warm-500 truncate mr-2">
-                      {stop.backup_venue ? (
-                        <span>
-                          <strong className="text-warm-700">Backup:</strong> {stop.backup_venue.name} ({stop.backup_venue.area})
-                        </span>
-                      ) : (
-                        <span className="italic">No constraint-safe backup for this stop</span>
-                      )}
-                    </div>
-
-                    <button
-                      type="button"
-                      onClick={() => onSwapClick(selectedPlanIndex, stopIdx)}
-                      className="px-2.5 py-1 bg-white hover:bg-rose-50 text-rose-600 border border-rose-200 rounded-lg font-medium text-[11px] transition-all shrink-0 shadow-2xs"
-                    >
-                      🔄 Swap Stop
-                    </button>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+                </li>
+              );
+            })}
+          </ol>
         </div>
 
-        {/* P1 Controls Bar (Rain Mode, Stay Suggestion, Rate Stops) */}
-        <div className="mt-6 pt-4 border-t border-warm-100 flex flex-wrap gap-2.5 items-center justify-between">
-          <div className="flex gap-2">
+        {/* Summary */}
+        <aside className="order-first space-y-4 lg:order-none lg:sticky lg:top-24">
+          <div className="dp-card p-5">
+            <dl className="grid grid-cols-3 gap-3 lg:grid-cols-1 lg:gap-4">
+              <div>
+                <dt className="text-xs text-ink-3">Total for two</dt>
+                <dd className="mt-1 font-serif text-2xl tabular-nums">{inr(shownTotal)}</dd>
+              </div>
+              <div>
+                <dt className="text-xs text-ink-3">Left in budget</dt>
+                <dd className="mt-1 font-serif text-2xl tabular-nums">{inr(shownLeft)}</dd>
+              </div>
+              <div>
+                <dt className="text-xs text-ink-3">Driving</dt>
+                <dd className="mt-1 font-serif text-2xl tabular-nums">{shownDrive} min</dd>
+              </div>
+            </dl>
+
+            <ul className="mt-5 grid gap-2 border-t border-line pt-4 sm:grid-cols-2 lg:grid-cols-1">
+              {checks.map(([key, label]) => {
+                const passed = ok[key] !== false;
+                return (
+                  <li key={key} className={`flex items-center gap-2 text-sm ${passed ? 'text-ink-2' : 'text-accent'}`}>
+                    {passed
+                      ? <Check size={16} strokeWidth={1.5} className="text-sage" aria-hidden="true" />
+                      : <X size={16} strokeWidth={1.5} aria-hidden="true" />}
+                    {label}
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+
+          {(liveWeather || liveRoutes) && (
+            <div className="dp-card space-y-3 p-5 text-sm text-ink-2">
+              {liveWeather && (
+                <p className="flex gap-3">
+                  <CloudSun size={18} strokeWidth={1.5} className="mt-0.5 shrink-0 text-ink-3" aria-hidden="true" />
+                  <span>
+                    {liveWeather.summary}
+                    {liveWeather.rain_probability != null && ` Rain chance ${liveWeather.rain_probability}%.`}
+                    <span className="mt-0.5 block text-xs text-ink-3">Weather for {liveWeather.city} · {liveWeather.source}</span>
+                  </span>
+                </p>
+              )}
+              {liveRoutes && (
+                <p className="flex gap-3">
+                  <Car size={18} strokeWidth={1.5} className="mt-0.5 shrink-0 text-ink-3" aria-hidden="true" />
+                  <span>
+                    Road route checked for {liveRoutes.legs.length} legs.
+                    <span className="mt-0.5 block text-xs text-ink-3">{liveRoutes.legs[0]?.source}</span>
+                  </span>
+                </p>
+              )}
+            </div>
+          )}
+
+          <div className="grid grid-cols-2 gap-2 lg:grid-cols-1">
             <button
               type="button"
               onClick={() => onRainToggle(selectedPlanIndex)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-medium border transition-all flex items-center gap-1.5 ${
-                rainModeActive
-                  ? 'bg-blue-500 text-white border-blue-500 shadow-sm'
-                  : 'bg-warm-100 text-warm-700 border-warm-200 hover:bg-warm-200'
-              }`}
+              aria-pressed={rainModeActive}
+              className={`dp-btn border text-sm ${rainModeActive ? 'border-ink bg-well text-ink' : 'border-line bg-paper text-ink-2 hover:border-ink-3'}`}
             >
-              <span>☔</span>
-              <span>{rainModeActive ? 'Rain Mode Active' : 'Rain Mode'}</span>
+              <Umbrella size={16} strokeWidth={1.5} aria-hidden="true" />
+              {rainModeActive ? 'Rain plan on' : 'Rain plan'}
             </button>
-
             <button
               type="button"
               onClick={() => setShowStaySuggestion(!showStaySuggestion)}
-              className="px-3 py-1.5 bg-warm-100 hover:bg-warm-200 text-warm-700 border border-warm-200 rounded-xl text-xs font-medium transition-all flex items-center gap-1.5"
+              aria-expanded={showStaySuggestion}
+              className="dp-btn-quiet text-sm"
             >
-              <span>🏨</span>
-              <span>Stay Suggestion</span>
+              <BedDouble size={16} strokeWidth={1.5} aria-hidden="true" />
+              Stay nearby
+            </button>
+            <button type="button" onClick={onRateClick} className="dp-btn-quiet col-span-2 text-sm lg:col-span-1">
+              <Star size={16} strokeWidth={1.5} aria-hidden="true" />
+              Rate this date
             </button>
           </div>
 
-          <button
-            type="button"
-            onClick={onRateClick}
-            className="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded-xl text-xs font-medium transition-all flex items-center gap-1.5"
-          >
-            <span>⭐</span>
-            <span>Rate This Date</span>
-          </button>
-        </div>
-
-        {/* Stay Deep-Link suggestion drawer */}
-        {showStaySuggestion && (
-          <div className="mt-4 p-4 bg-amber-50/80 border border-amber-200 rounded-xl text-xs text-warm-800 animate-fade-in">
-            <div className="flex items-center justify-between mb-1">
-              <span className="font-semibold text-amber-900">
-                Optional Boutique Stay Suggestion
-              </span>
-              <span className="text-[10px] text-amber-700">Deep link only (no payments)</span>
+          {showStaySuggestion && (
+            <div className="dp-card p-5 text-sm text-ink-2 animate-enter">
+              <p className="text-ink">Want to stay the night?</p>
+              <p className="mt-1">Browse hotels in {city}. We only link out. No booking or payment happens here.</p>
+              <a
+                href={`https://www.google.com/travel/hotels/${encodeURIComponent(city)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="dp-btn mt-3 px-0 text-sm text-accent underline underline-offset-4 hover:text-accent-deep"
+              >
+                See hotels in {city}
+                <ArrowUpRight size={16} strokeWidth={1.5} aria-hidden="true" />
+              </a>
             </div>
-            <p className="text-[11px] text-warm-600 mb-2">
-              Extend your date with a stay near your final stop in <strong>{plan.stops?.[0]?.venue?.city || 'Tamil Nadu'}</strong>. Browse current options and choose what fits your comfort and budget.
-            </p>
-            <a
-              href={`https://www.google.com/travel/hotels/${encodeURIComponent(plan.stops?.[0]?.venue?.city || 'Tamil Nadu')}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block px-3 py-1 bg-amber-600 hover:bg-amber-700 text-white font-medium rounded-lg text-[10px]"
-            >
-              Explore Hotel Availability & Rates ↗
-            </a>
-          </div>
-        )}
+          )}
+        </aside>
       </div>
     </div>
   );
