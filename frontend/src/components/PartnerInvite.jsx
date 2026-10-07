@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
+import { Check, Copy, Lock } from 'lucide-react';
 
-export default function PartnerInvite({ sessionData, onSwitchToPartnerB }) {
+export default function PartnerInvite({ tokenB, onSwitchToPartnerB }) {
   const [copied, setCopied] = useState(false);
-  const tokenB = sessionData?.token_b || '';
   const shareUrl = `${window.location.origin}/#invite=${tokenB}`;
 
   const copyToClipboard = () => {
@@ -12,48 +12,30 @@ export default function PartnerInvite({ sessionData, onSwitchToPartnerB }) {
   };
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-white/90 backdrop-blur-md rounded-2xl shadow-xl border border-rose-100 text-center animate-fade-in">
-      <div className="w-12 h-12 mx-auto mb-3 bg-rose-100 text-rose-500 rounded-full flex items-center justify-center text-xl">
-        💌
-      </div>
-      <h3 className="text-xl font-serif text-warm-900 mb-1">
-        Send Invite to Your Partner
-      </h3>
-      <p className="text-xs text-warm-500 mb-5 max-w-xs mx-auto">
-        Share this private link. She can upload her Instagram export, screenshots, or take a quick quiz to share her taste secretly.
+    <div className="dp-card mx-auto max-w-2xl p-5 shadow-soft animate-enter md:p-8">
+      <p className="dp-eyebrow">Invite</p>
+      <h2 className="mt-2 text-3xl leading-tight md:text-4xl">Now your partner&rsquo;s turn</h2>
+      <p className="mt-2 text-base text-ink-2">
+        Send this private link. They answer the same questions on their own phone.
       </p>
 
-      {/* Share Box */}
-      <div className="flex items-center gap-2 p-2 bg-warm-50 border border-warm-200 rounded-xl mb-4 text-left">
-        <input
-          type="text"
-          readOnly
-          value={shareUrl}
-          className="w-full bg-transparent text-xs text-warm-700 px-2 outline-none font-mono truncate"
-        />
-        <button
-          onClick={copyToClipboard}
-          className="px-3 py-1.5 bg-rose-500 hover:bg-rose-600 text-white text-xs font-medium rounded-lg transition-all shrink-0"
-        >
-          {copied ? 'Copied! ✓' : 'Copy'}
+      <div className="mt-6 flex flex-col gap-2 sm:flex-row">
+        <label htmlFor="dp-share" className="sr-only">Invite link</label>
+        <input id="dp-share" type="text" readOnly value={shareUrl} onFocus={(e) => e.target.select()} className="dp-field min-w-0 flex-1 font-mono text-sm md:text-sm" />
+        <button type="button" onClick={copyToClipboard} className="dp-btn-primary shrink-0">
+          {copied ? <Check size={18} strokeWidth={1.5} aria-hidden="true" /> : <Copy size={18} strokeWidth={1.5} aria-hidden="true" />}
+          {copied ? 'Copied' : 'Copy link'}
         </button>
       </div>
 
-      <div className="p-3 bg-warm-100/60 rounded-xl text-left border border-warm-200/60 mb-5">
-        <h4 className="text-[11px] font-semibold text-warm-800 uppercase tracking-wider mb-1">
-          Privacy Guarantee
-        </h4>
-        <p className="text-[11px] text-warm-600 leading-relaxed">
-          Neither partner will see the other’s raw responses. The planner will only reveal your mutual match highlights!
-        </p>
-      </div>
+      <p className="mt-6 flex gap-3 border-t border-line pt-6 text-sm leading-relaxed text-ink-2">
+        <Lock size={18} strokeWidth={1.5} className="mt-0.5 shrink-0 text-ink-3" aria-hidden="true" />
+        Neither of you sees the other&rsquo;s answers. You only see what you have in common.
+      </p>
 
       {onSwitchToPartnerB && (
-        <button
-          onClick={onSwitchToPartnerB}
-          className="text-xs text-rose-600 hover:text-rose-700 font-medium underline underline-offset-2"
-        >
-          (Demo Shortcut: Open Partner B View directly)
+        <button type="button" onClick={onSwitchToPartnerB} className="dp-btn mt-4 px-0 text-sm text-ink-3 underline underline-offset-4 hover:text-ink">
+          No second phone handy? Try your partner's side here
         </button>
       )}
     </div>

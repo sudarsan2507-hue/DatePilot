@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Coffee, Palette, Sunset, Utensils, Wine } from 'lucide-react';
 
 const CITY_AREAS = {
   Chennai: [
@@ -17,18 +18,21 @@ const CITY_AREAS = {
 };
 
 const SLOTS = [
-  { id: 'lunch', label: 'Lunch / Brunch', icon: '🍽️' },
-  { id: 'activity', label: 'Activity / Craft', icon: '🎨' },
-  { id: 'cafe', label: 'Café / Dessert', icon: '☕' },
-  { id: 'sunset', label: 'Sunset / Walk', icon: '🌅' },
-  { id: 'dinner', label: 'Dinner / Candlelight', icon: '🍷' },
+  { id: 'lunch', label: 'Lunch', icon: Utensils },
+  { id: 'activity', label: 'Activity', icon: Palette },
+  { id: 'cafe', label: 'Café', icon: Coffee },
+  { id: 'sunset', label: 'Sunset walk', icon: Sunset },
+  { id: 'dinner', label: 'Dinner', icon: Wine },
 ];
 
 export default function SessionSetup({ onSessionCreated }) {
+  // Local dates (toISOString would use UTC and can be a day off in India).
+  const localISO = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  const todayISO = localISO(new Date());
   const [date, setDate] = useState(() => {
-    const today = new Date();
-    today.setDate(today.getDate() + 1);
-    return today.toISOString().split('T')[0];
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    return localISO(tomorrow);
   });
   const [timeStart, setTimeStart] = useState('12:00');
   const [timeEnd, setTimeEnd] = useState('22:30');
@@ -50,7 +54,7 @@ export default function SessionSetup({ onSessionCreated }) {
   const toggleSlot = (slotId) => {
     if (slotsEnabled.includes(slotId)) {
       if (slotsEnabled.length <= 2) {
-        setError('Please keep at least 2 date stops enabled.');
+        setError('Keep at least two stops.');
         return;
       }
       setSlotsEnabled(slotsEnabled.filter((s) => s !== slotId));
@@ -61,6 +65,14 @@ export default function SessionSetup({ onSessionCreated }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (date < todayISO) {
+      setError('Pick today or a later date.');
+      return;
+    }
+    if (timeEnd <= timeStart) {
+      setError('The end time needs to be after the start time.');
+      return;
+    }
     setLoading(true);
     setError('');
 
@@ -86,205 +98,148 @@ export default function SessionSetup({ onSessionCreated }) {
   };
 
   return (
-    <div className="max-w-xl mx-auto p-6 bg-white/90 backdrop-blur-md rounded-2xl shadow-xl border border-rose-100 animate-fade-in">
-      <div className="text-center mb-6">
-        <span className="text-xs uppercase tracking-widest text-rose-500 font-semibold">
-          THE FIRST LITTLE STEP
-        </span>
-        <h2 className="text-2xl font-serif text-warm-900 mt-1">
-          Make room for a lovely day.
-        </h2>
-        <p className="text-xs text-warm-500 mt-1 max-w-sm mx-auto">
-          Pick your city, your time, and your budget. We’ll take care of the possibilities.
-        </p>
+    <div className="dp-screen dp-card mx-auto max-w-2xl p-5 shadow-soft animate-enter md:p-8">
+      <div className="mb-8">
+        <p className="dp-eyebrow">Your day</p>
+        <h2 className="mt-2 text-3xl leading-tight md:text-4xl">Set up your day</h2>
+        <p className="mt-2 text-base text-ink-2">Where, when and how much. We plan everything inside these limits.</p>
       </div>
 
       {error && (
-        <div className="mb-4 p-3 bg-rose-50 border border-rose-200 text-rose-700 text-xs rounded-lg">
+        <p role="alert" className="mb-6 rounded-lg border border-accent-soft/40 bg-well px-4 py-3 text-sm text-accent">
           {error}
-        </div>
+        </p>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-5">
-        {/* Date, City & Starting Area */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div>
-            <label className="block text-xs font-medium text-warm-800 mb-1">
-              Date
-            </label>
-            <input
-              type="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-              required
-              className="w-full px-3 py-2 text-sm bg-warm-50 border border-warm-200 rounded-lg focus:ring-2 focus:ring-rose-400 focus:outline-none"
-            />
+      <form onSubmit={handleSubmit} className="space-y-7">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="sm:col-span-2 lg:col-span-1">
+            <label htmlFor="dp-date" className="dp-label">Date</label>
+            <input id="dp-date" type="date" min={todayISO} value={date} onChange={(e) => setDate(e.target.value)} required className="dp-field" />
           </div>
-
           <div>
-            <label className="block text-xs font-medium text-warm-800 mb-1">
-              City
-            </label>
+            <label htmlFor="dp-city" className="dp-label">City</label>
             <select
+              id="dp-city"
               value={city}
               onChange={(e) => {
                 const nextCity = e.target.value;
                 setCity(nextCity);
                 setStartArea(CITY_AREAS[nextCity][0]);
               }}
-              className="w-full px-3 py-2 text-sm bg-warm-50 border border-warm-200 rounded-lg focus:ring-2 focus:ring-rose-400 focus:outline-none"
+              className="dp-field"
             >
               {Object.keys(CITY_AREAS).map((name) => (
                 <option key={name} value={name}>{name}</option>
               ))}
             </select>
           </div>
-
           <div>
-            <label className="block text-xs font-medium text-warm-800 mb-1">
-              Starting Place
-            </label>
-            <select
-              value={startArea}
-              onChange={(e) => setStartArea(e.target.value)}
-              className="w-full px-3 py-2 text-sm bg-warm-50 border border-warm-200 rounded-lg focus:ring-2 focus:ring-rose-400 focus:outline-none"
-            >
+            <label htmlFor="dp-area" className="dp-label">Starting from</label>
+            <select id="dp-area" value={startArea} onChange={(e) => setStartArea(e.target.value)} className="dp-field">
               {CITY_AREAS[city].map((a) => (
-                <option key={a} value={a}>
-                  {a}
-                </option>
+                <option key={a} value={a}>{a}</option>
               ))}
             </select>
           </div>
         </div>
 
-        {/* Time Window */}
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs font-medium text-warm-800 mb-1">
-              Start Time
-            </label>
-            <input
-              type="time"
-              value={timeStart}
-              onChange={(e) => setTimeStart(e.target.value)}
-              className="w-full px-3 py-2 text-sm bg-warm-50 border border-warm-200 rounded-lg focus:ring-2 focus:ring-rose-400 focus:outline-none"
-            />
+            <label htmlFor="dp-start" className="dp-label">From</label>
+            <input id="dp-start" type="time" value={timeStart} onChange={(e) => setTimeStart(e.target.value)} className="dp-field" />
           </div>
           <div>
-            <label className="block text-xs font-medium text-warm-800 mb-1">
-              End Time
-            </label>
-            <input
-              type="time"
-              value={timeEnd}
-              onChange={(e) => setTimeEnd(e.target.value)}
-              className="w-full px-3 py-2 text-sm bg-warm-50 border border-warm-200 rounded-lg focus:ring-2 focus:ring-rose-400 focus:outline-none"
-            />
+            <label htmlFor="dp-end" className="dp-label">Until</label>
+            <input id="dp-end" type="time" value={timeEnd} onChange={(e) => setTimeEnd(e.target.value)} className="dp-field" />
           </div>
         </div>
 
-        {/* Total Budget */}
-        <div>
-          <div className="flex justify-between items-center mb-1">
-            <label className="text-xs font-medium text-warm-800">
-              Total Combined Budget
-            </label>
-            <span className="text-sm font-semibold text-rose-600">
-              ₹{Number(budgetInr).toLocaleString('en-IN')}
-            </span>
+        <div className="grid gap-6 md:grid-cols-2">
+          <div>
+            <div className="flex items-baseline justify-between">
+              <label htmlFor="dp-budget" className="text-sm text-ink-2">Total budget for two</label>
+              <span className="font-serif text-xl">₹{Number(budgetInr).toLocaleString('en-IN')}</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="shrink-0 text-xs text-ink-3">₹2k</span>
+              <input
+                id="dp-budget"
+                type="range"
+                min="2000"
+                max="15000"
+                step="500"
+                value={budgetInr}
+                onChange={(e) => setBudgetInr(e.target.value)}
+                className="h-11 min-w-0 flex-1 cursor-pointer accent-accent"
+              />
+              <span className="shrink-0 text-xs text-ink-3">₹15k</span>
+            </div>
           </div>
-          <input
-            type="range"
-            min="2000"
-            max="15000"
-            step="500"
-            value={budgetInr}
-            onChange={(e) => setBudgetInr(e.target.value)}
-            className="w-full accent-rose-500 cursor-pointer"
-          />
-          <div className="flex justify-between text-[10px] text-warm-400 mt-0.5">
-            <span>₹2,000 (Cozy)</span>
-            <span>₹6,000 (Boutique)</span>
-            <span>₹15,000 (Luxury)</span>
+
+          <div>
+            <div className="flex items-baseline justify-between">
+              <label htmlFor="dp-travel" className="text-sm text-ink-2">Longest drive between stops</label>
+              <span className="font-serif text-xl">{maxTravelMin} min</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="shrink-0 text-xs text-ink-3">15m</span>
+              <input
+                id="dp-travel"
+                type="range"
+                min="15"
+                max="60"
+                step="5"
+                value={maxTravelMin}
+                onChange={(e) => setMaxTravelMin(e.target.value)}
+                className="h-11 min-w-0 flex-1 cursor-pointer accent-accent"
+              />
+              <span className="shrink-0 text-xs text-ink-3">60m</span>
+            </div>
           </div>
         </div>
 
-        {/* Max Travel Between Stops */}
-        <div>
-          <div className="flex justify-between items-center mb-1">
-            <label className="text-xs font-medium text-warm-800">
-              Max Travel Between Stops
-            </label>
-            <span className="text-xs font-medium text-warm-600">
-              {maxTravelMin} mins
-            </span>
-          </div>
-          <input
-            type="range"
-            min="15"
-            max="60"
-            step="5"
-            value={maxTravelMin}
-            onChange={(e) => setMaxTravelMin(e.target.value)}
-            className="w-full accent-rose-500 cursor-pointer"
-          />
-        </div>
-
-        {/* Enabled Slots Toggle */}
-        <div>
-          <label className="block text-xs font-medium text-warm-800 mb-1.5">
-            Enabled Date Stops
-          </label>
+        <fieldset>
+          <legend className="dp-label">Stops to include</legend>
           <div className="flex flex-wrap gap-2">
-            {SLOTS.map((s) => {
-              const active = slotsEnabled.includes(s.id);
-              return (
-                <button
-                  key={s.id}
-                  type="button"
-                  onClick={() => toggleSlot(s.id)}
-                  className={`px-3 py-1.5 text-xs font-medium rounded-full transition-all flex items-center gap-1.5 ${
-                    active
-                      ? 'bg-rose-500 text-white shadow-sm shadow-rose-200'
-                      : 'bg-warm-100 text-warm-600 hover:bg-warm-200'
-                  }`}
-                >
-                  <span>{s.icon}</span>
-                  <span>{s.label}</span>
-                </button>
-              );
-            })}
+            {SLOTS.map(({ id, label, icon: Icon }) => (
+              <button
+                key={id}
+                type="button"
+                onClick={() => toggleSlot(id)}
+                aria-pressed={slotsEnabled.includes(id)}
+                className="dp-chip"
+              >
+                <Icon size={18} strokeWidth={1.5} aria-hidden="true" />
+                {label}
+              </button>
+            ))}
           </div>
-        </div>
+        </fieldset>
 
-        {/* Surprise Mode Toggle */}
-        <div className="flex items-center justify-between p-3 bg-rose-50/60 rounded-xl border border-rose-100">
+        <div className="flex items-center justify-between gap-4 border-t border-line pt-6">
           <div>
-            <h4 className="text-xs font-semibold text-warm-900">
-              Surprise Mode ✨
-            </h4>
-            <p className="text-[11px] text-warm-500">
-              Keep venues confidential from her until the date starts!
-            </p>
+            <p id="dp-surprise-label" className="text-base">Surprise mode</p>
+            <p className="mt-0.5 text-sm text-ink-3">Hide the venues from your partner until the day.</p>
           </div>
-          <label className="relative inline-flex items-center cursor-pointer">
-            <input
-              type="checkbox"
-              checked={surpriseMode}
-              onChange={(e) => setSurpriseMode(e.target.checked)}
-              className="sr-only peer"
-            />
-            <div className="w-9 h-5 bg-warm-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-rose-500"></div>
-          </label>
+          <button
+            type="button"
+            role="switch"
+            aria-checked={surpriseMode}
+            aria-labelledby="dp-surprise-label"
+            onClick={() => setSurpriseMode(!surpriseMode)}
+            className="grid h-11 w-14 shrink-0 place-items-center"
+          >
+            <span className={`relative block h-6 w-11 rounded-full ${surpriseMode ? 'bg-accent' : 'bg-line'}`}>
+              <span
+                className={`absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-white shadow-sm transition-transform duration-200 ease-out ${surpriseMode ? 'translate-x-5' : ''}`}
+              />
+            </span>
+          </button>
         </div>
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full py-3 px-4 bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white font-medium rounded-xl shadow-md shadow-rose-200 transition-all text-sm disabled:opacity-50"
-        >
-          {loading ? 'Making space for your day…' : 'Let’s plan something lovely ↗'}
+        <button type="submit" disabled={loading} className="dp-btn-primary w-full min-h-12">
+          {loading ? 'Setting up…' : 'Continue'}
         </button>
       </form>
     </div>
