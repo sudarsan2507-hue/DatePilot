@@ -45,23 +45,34 @@ async def live_route_estimates(token: str, plan_index: int):
         )).first()
     if not row or not row.plan_json:
         raise HTTPException(status_code=404, detail="Plan not found")
+    if _surprise_is_hidden(row, token):
+        raise HTTPException(status_code=403, detail="The route stays hidden until the surprise date begins")
     plans = json.loads(row.plan_json)
     if plan_index < 0 or plan_index >= len(plans):
         raise HTTPException(status_code=400, detail="Invalid plan index")
     plan = DatePlan.model_validate(plans[plan_index])
-    previous = start_coordinates(row.city, row.start_area)
+    start = start_coordinates(row.city, row.start_area)
+    previous = start
     legs = []
     for stop in plan.stops:
         current = (stop.venue.lat, stop.venue.lng)
-        route = await get_osrm_route([previous, current])
+        route = await get_osrm_route([previous, current], geometry=True)
         legs.append({
             "venue_name": stop.venue.name,
             "distance_km": route["distance_km"] if route else stop.distance_from_prev_km,
             "duration_min": route["duration_min"] if route else stop.travel_from_prev_min,
             "source": route["source"] if route else "Haversine estimate (OSRM unavailable)",
+            # Road path for the map; a straight line when OSRM is unavailable.
+            "path": route["path"] if route and route.get("path") else [list(previous), list(current)],
+            "is_road": bool(route and route.get("path")),
         })
         previous = current
-    return {"plan_index": plan_index, "legs": legs, "source": "OSRM with deterministic fallback"}
+    return {
+        "plan_index": plan_index,
+        "start": {"lat": start[0], "lng": start[1], "label": f"{row.start_area}, {row.city}"},
+        "legs": legs,
+        "source": "OSRM with deterministic fallback",
+    }
 
 
 def _surprise_is_hidden(row: SessionDB, token: str) -> bool:
@@ -86,16 +97,24 @@ def _redact_surprise_plans(plans: list[dict], city: str) -> list[dict]:
                 "cuisine_tags": [],
                 "vibe_tags": [],
                 "source_url": "",
+                "image_url": None,
+                "image_page": None,
+                "image_kind": None,
             })
             stop["why_picked"] = "A constraint-checked surprise chosen from your shared preferences."
             stop["backup_venue"] = None
     return redacted
 
 
-async def _enrich_plan(plan: DatePlan) -> DatePlan:
-    """Enrich plan with AI explanations and friendly itinerary narrative."""
+async def _enrich_plan(plan: DatePlan, why_cache: dict | None = None) -> DatePlan:
+    """Enrich plan with AI explanations and friendly itinerary narrative.
+    `why_cache` lets plans that share a place reuse its reason (one model call per place)."""
+    cache = why_cache if why_cache is not None else {}
     for stop in plan.stops:
-        stop.why_picked = await write_why_picked(stop, plan.matched_vibes, plan.matched_cuisines)
+        key = (stop.venue.id, stop.slot)
+        if key not in cache:
+            cache[key] = await write_why_picked(stop, plan.matched_vibes, plan.matched_cuisines)
+        stop.why_picked = cache[key]
     plan.itinerary_text = await write_itinerary(plan)
     return plan
 
@@ -121,8 +140,9 @@ async def generate_plan(token_a: str):
         )
 
     enriched_plans: list[DatePlan] = []
+    why_cache: dict = {}
     for p in plans:
-        enriched_plans.append(await _enrich_plan(p))
+        enriched_plans.append(await _enrich_plan(p, why_cache))
 
     # Persist top plans in DB
     with DBSession(engine) as db:

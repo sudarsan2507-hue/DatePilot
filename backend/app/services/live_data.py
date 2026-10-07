@@ -21,25 +21,30 @@ CITY_CENTERS: dict[str, tuple[float, float]] = {
 }
 
 
-async def get_osrm_route(points: list[tuple[float, float]]) -> dict[str, Any] | None:
-    """Return a real road route, or None when the public OSRM service is unavailable."""
+async def get_osrm_route(points: list[tuple[float, float]], geometry: bool = False) -> dict[str, Any] | None:
+    """Return a real road route, or None when the public OSRM service is unavailable.
+    With geometry=True the result includes the road path as [[lat, lng], ...]."""
     if len(points) < 2:
         return None
     coordinates = ";".join(f"{lng},{lat}" for lat, lng in points)
     url = f"{OSRM_URL}/{coordinates}"
     try:
-        async with httpx.AsyncClient(timeout=httpx.Timeout(4.0, connect=1.5)) as client:
-            response = await client.get(url, params={"overview": "false", "steps": "false"})
+        params = {"overview": "full", "geometries": "geojson", "steps": "false"} if geometry else {"overview": "false", "steps": "false"}
+        async with httpx.AsyncClient(timeout=httpx.Timeout(6.0, connect=2.0)) as client:
+            response = await client.get(url, params=params)
             response.raise_for_status()
             payload = response.json()
         route = payload.get("routes", [None])[0]
         if not route:
             return None
-        return {
+        result = {
             "distance_km": round(float(route["distance"]) / 1000, 1),
             "duration_min": int(round(float(route["duration"]) / 60)),
             "source": "OSRM driving route",
         }
+        if geometry:
+            result["path"] = [[lat, lng] for lng, lat in route["geometry"]["coordinates"]]
+        return result
     except (httpx.HTTPError, KeyError, TypeError, ValueError):
         return None
 
