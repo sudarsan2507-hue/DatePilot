@@ -19,12 +19,15 @@ OPENAI_BASE_URL = os.getenv("OPENAI_BASE_URL", "").rstrip("/")
 OPENAI_API_KEY  = os.getenv("OPENAI_API_KEY", "")
 LLM_MODEL       = os.getenv("LLM_MODEL", "gemma3:4b")
 VISION_MODEL    = os.getenv("VISION_MODEL", "llava:7b")
+# A 4B model on a laptop CPU needs ~7s per reply once loaded (~20s cold), so allow plenty.
+LLM_TIMEOUT_S   = float(os.getenv("LLM_TIMEOUT_S", "120"))
+KEEP_ALIVE      = os.getenv("OLLAMA_KEEP_ALIVE", "30m")
 
 _last_ollama_fail: float = 0.0
 _last_openai_fail: float = 0.0
 
 
-async def chat(prompt: str, system: str = "", model: Optional[str] = None) -> str:
+async def chat(prompt: str, system: str = "", model: Optional[str] = None, max_tokens: Optional[int] = None) -> str:
     """
     Send prompt to configured open-weight model endpoint.
     Falls back gracefully if endpoint is unreachable.
@@ -46,7 +49,7 @@ async def chat(prompt: str, system: str = "", model: Optional[str] = None) -> st
                 r = await client.post(
                     f"{OPENAI_BASE_URL}/chat/completions",
                     headers=headers,
-                    json={"model": m, "messages": messages, "temperature": 0.4},
+                    json={"model": m, "messages": messages, "temperature": 0.4, **({"max_tokens": max_tokens} if max_tokens else {})},
                 )
                 if r.status_code == 200:
                     data = r.json()
@@ -64,21 +67,39 @@ async def chat(prompt: str, system: str = "", model: Optional[str] = None) -> st
                 {"role": "user", "content": prompt},
             ],
             "stream": False,
-            "options": {"temperature": 0.3},
+            "keep_alive": KEEP_ALIVE,
+            "options": {"temperature": 0.3, **({"num_predict": max_tokens} if max_tokens else {})},
         }
 
         try:
-            timeout = httpx.Timeout(10.0, connect=1.0)
+            timeout = httpx.Timeout(LLM_TIMEOUT_S, connect=2.0)
             async with httpx.AsyncClient(timeout=timeout) as client:
                 r = await client.post(f"{OLLAMA_BASE_URL}/api/chat", json=payload)
                 if r.status_code == 200:
                     return r.json()["message"]["content"]
-        except Exception as e:
+                logger.warning(f"Ollama returned {r.status_code}: {r.text[:200]}")
+        except (httpx.ConnectError, httpx.ConnectTimeout) as e:
+            # Only a server that cannot be reached is put on cooldown; a slow reply is not.
             _last_ollama_fail = time.time()
-            logger.info(f"Ollama endpoint at {OLLAMA_BASE_URL} not reachable: {e}. Activating fast heuristic fallback.")
+            logger.info(f"Ollama endpoint at {OLLAMA_BASE_URL} not reachable: {e}. Using template fallback.")
+        except Exception as e:
+            logger.warning(f"Ollama call failed: {e!r}. Using template fallback for this call.")
 
     # 3. Graceful fallback
     return ""
+
+
+async def warm_up() -> None:
+    """Load the chat model into memory at startup so the first plan is not slow."""
+    try:
+        async with httpx.AsyncClient(timeout=httpx.Timeout(LLM_TIMEOUT_S, connect=2.0)) as client:
+            await client.post(
+                f"{OLLAMA_BASE_URL}/api/generate",
+                json={"model": LLM_MODEL, "prompt": "", "keep_alive": KEEP_ALIVE},
+            )
+        logger.info(f"Warmed up {LLM_MODEL}")
+    except Exception as e:
+        logger.info(f"Model warm-up skipped: {e!r}")
 
 
 async def chat_json(prompt: str, system: str = "", model: Optional[str] = None, retries: int = 1) -> Any:
@@ -109,9 +130,10 @@ async def chat_vision(image_bytes: bytes, prompt: str) -> str:
         "model": VISION_MODEL,
         "messages": [{"role": "user", "content": prompt, "images": [b64]}],
         "stream": False,
+        "keep_alive": KEEP_ALIVE,
     }
     try:
-        async with httpx.AsyncClient(timeout=35.0) as client:
+        async with httpx.AsyncClient(timeout=httpx.Timeout(max(LLM_TIMEOUT_S, 180.0), connect=2.0)) as client:
             r = await client.post(f"{OLLAMA_BASE_URL}/api/chat", json=payload)
             if r.status_code == 200:
                 return r.json()["message"]["content"]
