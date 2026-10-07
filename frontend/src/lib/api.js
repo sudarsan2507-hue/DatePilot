@@ -2,7 +2,9 @@
  * Centralized API client for DatePilot.
  * Uses VITE_API_URL or defaults to localhost:8000.
  */
-const configuredUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+// Default to the same host the page was opened from, so a phone on the same
+// Wi-Fi (http://<laptop-ip>:5173) talks to the laptop's backend, not itself.
+const configuredUrl = import.meta.env.VITE_API_URL || `${window.location.protocol}//${window.location.hostname}:8000`;
 const BASE_URL = configuredUrl.startsWith('http') ? configuredUrl : `https://${configuredUrl}`;
 
 async function request(path, options = {}) {
