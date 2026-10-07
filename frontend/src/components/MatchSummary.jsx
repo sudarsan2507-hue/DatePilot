@@ -1,4 +1,21 @@
 import React from 'react';
+import { Clock } from 'lucide-react';
+import PlanningScene from './PlanningScene';
+
+const pretty = (value) => value.replace(/-/g, ' ');
+
+function TagList({ items, empty }) {
+  if (!items?.length) return <p className="text-sm text-ink-3">{empty}</p>;
+  return (
+    <ul className="flex flex-wrap gap-2">
+      {items.map((item, i) => (
+        <li key={item} className="side-step rounded-lg border border-line bg-paper px-3.5 py-2 text-sm capitalize text-ink" style={{ animationDelay: `${200 + i * 80}ms` }}>
+          {pretty(item)}
+        </li>
+      ))}
+    </ul>
+  );
+}
 
 export default function MatchSummary({
   summary,
@@ -12,137 +29,79 @@ export default function MatchSummary({
 }) {
   if (!summary?.ready) {
     return (
-      <div className="max-w-md mx-auto p-6 bg-white/90 backdrop-blur-md rounded-2xl shadow-xl border border-rose-100 text-center animate-fade-in">
-        <div className="w-12 h-12 mx-auto mb-3 bg-rose-50 text-rose-500 rounded-full flex items-center justify-center text-xl animate-pulse">
-          ⏳
-        </div>
-        <h3 className="text-xl font-serif text-warm-900 mb-2">
-          Waiting for Partner Preferences
-        </h3>
-        <p className="text-xs text-warm-500 leading-relaxed mb-4">
+      <div className="dp-screen dp-card mx-auto max-w-2xl p-5 text-center shadow-soft animate-enter md:p-8">
+        <Clock size={24} strokeWidth={1.5} className="mx-auto text-ink-3" aria-hidden="true" />
+        <h2 className="mt-4 text-3xl leading-tight">Waiting for your partner</h2>
+        <p className="mx-auto mt-2 max-w-md text-base text-ink-2">
           {partnerBSubmitted
-            ? 'Partner B has submitted! Getting mutual overlap summary ready...'
-            : 'Your taste card is confirmed! Once your partner opens her invite and enters her preferences, your mutual match summary will unlock here.'}
+            ? 'Your partner has answered. Putting your overlap together.'
+            : 'Your answers are saved. This page updates by itself once your partner has answered.'}
         </p>
         <button
           type="button"
           onClick={onRefresh}
           disabled={refreshing}
-          className="text-xs font-medium text-rose-600 hover:text-rose-800 underline underline-offset-2 disabled:opacity-50"
+          className="dp-btn mt-4 text-sm text-ink-2 underline underline-offset-4 hover:text-ink disabled:opacity-50"
         >
-          {refreshing ? 'Checking…' : 'Check again now'}
+          {refreshing ? 'Checking…' : 'Check now'}
         </button>
         {refreshError && (
-          <p className="mt-3 text-xs text-red-600" role="alert">
-            {refreshError} We’ll keep retrying automatically.
+          <p className="mt-2 text-sm text-accent" role="alert">
+            {refreshError} We will keep trying.
           </p>
         )}
       </div>
     );
   }
 
+  if (generating) {
+    return (
+      <div className="dp-screen dp-card mx-auto max-w-2xl px-5 py-10 shadow-soft md:px-8 md:py-14">
+        <PlanningScene />
+      </div>
+    );
+  }
+
   return (
-    <div className="max-w-xl mx-auto p-6 bg-white/95 backdrop-blur-md rounded-2xl shadow-xl border border-rose-100 animate-fade-in text-left">
-      <div className="text-center mb-5">
-        <span className="text-xs uppercase tracking-widest text-rose-500 font-semibold">
-          Mutual Taste Harmony
-        </span>
-        <h2 className="text-2xl font-serif text-warm-900 mt-1">
-          What You Two Matched On ✨
-        </h2>
-        <p className="text-xs text-warm-500 mt-1">
-          Calculated anonymously without revealing who chose what.
+    <div className="dp-screen dp-card mx-auto max-w-2xl p-5 shadow-soft animate-enter md:p-8">
+      <p className="dp-eyebrow">Together</p>
+      <h2 className="mt-2 text-3xl leading-tight md:text-4xl">What you have in common</h2>
+      <p className="mt-2 text-base text-ink-2">Worked out privately. Neither of you sees who chose what.</p>
+
+      <dl className="mt-8 divide-y divide-line border-y border-line">
+        <div className="grid gap-3 py-5 sm:grid-cols-[140px_1fr] sm:gap-6">
+          <dt className="text-sm text-ink-2">Places</dt>
+          <dd><TagList items={summary.shared_vibes} empty="Different tastes. We will balance both." /></dd>
+        </div>
+        <div className="grid gap-3 py-5 sm:grid-cols-[140px_1fr] sm:gap-6">
+          <dt className="text-sm text-ink-2">Food</dt>
+          <dd><TagList items={summary.shared_cuisines} empty="We will pick local favourites you can both enjoy." /></dd>
+        </div>
+        <div className="grid grid-cols-2 gap-6 py-5">
+          <div>
+            <dt className="text-sm text-ink-2">Budget</dt>
+            <dd className="mt-1 font-serif text-2xl">₹{Number(summary.effective_budget || 5000).toLocaleString('en-IN')}</dd>
+            <dd className="mt-0.5 text-xs text-ink-3">The lower of your two limits</dd>
+          </div>
+          <div>
+            <dt className="text-sm text-ink-2">Dietary needs</dt>
+            <dd className="mt-1 font-serif text-2xl capitalize">
+              {summary.dietary_rules?.length ? summary.dietary_rules.map(pretty).join(', ') : 'None'}
+            </dd>
+            <dd className="mt-0.5 text-xs text-ink-3">Every stop works for both</dd>
+          </div>
+        </div>
+      </dl>
+
+      {isPartnerA ? (
+        <button type="button" onClick={onGeneratePlan} disabled={generating} className="dp-btn-primary mt-8 w-full min-h-12">
+          {generating ? 'Planning your day… this takes a minute' : 'Plan our day'}
+        </button>
+      ) : (
+        <p className="mt-8 rounded-lg bg-well px-4 py-3 text-sm text-ink-2">
+          All set. Your partner can now plan the day.
         </p>
-      </div>
-
-      <div className="space-y-4">
-        {/* Shared Vibes */}
-        <div className="p-3.5 bg-rose-50/70 rounded-xl border border-rose-100">
-          <span className="text-[11px] font-semibold text-rose-700 uppercase tracking-wider block mb-1.5">
-            Shared Atmosphere & Aesthetic Overlap
-          </span>
-          <div className="flex flex-wrap gap-1.5">
-            {(summary.shared_vibes || []).map((v) => (
-              <span
-                key={v}
-                className="px-2.5 py-1 bg-white text-rose-900 font-medium text-xs rounded-full border border-rose-200 shadow-2xs"
-              >
-                💖 {v}
-              </span>
-            ))}
-            {(!summary.shared_vibes || summary.shared_vibes.length === 0) && (
-              <span className="text-xs text-warm-500 italic">
-                Complementary vibes (planner will balance both)
-              </span>
-            )}
-          </div>
-        </div>
-
-        {/* Shared Cuisines */}
-        <div className="p-3.5 bg-amber-50/70 rounded-xl border border-amber-100">
-          <span className="text-[11px] font-semibold text-amber-800 uppercase tracking-wider block mb-1.5">
-            Mutual Dining Flavors
-          </span>
-          <div className="flex flex-wrap gap-1.5">
-            {(summary.shared_cuisines || []).map((c) => (
-              <span
-                key={c}
-                className="px-2.5 py-1 bg-white text-amber-900 font-medium text-xs rounded-full border border-amber-200 shadow-2xs"
-              >
-                🍴 {c}
-              </span>
-            ))}
-            {(!summary.shared_cuisines || summary.shared_cuisines.length === 0) && (
-              <span className="text-xs text-warm-500 italic">
-                Curated local favorites and complementary flavors
-              </span>
-            )}
-          </div>
-        </div>
-
-        {/* Budget & Hard Constraints Merged */}
-        <div className="grid grid-cols-2 gap-3 pt-1">
-          <div className="p-3 bg-warm-50 rounded-xl border border-warm-200">
-            <span className="text-[10px] text-warm-500 uppercase tracking-wider block">
-              Merged Budget Cap
-            </span>
-            <span className="text-base font-semibold text-warm-900">
-              ₹{Number(summary.effective_budget || 5000).toLocaleString('en-IN')}
-            </span>
-            <span className="text-[10px] text-warm-400 block mt-0.5">
-              (strict ceiling for both)
-            </span>
-          </div>
-
-          <div className="p-3 bg-warm-50 rounded-xl border border-warm-200">
-            <span className="text-[10px] text-warm-500 uppercase tracking-wider block">
-              Dietary Safeguard
-            </span>
-            <span className="text-sm font-semibold text-warm-900">
-              {summary.dietary_rules?.length ? summary.dietary_rules.join(', ') : 'All Welcome'}
-            </span>
-            <span className="text-[10px] text-warm-400 block mt-0.5">
-              (union enforced)
-            </span>
-          </div>
-        </div>
-
-        {/* Generate Plan Button */}
-        {isPartnerA ? (
-          <button
-            type="button"
-            onClick={onGeneratePlan}
-            disabled={generating}
-            className="w-full mt-4 py-3.5 px-4 bg-gradient-to-r from-rose-500 via-rose-600 to-rose-700 hover:from-rose-600 hover:to-rose-800 text-white font-medium rounded-xl text-sm shadow-lg shadow-rose-200 transition-all text-center disabled:opacity-50"
-          >
-            {generating ? 'Crafting 3 Tailored Plans with Open AI...' : 'Generate Top 3 Constraint-Checked Plans 🚀'}
-          </button>
-        ) : (
-          <div className="p-3 bg-rose-50/50 rounded-xl border border-rose-100 text-center text-xs text-warm-600 mt-2">
-            Preferences synced! Partner A can now generate your top 3 date plans.
-          </div>
-        )}
-      </div>
+      )}
     </div>
   );
 }
