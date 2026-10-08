@@ -10,6 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "leaflet": "1.9",
+    "lottie-web": "^5.13.0",
+    "lucide-react": "^1.52.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8"
   },
