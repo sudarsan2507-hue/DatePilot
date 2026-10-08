@@ -9,11 +9,15 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
  *   none                                             →  logo placeholder
  * Put the files in frontend/public/intro/.
  *
- * Skip: the Skip button, a click/tap anywhere, or Esc. Never longer than MAX_MS.
+ * Skip: the Skip button, a click/tap anywhere, or Esc. Video and Lottie get MAX_MS from the
+ * moment they start playing; if they never start, SAFETY_MS from mount ends it anyway.
+ * Square video: cover on portrait screens; on landscape the whole frame is shown, over a
+ * blurred copy of itself, so the headline at the top isn't cropped.
  * Reduced motion: a still logo for 1 second, no video or animation.
  */
 
 const MAX_MS = 4500;
+const SAFETY_MS = 5500;
 const PLACEHOLDER_MS = 2600;
 const STILL_MS = 1000;
 const FADE_MS = 450;
@@ -59,7 +63,7 @@ function LogoMark({ animated }) {
   );
 }
 
-function LottiePlayer({ onEnd, onError }) {
+function LottiePlayer({ onStart, onEnd, onError }) {
   const ref = useRef(null);
   useEffect(() => {
     let anim;
@@ -75,6 +79,7 @@ function LottiePlayer({ onEnd, onError }) {
           path: '/intro/intro.json',
           rendererSettings: { preserveAspectRatio: 'xMidYMid meet' },
         });
+        anim.addEventListener('DOMLoaded', onStart);
         anim.addEventListener('complete', onEnd);
         anim.addEventListener('data_failed', onError);
       })
@@ -83,7 +88,7 @@ function LottiePlayer({ onEnd, onError }) {
       cancelled = true;
       anim?.destroy();
     };
-  }, [onEnd, onError]);
+  }, [onStart, onEnd, onError]);
   return <div ref={ref} className="h-[min(70vh,70vw)] w-[min(70vh,70vw)]" aria-hidden="true" />;
 }
 
@@ -92,6 +97,7 @@ export default function IntroOverlay({ onDone }) {
     && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
   const [media, setMedia] = useState(reducedMotion ? { kind: 'still' } : null);
   const [leaving, setLeaving] = useState(false);
+  const [playing, setPlaying] = useState(false);
   const doneRef = useRef(false);
   const skipRef = useRef(null);
 
@@ -107,6 +113,7 @@ export default function IntroOverlay({ onDone }) {
   }, [onDone, reducedMotion]);
 
   const fallBack = useCallback(() => setMedia({ kind: 'placeholder' }), []);
+  const started = useCallback(() => setPlaying(true), []);
 
   // Pick the media (skipped under reduced motion).
   useEffect(() => {
@@ -116,11 +123,18 @@ export default function IntroOverlay({ onDone }) {
     return () => { cancelled = true; };
   }, [reducedMotion]);
 
-  // Hard cap, plus the shorter placeholder / still-logo timings.
+  // Safety cap from mount, plus the shorter placeholder / still-logo timings.
   useEffect(() => {
-    const cap = window.setTimeout(finish, reducedMotion ? STILL_MS : MAX_MS);
+    const cap = window.setTimeout(finish, reducedMotion ? STILL_MS : SAFETY_MS);
     return () => window.clearTimeout(cap);
   }, [finish, reducedMotion]);
+
+  // Video / Lottie: MAX_MS from the first frame, so a slow start doesn't cut the ending.
+  useEffect(() => {
+    if (!playing) return undefined;
+    const cap = window.setTimeout(finish, MAX_MS);
+    return () => window.clearTimeout(cap);
+  }, [playing, finish]);
 
   useEffect(() => {
     if (media?.kind !== 'placeholder') return undefined;
@@ -138,7 +152,7 @@ export default function IntroOverlay({ onDone }) {
 
   return (
     <div
-      className={`fixed inset-0 z-[70] flex cursor-pointer items-center justify-center bg-cream transition-opacity ease-out ${
+      className={`fixed inset-0 z-[70] flex cursor-pointer overflow-hidden items-center justify-center bg-cream transition-opacity ease-out ${
         leaving ? 'pointer-events-none opacity-0' : 'opacity-100'
       }`}
       style={{ transitionDuration: `${FADE_MS}ms` }}
@@ -147,19 +161,31 @@ export default function IntroOverlay({ onDone }) {
       aria-label="DatePilot intro"
     >
       {media?.kind === 'video' && (
-        <video
-          className="h-full w-full object-cover"
-          src={media.src}
-          autoPlay
-          muted
-          playsInline
-          preload="auto"
-          onEnded={finish}
-          onError={fallBack}
-          aria-hidden="true"
-        />
+        <>
+          {/* landscape only: soft fill for the bands beside the square video */}
+          <video
+            className="absolute inset-0 hidden h-full w-full scale-110 object-cover blur-2xl landscape:block"
+            src={media.src}
+            autoPlay
+            muted
+            playsInline
+            aria-hidden="true"
+          />
+          <video
+            className="relative h-full w-full object-cover landscape:object-contain"
+            src={media.src}
+            autoPlay
+            muted
+            playsInline
+            preload="auto"
+            onPlaying={started}
+            onEnded={finish}
+            onError={fallBack}
+            aria-hidden="true"
+          />
+        </>
       )}
-      {media?.kind === 'lottie' && <LottiePlayer onEnd={finish} onError={fallBack} />}
+      {media?.kind === 'lottie' && <LottiePlayer onStart={started} onEnd={finish} onError={fallBack} />}
       {media?.kind === 'placeholder' && <LogoMark animated />}
       {media?.kind === 'still' && <LogoMark animated={false} />}
 
