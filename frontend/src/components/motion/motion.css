@@ -1,0 +1,191 @@
+/* DatePilot motion pieces. Calm, eased, no bounce.
+   Every animation here pauses when the piece is off-screen (.dp-paused)
+   and stops completely under prefers-reduced-motion. */
+
+.dp-paused,
+.dp-paused * {
+  animation-play-state: paused !important;
+}
+
+/* ---------- #5 Reading your answers ---------- */
+
+@keyframes dp-chip-lift-cycle {
+  0%   { opacity: 0; transform: translateY(14px) scale(0.96); }
+  8%   { opacity: 1; transform: translateY(0) scale(1); }
+  78%  { opacity: 1; transform: translateY(0) scale(1); }
+  90%  { opacity: 0; transform: translateY(-6px) scale(0.98); }
+  100% { opacity: 0; transform: translateY(-6px) scale(0.98); }
+}
+
+@keyframes dp-line-fill {
+  0%   { transform: scaleX(0); }
+  60%  { transform: scaleX(1); }
+  100% { transform: scaleX(1); }
+}
+
+@keyframes dp-progress {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(260%); }
+}
+
+@keyframes dp-status-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes dp-card-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.dp-chip-lift {
+  opacity: 0;
+  animation: dp-chip-lift-cycle 7s cubic-bezier(.2,.7,.2,1) infinite both;
+}
+.dp-line {
+  transform-origin: left center;
+  animation: dp-line-fill 7s cubic-bezier(.2,.7,.2,1) infinite both;
+}
+.dp-progress-bar {
+  animation: dp-progress 1.8s cubic-bezier(.45,0,.55,1) infinite;
+}
+.dp-status {
+  animation: dp-status-in 400ms ease-out both;
+}
+.dp-card-in {
+  animation: dp-card-in 350ms cubic-bezier(.2,.7,.2,1) both;
+}
+
+/* ---------- #1 Gutter art: kolam + petals ---------- */
+
+@keyframes dp-draw {
+  0%   { stroke-dashoffset: 1; opacity: 1; }
+  45%  { stroke-dashoffset: 0; opacity: 1; }
+  85%  { stroke-dashoffset: 0; opacity: 1; }
+  100% { stroke-dashoffset: 0; opacity: 0; }
+}
+@keyframes dp-dot-breathe {
+  0%, 100% { opacity: .55; }
+  50%      { opacity: .9; }
+}
+.dp-kolam-line {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: dp-draw 12s cubic-bezier(.4,0,.2,1) infinite both;
+}
+.dp-kolam-dot {
+  animation: dp-dot-breathe 6s ease-in-out infinite;
+}
+
+@keyframes dp-fall {
+  0%   { transform: translateY(-30px); opacity: 0; }
+  10%  { opacity: 1; }
+  85%  { opacity: 1; }
+  100% { transform: translateY(var(--fall, 440px)); opacity: 0; }
+}
+@keyframes dp-sway {
+  0%, 100% { transform: translateX(-10px) rotate(-18deg); }
+  50%      { transform: translateX(10px) rotate(22deg); }
+}
+.dp-petal-fall {
+  animation: dp-fall var(--dur, 11s) linear infinite both;
+}
+.dp-petal-sway {
+  animation: dp-sway var(--sway, 4s) ease-in-out infinite;
+}
+
+/* ---------- #4 Waiting for partner ---------- */
+
+@keyframes dp-orbit {
+  to { transform: rotate(360deg); }
+}
+@keyframes dp-halo {
+  0%   { transform: scale(1);   opacity: .45; }
+  70%  { transform: scale(2.4); opacity: 0; }
+  100% { transform: scale(2.4); opacity: 0; }
+}
+@keyframes dp-breathe-in {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(.82); }
+}
+.dp-orbit {
+  transform-box: view-box;
+  transform-origin: 48px 48px;
+  animation: dp-orbit 9s linear infinite;
+}
+.dp-breathe {
+  transform-box: view-box;
+  transform-origin: 48px 48px;
+  animation: dp-breathe-in 4.5s ease-in-out infinite;
+}
+.dp-halo {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: dp-halo 3s ease-out infinite;
+}
+
+/* ---------- #3 Two dots meet (plays once) ---------- */
+
+@keyframes dp-meet-left {
+  from { transform: translateX(-40px); opacity: 0; }
+  20%  { opacity: 1; }
+  to   { transform: translateX(0); opacity: 1; }
+}
+@keyframes dp-meet-right {
+  from { transform: translateX(40px); opacity: 0; }
+  20%  { opacity: 1; }
+  to   { transform: translateX(0); opacity: 1; }
+}
+@keyframes dp-trail {
+  0%   { stroke-dashoffset: 1; opacity: .8; }
+  60%  { stroke-dashoffset: 0; opacity: .8; }
+  100% { stroke-dashoffset: 0; opacity: .25; }
+}
+@keyframes dp-heart {
+  from { opacity: 0; transform: translateY(4px) scale(.8); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.dp-meet-l { animation: dp-meet-left 1.2s cubic-bezier(.2,.7,.2,1) both; }
+.dp-meet-r { animation: dp-meet-right 1.2s cubic-bezier(.2,.7,.2,1) both; }
+.dp-trail {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: dp-trail 1.6s cubic-bezier(.2,.7,.2,1) both;
+}
+.dp-heart {
+  transform-box: fill-box;
+  transform-origin: center bottom;
+  animation: dp-heart 500ms cubic-bezier(.2,.7,.2,1) 1.15s both;
+}
+
+/* ---------- Reduced motion: show the finished still ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .dp-chip-lift,
+  .dp-line,
+  .dp-status,
+  .dp-card-in,
+  .dp-kolam-dot,
+  .dp-meet-l,
+  .dp-meet-r,
+  .dp-heart {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .dp-kolam-line,
+  .dp-trail {
+    animation: none !important;
+    stroke-dashoffset: 0 !important;
+    opacity: 1 !important;
+  }
+  .dp-progress-bar,
+  .dp-orbit,
+  .dp-breathe,
+  .dp-halo,
+  .dp-petal-fall,
+  .dp-petal-sway {
+    animation: none !important;
+  }
+  .dp-halo { opacity: 0 !important; }
+}

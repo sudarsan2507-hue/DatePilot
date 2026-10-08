@@ -12,6 +12,8 @@ import PartnerLimits from './components/PartnerLimits';
 import { ArrowUpRight, Check, Eye, Lock, MapPin, Plus, Users } from 'lucide-react';
 import { useReveal, useTilt } from './lib/motion';
 import { SideArtLeft, SideArtRight } from './components/SideScenes';
+import { GutterKolam, GutterPetals } from './components/motion/GutterArt';
+import TwoDotsMeet from './components/motion/TwoDotsMeet';
 import IntroOverlay from './components/IntroOverlay';
 import { markIntroPlayed, shouldPlayIntroOnLoad, watchSessionTimeout } from './lib/introSession';
 
@@ -509,10 +511,14 @@ export default function App() {
 
       {/* Main App Flow */}
       <main ref={revealRef} className="mx-auto mt-8 max-w-7xl px-4 pb-16 md:px-6">
-        <div className={view === 'plans' ? '' : 'min-[1180px]:grid min-[1180px]:grid-cols-[minmax(0,1fr)_42rem_minmax(0,1fr)] min-[1180px]:items-start min-[1180px]:gap-8 xl:gap-10'}>
+        <div className={view === 'plans' ? '' : 'min-[960px]:grid min-[960px]:grid-cols-[minmax(0,1fr)_minmax(0,42rem)_minmax(0,1fr)] min-[960px]:items-start min-[960px]:gap-6 min-[1180px]:grid-cols-[minmax(0,1fr)_42rem_minmax(0,1fr)] min-[1180px]:gap-8 xl:gap-10'}>
         {view !== 'plans' && (
-          <aside className="hidden min-[1180px]:sticky min-[1180px]:top-28 min-[1180px]:block">
-            <SideArtLeft />
+          <aside className="hidden min-[960px]:sticky min-[960px]:top-28 min-[960px]:block">
+            {/* 960–1179px: narrow gutter art; from 1180px: the postcards */}
+            <GutterKolam className="min-[1180px]:hidden" />
+            <div className="hidden min-[1180px]:block">
+              <SideArtLeft />
+            </div>
           </aside>
         )}
         <div className="min-w-0">
@@ -603,10 +609,16 @@ export default function App() {
             liveRoutes={liveRoutes}
           />
         )}
+
+        {/* Short steps leave a blank band above the footer */}
+        {['limits', 'invite', 'match'].includes(view) && <TwoDotsMeet className="mt-10" />}
         </div>
         {view !== 'plans' && (
-          <aside className="hidden min-[1180px]:sticky min-[1180px]:top-28 min-[1180px]:block">
-            <SideArtRight />
+          <aside className="hidden min-[960px]:sticky min-[960px]:top-28 min-[960px]:block">
+            <GutterPetals className="min-[1180px]:hidden" />
+            <div className="hidden min-[1180px]:block">
+              <SideArtRight />
+            </div>
           </aside>
         )}
         </div>

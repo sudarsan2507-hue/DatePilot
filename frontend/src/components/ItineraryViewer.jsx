@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useCountUp } from '../lib/motion';
 import { directionsTo, downloadCalendar, fullRouteUrl, shareText } from '../lib/dayTools';
 import RouteMap from './RouteMap';
+import PlansRouteMargin from './motion/PlansRouteMargin';
 import {
   ArrowUpRight, BedDouble, CalendarPlus, Car, Check, CloudSun, Coffee, MapPin, Navigation,
   Palette, RefreshCw, Share2, Star, Sunset, Umbrella, Utensils, Wine, X,
@@ -107,7 +108,10 @@ export default function ItineraryViewer({
   };
 
   return (
-    <div className="dp-screen mx-auto max-w-5xl animate-enter">
+    <div className="dp-screen relative mx-auto max-w-5xl animate-enter">
+      {/* Margin art from 1280px; margins kept tight at 1280 so nothing leaves the screen */}
+      <PlansRouteMargin key={`l-${selectedPlanIndex}`} stops={stops.length} className="absolute bottom-0 right-full top-0 mr-4 min-[1400px]:mr-14" />
+      <PlansRouteMargin key={`r-${selectedPlanIndex}`} stops={stops.length} tone="sage" mirror className="absolute bottom-0 left-full top-0 ml-4 min-[1400px]:ml-14" />
       <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div>
           <p className="dp-eyebrow">Your day</p>

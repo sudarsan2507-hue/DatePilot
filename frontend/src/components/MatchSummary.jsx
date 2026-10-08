@@ -1,6 +1,6 @@
 import React from 'react';
-import { Clock } from 'lucide-react';
 import PlanningScene from './PlanningScene';
+import PartnerWaiting from './motion/PartnerWaiting';
 
 const pretty = (value) => value.replace(/-/g, ' ');
 
@@ -30,7 +30,7 @@ export default function MatchSummary({
   if (!summary?.ready) {
     return (
       <div className="dp-screen dp-card mx-auto max-w-2xl p-5 text-center shadow-soft animate-enter md:p-8">
-        <Clock size={24} strokeWidth={1.5} className="mx-auto text-ink-3" aria-hidden="true" />
+        <PartnerWaiting className="mx-auto" />
         <h2 className="mt-4 text-3xl leading-tight">Waiting for your partner</h2>
         <p className="mx-auto mt-2 max-w-md text-base text-ink-2">
           {partnerBSubmitted
