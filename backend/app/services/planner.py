@@ -274,6 +274,27 @@ def apply_venue_replacement(
     return result
 
 
+def pick_three(ranked: list[DatePlan]) -> list[DatePlan]:
+    """Best match, the next best different plan, and the cheapest different plan.
+    The third is only a "lowest cost" pick when it really costs less than the first two."""
+    distinct: list[DatePlan] = []
+    seen: set[tuple] = set()
+    for plan in ranked:
+        key = tuple(sorted(stop.venue.id for stop in plan.stops))
+        if key not in seen:
+            seen.add(key)
+            distinct.append(plan)
+    picked = distinct[:2]
+    rest = distinct[2:]
+    if rest:
+        cheapest = min(rest, key=lambda p: p.total_cost)
+        if picked and cheapest.total_cost < min(p.total_cost for p in picked):
+            picked.append(cheapest)
+        else:
+            picked.append(rest[0])
+    return picked
+
+
 def plan_date(
     session: SessionDB,
     taste_a: TasteCard,
@@ -441,7 +462,7 @@ def plan_date(
         return quality_sum + budget_bonus + variety_bonus + flexible_stops * 2.0 - repetition_penalty - travel_pen
 
     plans.sort(key=plan_rank_score, reverse=True)
-    top_plans = plans[:3]
+    top_plans = pick_three(plans)
 
     # Backups are real constraint-safe swaps, not merely similar venues.
     for plan in top_plans:

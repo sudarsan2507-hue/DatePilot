@@ -64,3 +64,11 @@ def test_slots_follow_the_start_time():
     assert SlotType.sunset not in pick_slots("19:00", end_time("19:00"), [])
     assert end_time("20:00") == "23:00"
 
+
+def test_lowest_cost_plan_is_really_the_cheapest():
+    for budget in (1000, 2000, 3500):
+        plans = client.post("/quick-plan", json={"city": "Chennai", "budget_inr": budget, "vibes": ["romantic"]}).json()["plans"]
+        venue_sets = [tuple(sorted(s["venue"]["id"] for s in p["stops"])) for p in plans]
+        assert len(set(venue_sets)) == len(venue_sets)  # no plan offered twice
+        if len(plans) == 3 and plans[2]["total_cost"] < min(p["total_cost"] for p in plans[:2]):
+            assert plans[2]["total_cost"] == min(p["total_cost"] for p in plans)

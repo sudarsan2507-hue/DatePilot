@@ -24,7 +24,17 @@ const SLOT_LABELS = {
   dinner: 'Dinner',
 };
 
-const PLAN_LABELS = ['Best match', 'Alternative', 'Lowest cost'];
+/** Tab names that match the numbers: "Lowest cost" only on the plan that really is cheapest. */
+function planLabels(plans) {
+  const costs = plans.map((p) => p.total_cost);
+  const min = Math.min(...costs);
+  const cheapestIdx = costs.filter((c) => c === min).length === 1 ? costs.indexOf(min) : -1;
+  return plans.map((_, idx) => {
+    if (idx === 0) return 'Best match';
+    if (idx === cheapestIdx) return 'Lowest cost';
+    return plans.length > 2 && idx === 2 && cheapestIdx !== 1 ? 'Another idea' : 'Alternative';
+  });
+}
 
 const inr = (n) => `₹${Number(n || 0).toLocaleString('en-IN')}`;
 
@@ -81,6 +91,7 @@ export default function ItineraryViewer({
 
   const rainModeActive = rainPlanIndex === selectedPlanIndex;
   const stops = activePlan.stops || [];
+  const labels = planLabels(plans);
   const city = stops[0]?.venue?.city || 'Tamil Nadu';
   const isSurprise = stops.length > 0 && stops.every((s) => !s.venue.lat && !s.venue.lng);
   const start = liveRoutes?.start;
@@ -129,7 +140,7 @@ export default function ItineraryViewer({
                 selectedPlanIndex === idx ? 'bg-paper text-ink shadow-sm' : 'text-ink-3 hover:text-ink-2'
               }`}
             >
-              {PLAN_LABELS[idx] || `Plan ${idx + 1}`}
+              {labels[idx] || `Plan ${idx + 1}`}
             </button>
           ))}
         </div>
