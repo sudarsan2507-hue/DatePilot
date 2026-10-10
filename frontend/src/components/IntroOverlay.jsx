@@ -172,7 +172,7 @@ export default function IntroOverlay({ onDone }) {
             aria-hidden="true"
           />
           <video
-            className="relative h-full w-full object-cover landscape:object-contain"
+            className="intro-video relative h-full w-full object-cover landscape:object-contain"
             src={media.src}
             autoPlay
             muted

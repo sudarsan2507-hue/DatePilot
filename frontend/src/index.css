@@ -146,3 +146,11 @@
 .arch-two { right: -50px; border-color: #7f8a70; bottom: -135px; transform: rotate(15deg); }
 .art-caption { position: absolute; left: 24px; top: 26px; color: #3d3027; font: 28px/1.12 Georgia, serif; letter-spacing: -0.5px; }
 .preview-bottom { display: flex; justify-content: space-between; align-items: center; padding: 18px 4px 4px; }
+
+/* Intro on landscape screens: feather the square video's sides into the blurred fill behind it */
+@media (orientation: landscape) {
+  .intro-video {
+    -webkit-mask-image: linear-gradient(to right, transparent calc(50% - 50vh), #000 calc(50% - 50vh + 18vh), #000 calc(50% + 50vh - 18vh), transparent calc(50% + 50vh));
+    mask-image: linear-gradient(to right, transparent calc(50% - 50vh), #000 calc(50% - 50vh + 18vh), #000 calc(50% + 50vh - 18vh), transparent calc(50% + 50vh));
+  }
+}

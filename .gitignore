@@ -60,3 +60,7 @@ Thumbs.db
 
 # Local Claude Code skills
 .claude/skills/
+
+# Designer handoff (shared separately, not part of the app)
+design-handoff/
+design-handoff.zip
