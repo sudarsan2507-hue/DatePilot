@@ -14,6 +14,12 @@ def create_db_and_tables():
     # hackathon sessions readable while adding Tamil Nadu city selection.
     if "sessions" in inspect(engine).get_table_names():
         columns = {column["name"] for column in inspect(engine).get_columns("sessions")}
-        if "city" not in columns:
-            with engine.begin() as connection:
-                connection.execute(text("ALTER TABLE sessions ADD COLUMN city VARCHAR NOT NULL DEFAULT 'Chennai'"))
+        added = {
+            "city": "VARCHAR NOT NULL DEFAULT 'Chennai'",
+            # Sessions made before solo planning were all partner sessions.
+            "mode": "VARCHAR NOT NULL DEFAULT 'together'",
+        }
+        with engine.begin() as connection:
+            for name, definition in added.items():
+                if name not in columns:
+                    connection.execute(text(f"ALTER TABLE sessions ADD COLUMN {name} {definition}"))
