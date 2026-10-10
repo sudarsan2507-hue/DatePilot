@@ -23,7 +23,8 @@ def test_health_check():
     assert res.json()["status"] == "ok"
 
 
-def test_rejects_invalid_session_window_and_upload_type():
+def test_rejects_invalid_session_window_and_upload_type(monkeypatch):
+    monkeypatch.setenv("ENABLE_UPLOADS", "true")
     invalid = client.post("/sessions/", json={
         "date": "not-a-date",
         "time_start": "22:00",
@@ -61,6 +62,20 @@ def test_rejects_invalid_session_window_and_upload_type():
         files={"file": ("profile.txt", b"quiet cafe", "text/plain")},
     )
     assert unsupported.status_code == 415
+
+
+def test_uploads_are_off_by_default(monkeypatch):
+    monkeypatch.delenv("ENABLE_UPLOADS", raising=False)
+    created = client.post("/sessions/", json={
+        "date": "2026-10-04", "time_start": "12:00", "time_end": "22:00",
+        "budget_inr": 5000, "start_area": "Alwarpet", "max_travel_minutes": 45,
+        "slots_enabled": ["lunch", "dinner"],
+    }).json()
+    res = client.post(
+        f"/taste/{created['token_a']}/upload",
+        files={"file": ("export.json", b"{}", "application/json")},
+    )
+    assert res.status_code == 404
 
 
 def test_full_date_pilot_flow():

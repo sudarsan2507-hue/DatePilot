@@ -6,6 +6,7 @@ Rules:
 - Raw file uploads are discarded immediately from memory after parsing.
 - "Delete all my data" permanently wipes everything for that user.
 """
+import os
 from fastapi import APIRouter, UploadFile, File, HTTPException
 from sqlmodel import Session as DBSession, select
 from app.db import engine
@@ -17,6 +18,11 @@ router = APIRouter(prefix="/taste", tags=["taste"])
 MAX_UPLOAD_BYTES = 15 * 1024 * 1024
 
 
+def uploads_enabled() -> bool:
+    """Instagram / screenshot uploads are off unless ENABLE_UPLOADS=true."""
+    return os.getenv("ENABLE_UPLOADS", "false").strip().lower() in ("1", "true", "yes")
+
+
 @router.post("/{token}/upload")
 async def upload_taste(token: str, file: UploadFile = File(...)):
     """
@@ -24,6 +30,8 @@ async def upload_taste(token: str, file: UploadFile = File(...)):
     Extracts candidate TasteCard and returns it for user review.
     Does NOT persist to DB yet. Discards raw file data immediately.
     """
+    if not uploads_enabled():
+        raise HTTPException(status_code=404, detail="File uploads are turned off")
     with DBSession(engine) as db:
         row = db.exec(
             select(SessionDB).where(
