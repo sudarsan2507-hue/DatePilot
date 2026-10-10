@@ -63,6 +63,7 @@ def get_session(token: str):
 
     return {
         "partner": partner,
+        "mode": row.mode,
         "date": row.date,
         "time_start": row.time_start,
         "time_end": row.time_end,
