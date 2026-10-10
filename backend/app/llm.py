@@ -1,9 +1,11 @@
 """
-llm.py — Swappable Open-Model LLM wrapper.
-Supports:
-- Ollama endpoints (/api/chat) e.g. Gemma 4 (E4B / E2B), Gemma 3, LLaVA
-- OpenAI-compatible hosted endpoints (/v1/chat/completions) for cloud deployment
-- Resilient fallback to deterministic generation when endpoints are offline
+llm.py — Optional text model. Planning never needs it; it only words the plan text.
+
+TEXT_MODEL picks the backend (read on every call, so it can change without a restart):
+- none   (default) no model: every call returns "" at once and the callers use templates
+- ollama local Ollama (/api/chat), e.g. gemma3:4b
+- cloud  an OpenAI-compatible endpoint (OPENAI_BASE_URL, OPENAI_API_KEY)
+Any failure also returns "", so the app always works with the model off.
 """
 import os
 import json
@@ -23,6 +25,19 @@ VISION_MODEL    = os.getenv("VISION_MODEL", "llava:7b")
 LLM_TIMEOUT_S   = float(os.getenv("LLM_TIMEOUT_S", "120"))
 KEEP_ALIVE      = os.getenv("OLLAMA_KEEP_ALIVE", "30m")
 
+TEXT_MODELS = ("none", "ollama", "cloud")
+
+
+def text_model() -> str:
+    """The configured text model backend: none | ollama | cloud."""
+    value = os.getenv("TEXT_MODEL", "none").strip().lower()
+    return value if value in TEXT_MODELS else "none"
+
+
+def text_model_enabled() -> bool:
+    return text_model() != "none"
+
+
 _last_ollama_fail: float = 0.0
 _last_openai_fail: float = 0.0
 
@@ -33,11 +48,14 @@ async def chat(prompt: str, system: str = "", model: Optional[str] = None, max_t
     Falls back gracefully if endpoint is unreachable.
     """
     global _last_ollama_fail, _last_openai_fail
+    backend = text_model()
+    if backend == "none":
+        return ""
     now = time.time()
     m = model or LLM_MODEL
 
-    # 1. Try OpenAI-compatible endpoint if configured and not in cooldown
-    if OPENAI_BASE_URL and (now - _last_openai_fail > 30.0):
+    # 1. Cloud: an OpenAI-compatible endpoint, if configured and not in cooldown
+    if backend == "cloud" and OPENAI_BASE_URL and (now - _last_openai_fail > 30.0):
         headers = {"Authorization": f"Bearer {OPENAI_API_KEY}"} if OPENAI_API_KEY else {}
         messages = []
         if system:
@@ -58,8 +76,8 @@ async def chat(prompt: str, system: str = "", model: Optional[str] = None, max_t
             _last_openai_fail = time.time()
             logger.warning(f"Hosted LLM endpoint error: {e}. Falling back.")
 
-    # 2. Try Ollama endpoint if not in cooldown
-    if now - _last_ollama_fail > 30.0:
+    # 2. Local Ollama, if not in cooldown
+    if backend == "ollama" and now - _last_ollama_fail > 30.0:
         payload = {
             "model": m,
             "messages": [
@@ -90,7 +108,10 @@ async def chat(prompt: str, system: str = "", model: Optional[str] = None, max_t
 
 
 async def warm_up() -> None:
-    """Load the chat model into memory at startup so the first plan is not slow."""
+    """Load the Ollama model into memory at startup, only when it's the chosen text model."""
+    if text_model() != "ollama":
+        logger.info("Text model is %s: no warm-up", text_model())
+        return
     try:
         async with httpx.AsyncClient(timeout=httpx.Timeout(LLM_TIMEOUT_S, connect=2.0)) as client:
             await client.post(
