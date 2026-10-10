@@ -124,6 +124,58 @@ class SessionCreate(BaseModel):
         return self
 
 
+QUICK_VIBES = ("chill", "foodie", "outdoorsy", "artsy", "romantic", "playful")
+
+
+class QuickPlanRequest(BaseModel):
+    """Solo planning: three quick inputs, everything else optional."""
+    city: str = "Chennai"
+    budget_inr: int = Field(ge=200, le=100_000)
+    vibes: list[str] = Field(default_factory=list)      # up to 3 of QUICK_VIBES
+    date: Optional[str] = None                          # YYYY-MM-DD, defaults to today (IST)
+    time_start: str = "16:00"
+    start_area: str = "City centre"
+    # Optional "Make it more personal" quiz answers, about the planner and about their date.
+    about_you: Optional[dict] = None
+    about_date: Optional[dict] = None
+
+    @field_validator("city")
+    @classmethod
+    def supported_city(cls, value: str) -> str:
+        return canonical_city(value)
+
+    @field_validator("vibes")
+    @classmethod
+    def valid_vibes(cls, values: list[str]) -> list[str]:
+        cleaned = list(dict.fromkeys(v.strip().lower() for v in values if v.strip()))
+        unknown = [v for v in cleaned if v not in QUICK_VIBES]
+        if unknown:
+            raise ValueError(f"Unknown vibe: {', '.join(unknown)}")
+        if len(cleaned) > 3:
+            raise ValueError("Pick up to 3 vibes")
+        return cleaned
+
+    @field_validator("date")
+    @classmethod
+    def valid_date(cls, value: Optional[str]) -> Optional[str]:
+        if value:
+            datetime.strptime(value, "%Y-%m-%d")
+        return value or None
+
+    @field_validator("time_start")
+    @classmethod
+    def valid_start(cls, value: str) -> str:
+        start = datetime.strptime(value, "%H:%M")
+        if not (6 <= start.hour <= 21):
+            raise ValueError("Start between 06:00 and 21:59")
+        return value
+
+    @field_validator("start_area")
+    @classmethod
+    def valid_area(cls, value: str) -> str:
+        return value.strip()[:80] or "City centre"
+
+
 class PartnerBLimits(BaseModel):
     budget_inr: Optional[int] = Field(default=None, ge=0, le=100_000)
     max_travel_minutes: Optional[int] = Field(default=None, ge=1, le=180)
