@@ -1,0 +1,11 @@
+{
+  "_comment": "Plain rules that turn quick-start vibe chips into the venue tags the planner scores against. No model call.",
+  "vibes": {
+    "chill":     { "vibes": ["quiet", "peaceful", "cozy", "relaxed", "serene", "garden", "books"], "cuisines": ["cafe", "coffee"] },
+    "foodie":    { "vibes": ["local", "authentic"], "cuisines": ["south-indian", "chettinad", "seafood", "biryani", "tiffin", "dosa", "desserts", "filter-coffee", "jigarthanda", "street-food"] },
+    "outdoorsy": { "vibes": ["outdoors", "beach", "walk", "green", "breezy", "coastal", "lake", "scenic", "seaside", "waterfront", "botanical", "sunset"], "cuisines": [] },
+    "artsy":     { "vibes": ["artsy", "museum", "heritage", "history", "culture", "cultural", "sculpture", "creative", "bohemian", "architecture", "vintage", "aesthetic"], "cuisines": [] },
+    "romantic":  { "vibes": ["romantic", "candlelight", "intimate", "sunset", "golden-hour", "elegant", "garden"], "cuisines": ["desserts"] },
+    "playful":   { "vibes": ["fun", "playful", "quirky", "interactive", "hands-on", "adventure", "active", "themed", "retro"], "cuisines": [] }
+  }
+}
