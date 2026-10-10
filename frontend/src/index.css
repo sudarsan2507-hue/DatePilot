@@ -22,28 +22,28 @@
 
 @layer components {
   /* Surfaces */
-  .dp-card { @apply bg-paper border border-line rounded-xl; }
+  .dp-card { @apply bg-paper border border-line rounded-2xl; }
   .dp-eyebrow { @apply text-xs uppercase tracking-[0.12em] text-ink-3; }
   .dp-label { @apply block text-sm text-ink-2 mb-2; }
   .dp-field {
-    @apply w-full min-h-11 px-3.5 bg-well border border-line rounded-lg text-base md:text-[15px] text-ink;
+    @apply w-full min-h-11 px-4 bg-well border border-line rounded-xl text-base md:text-[15px] text-ink;
   }
   .dp-field:focus { @apply outline-none border-accent-soft; box-shadow: 0 0 0 3px rgb(166 93 69 / 0.15); }
 
-  /* Buttons */
+  /* Buttons: pills. Primary is solid ink; terracotta is kept for accents, not every CTA. */
   .dp-btn {
-    @apply inline-flex items-center justify-center gap-2 min-h-11 px-5 rounded-lg text-base md:text-[15px] font-medium;
+    @apply inline-flex items-center justify-center gap-2 min-h-11 px-6 rounded-full text-base md:text-[15px] font-medium;
   }
-  .dp-btn-primary { @apply dp-btn bg-accent text-white hover:bg-accent-deep disabled:opacity-50; }
-  .dp-btn-quiet { @apply dp-btn bg-paper text-ink-2 border border-line hover:border-ink-3; }
+  .dp-btn-primary { @apply dp-btn bg-ink text-paper hover:bg-ink-deep disabled:opacity-50; }
+  .dp-btn-quiet { @apply dp-btn bg-paper text-ink-2 border border-line hover:border-ink-3 hover:text-ink; }
   .dp-btn:active { transform: scale(0.99); }
 
-  /* Selectable chip (8px radius, not a pill) */
+  /* Selectable chip: pill, fills with ink when picked */
   .dp-chip {
-    @apply inline-flex items-center gap-2 min-h-11 px-3.5 rounded-lg border text-sm;
+    @apply inline-flex items-center gap-2 min-h-11 px-4 rounded-full border text-sm;
   }
-  .dp-chip[aria-pressed='false'] { @apply bg-paper border-line text-ink-3 hover:border-ink-3 hover:text-ink-2; }
-  .dp-chip[aria-pressed='true'] { @apply bg-well border-ink text-ink; box-shadow: inset 0 0 0 1px #382a22; }
+  .dp-chip[aria-pressed='false'] { @apply bg-paper border-line text-ink-2 hover:border-ink-3 hover:text-ink; }
+  .dp-chip[aria-pressed='true'] { @apply bg-ink border-ink text-paper; }
 }
 
 /* Motion */
