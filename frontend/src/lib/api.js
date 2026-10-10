@@ -31,6 +31,14 @@ async function request(path, options = {}) {
 }
 
 export const api = {
+  // Solo, budget-first planning: a few quick inputs in, plans straight back.
+  quickPlan: (payload) =>
+    request('/quick-plan', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    }),
+
   // Session
   createSession: (payload) =>
     request('/sessions/', {

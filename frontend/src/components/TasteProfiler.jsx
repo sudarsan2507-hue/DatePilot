@@ -1,37 +1,10 @@
 import React, { useState } from 'react';
 import { api } from '../lib/api';
 import ReadingAnswers from './motion/ReadingAnswers';
+import { ENABLE_UPLOADS } from '../lib/features';
+import { QUIZ_ACTIVITIES as SAMPLE_ACTIVITIES, QUIZ_CUISINES as SAMPLE_CUISINES, QUIZ_VIBES as SAMPLE_VIBES, toAnswers } from '../lib/quiz';
 import { FileArchive, ImageIcon, ListChecks, Upload } from 'lucide-react';
 
-const SAMPLE_CUISINES = [
-  'South Indian',
-  'Continental',
-  'Café & Bakery',
-  'Italian',
-  'Mediterranean',
-  'North Indian / Tandoor',
-  'Desserts & Gelato',
-  'Coastal Seafood',
-];
-
-const SAMPLE_VIBES = [
-  'Quiet & Intimate',
-  'Romantic Garden',
-  'Vintage / Pastel',
-  'Beachside & Breezy',
-  'Artsy & Bohemian',
-  'Candlelight',
-  'Heritage & Cultural',
-];
-
-const SAMPLE_ACTIVITIES = [
-  'Pottery Workshop',
-  'Board Game Café',
-  'Sunset Promenade',
-  'Art Gallery Walk',
-  'Historic Museum',
-  'Backwater Boating',
-];
 
 export default function TasteProfiler({ sessionToken, partnerLabel, onTasteExtracted }) {
   const [activeTab, setActiveTab] = useState('quiz'); // 'upload' | 'screenshot' | 'quiz'
@@ -76,14 +49,14 @@ export default function TasteProfiler({ sessionToken, partnerLabel, onTasteExtra
     setLoading(true);
     setError('');
 
-    const answers = {
-      cuisines: selectedCuisines.map((c) => c.toLowerCase().replace(/ & /g, '-').replace(/\s+/g, '-')),
-      vibes: selectedVibes.map((v) => v.toLowerCase().replace(/ & /g, '-').replace(/\s+/g, '-')),
-      activities: selectedActivities.map((a) => a.toLowerCase().replace(/\s+/g, '-')),
-      dietary_signals: dietary !== 'none' ? [dietary] : [],
-      dislikes: dislikesText.split(',').map((d) => d.trim().toLowerCase()).filter(Boolean),
-      price_comfort: priceComfort,
-    };
+    const answers = toAnswers({
+      cuisines: selectedCuisines,
+      vibes: selectedVibes,
+      activities: selectedActivities,
+      dietary,
+      dislikes: dislikesText,
+      priceComfort,
+    });
 
     try {
       const extracted = await api.submitTasteQuiz(sessionToken, answers);
@@ -147,7 +120,9 @@ export default function TasteProfiler({ sessionToken, partnerLabel, onTasteExtra
         <p className="dp-eyebrow">{partnerLabel === 'demo' ? "Your partner's tastes · demo" : 'Your tastes · private'}</p>
         <h2 className="mt-2 text-3xl leading-tight md:text-4xl">What do you enjoy?</h2>
         <p className="mt-2 text-base text-ink-2">
-          Answer a few questions or share files you exported yourself. Files are read by a local model and deleted straight after.
+          {ENABLE_UPLOADS
+            ? 'Answer a few questions or share files you exported yourself. Files are read by a local model and deleted straight after.'
+            : 'Answer a few quick questions. Only the overlap with your partner is ever shown.'}
         </p>
       </div>
 
@@ -157,6 +132,8 @@ export default function TasteProfiler({ sessionToken, partnerLabel, onTasteExtra
         </p>
       )}
 
+      {/* Upload tabs only when the feature flag is on; otherwise it's just the quiz. */}
+      {ENABLE_UPLOADS && (
       <div role="tablist" aria-label="How to share your tastes" className="mb-8 grid grid-cols-3 gap-1 rounded-lg border border-line bg-well p-1">
         {tabs.map(({ id, label, icon: Icon }) => (
           <button
@@ -174,6 +151,7 @@ export default function TasteProfiler({ sessionToken, partnerLabel, onTasteExtra
           </button>
         ))}
       </div>
+      )}
 
       {activeTab === 'quiz' && (
         <form onSubmit={handleQuizSubmit} className="space-y-7">

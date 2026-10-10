@@ -1,21 +1,6 @@
 import React, { useState } from 'react';
 import { Coffee, Palette, Sunset, Utensils, Wine } from 'lucide-react';
-
-const CITY_AREAS = {
-  Chennai: [
-    'Alwarpet', 'Adyar', 'Besant Nagar', 'Mylapore', 'Nungambakkam',
-    'T. Nagar', 'Anna Nagar', 'Egmore', 'Guindy', 'Velachery',
-    'ECR / Neelankarai', 'Muttukadu / Kovalam', 'Marina Beach',
-  ],
-  Coimbatore: [
-    'R.S. Puram', 'Gandhipuram', 'Peelamedu', 'Race Course',
-    'Saibaba Colony', 'Ukkadam',
-  ],
-  Madurai: [
-    'Anna Nagar', 'KK Nagar', 'Goripalayam', 'Mattuthavani',
-    'Town Hall Road', 'Vandiyur',
-  ],
-};
+import { CITY_AREAS } from '../lib/places';
 
 const SLOTS = [
   { id: 'lunch', label: 'Lunch', icon: Utensils },
