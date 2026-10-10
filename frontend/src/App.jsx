@@ -49,6 +49,13 @@ export default function App() {
   const [rainTriggerNote, setRainTriggerNote] = useState('');
   const [liveWeather, setLiveWeather] = useState(null);
   const [liveRoutes, setLiveRoutes] = useState(null);
+  // Server options: the text model is off unless the server turns it on.
+  const [serverConfig, setServerConfig] = useState({ text_model: 'none', uploads: false });
+  const [writingText, setWritingText] = useState(false);
+
+  useEffect(() => {
+    api.getConfig().then(setServerConfig).catch(() => {});
+  }, []);
 
   // Intro: first visit in a browser session, after the inactivity timeout, or from the logo.
   // A new key replays it from the start.
@@ -380,6 +387,21 @@ export default function App() {
     }
   };
 
+  // Optional: let the text model reword the plans (every time and price is checked server-side).
+  const handleWriteText = async () => {
+    const currentToken = activePartner === 'a' ? tokenA : tokenB;
+    setWritingText(true);
+    try {
+      const reworded = await api.writeText(currentToken);
+      setPlans(reworded);
+      setRainPlanIndex(null);
+    } catch (err) {
+      alert(err.message || 'Could not reword the plan. The original text is still there.');
+    } finally {
+      setWritingText(false);
+    }
+  };
+
   const handleSwapClick = (planIndex, stopIndex) => {
     const currentPlan = plans[planIndex];
     if (currentPlan && currentPlan.stops[stopIndex]) {
@@ -674,6 +696,8 @@ export default function App() {
             rainTriggerNote={rainTriggerNote}
             liveWeather={liveWeather}
             liveRoutes={liveRoutes}
+            onWriteText={serverConfig.text_model !== 'none' && rainPlanIndex === null ? handleWriteText : undefined}
+            writingText={writingText}
           />
         )}
 

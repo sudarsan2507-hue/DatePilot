@@ -15,7 +15,7 @@ const STATUS_LINES = [
 
 const FALLBACK_CHIPS = ['Café & Bakery', 'Quiet & Intimate', 'Sunset Promenade', 'Continental']
 
-export default function ReadingAnswers({ chips = [], lines = STATUS_LINES, className = '' }) {
+export default function ReadingAnswers({ chips = [], lines = STATUS_LINES, title = 'Your taste card', className = '' }) {
   const [ref, inView] = useInView()
   const [lineIdx, setLineIdx] = useState(0)
 
@@ -37,7 +37,7 @@ export default function ReadingAnswers({ chips = [], lines = STATUS_LINES, class
     >
       <div className="sticky top-[22vh] flex justify-center px-4 py-10">
         <div className="dp-card-in w-full max-w-[300px] rounded-xl border border-line bg-paper p-5 shadow-[0_8px_30px_-12px_rgba(56,42,34,0.25)]">
-          <p className="text-[11px] uppercase tracking-[0.16em] text-ink-3">Your taste card</p>
+          <p className="text-[11px] uppercase tracking-[0.16em] text-ink-3">{title}</p>
 
           {/* chips lift into the card one by one */}
           <div className="mt-4 flex min-h-[76px] flex-wrap content-start gap-2">

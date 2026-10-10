@@ -3,9 +3,10 @@ import { useCountUp } from '../lib/motion';
 import { directionsTo, downloadCalendar, fullRouteUrl, shareText } from '../lib/dayTools';
 import RouteMap from './RouteMap';
 import PlansRouteMargin from './motion/PlansRouteMargin';
+import ReadingAnswers from './motion/ReadingAnswers';
 import {
   ArrowUpRight, BedDouble, CalendarPlus, Car, Check, CloudSun, Coffee, MapPin, Navigation,
-  Palette, RefreshCw, Share2, Star, Sunset, Umbrella, Utensils, Wine, X,
+  Palette, RefreshCw, Share2, Sparkles, Star, Sunset, Umbrella, Utensils, Wine, X,
 } from 'lucide-react';
 
 const SLOT_ICONS = {
@@ -76,6 +77,8 @@ export default function ItineraryViewer({
   rainTriggerNote,
   liveWeather,
   liveRoutes,
+  onWriteText,
+  writingText = false,
 }) {
   const [showStaySuggestion, setShowStaySuggestion] = useState(false);
   const [shared, setShared] = useState(false);
@@ -123,6 +126,13 @@ export default function ItineraryViewer({
       {/* Margin art from 1280px; margins kept tight at 1280 so nothing leaves the screen */}
       <PlansRouteMargin key={`l-${selectedPlanIndex}`} stops={stops.length} className="absolute bottom-0 right-full top-0 mr-4 min-[1400px]:mr-14" />
       <PlansRouteMargin key={`r-${selectedPlanIndex}`} stops={stops.length} tone="sage" mirror className="absolute bottom-0 left-full top-0 ml-4 min-[1400px]:ml-14" />
+      {writingText && (
+        <ReadingAnswers
+          title="Your day"
+          chips={stops.map((st) => st.venue.name)}
+          lines={['Writing your day', 'Checking every time and price', 'Almost there']}
+        />
+      )}
       <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div>
           <p className="dp-eyebrow">Your day</p>
@@ -153,6 +163,19 @@ export default function ItineraryViewer({
             <p className="reveal border-l-2 border-accent-soft pl-5 font-serif text-lg italic leading-relaxed text-ink-2">
               {activePlan.itinerary_text}
             </p>
+          )}
+
+          {/* Optional, only when the server has a text model on */}
+          {onWriteText && !isSurprise && (
+            <button
+              type="button"
+              onClick={onWriteText}
+              disabled={writingText}
+              className="dp-btn -mt-3 px-0 text-sm text-ink-2 underline underline-offset-4 hover:text-ink disabled:opacity-50"
+            >
+              <Sparkles size={16} strokeWidth={1.5} aria-hidden="true" />
+              {writingText ? 'Writing…' : 'Write it in warmer words'}
+            </button>
           )}
 
           {rainModeActive && (

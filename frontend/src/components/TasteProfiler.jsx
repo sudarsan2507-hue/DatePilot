@@ -115,7 +115,8 @@ export default function TasteProfiler({ sessionToken, partnerLabel, onTasteExtra
 
   return (
     <div className="dp-screen dp-card relative mx-auto max-w-2xl p-5 shadow-soft animate-enter md:p-8">
-      {loading && <ReadingAnswers {...readingProps} />}
+      {/* The quiz is instant (rule-based); only uploads wait for the model. */}
+      {loading && activeTab !== 'quiz' && <ReadingAnswers {...readingProps} />}
       <div className="mb-6">
         <p className="dp-eyebrow">{partnerLabel === 'demo' ? "Your partner's tastes · demo" : 'Your tastes · private'}</p>
         <h2 className="mt-2 text-3xl leading-tight md:text-4xl">What do you enjoy?</h2>

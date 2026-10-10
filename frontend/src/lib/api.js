@@ -97,6 +97,12 @@ export const api = {
 
   getCurrentPlan: (token) => request(`/plan/${token}/current`),
 
+  // Optional: reword the plan text with the text model (only when the server has one on)
+  writeText: (token) =>
+    request(`/plan/${token}/write-text`, {
+      method: 'POST',
+    }),
+
   swapStop: (token, planIndex, stopIndex, apply = false) =>
     request(`/plan/${token}/swap/${planIndex}/${stopIndex}?apply=${apply}`, {
       method: 'POST',
@@ -119,6 +125,9 @@ export const api = {
     }),
 
   getMemoryInsights: (token) => request(`/memory/${token}/insights`),
+
+  // What the server offers: { text_model: 'none' | 'ollama' | 'cloud', uploads: bool }
+  getConfig: () => request('/config'),
 
   // Optional keyless live data
   getWeather: (city, forecastDate) =>
