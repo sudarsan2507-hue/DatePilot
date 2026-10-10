@@ -8,6 +8,7 @@ from __future__ import annotations
 import json
 import math
 import itertools
+from functools import lru_cache
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Optional, List, Dict, Tuple
@@ -71,6 +72,12 @@ SLOT_WINDOWS: dict[SlotType, tuple[str, str]] = {
     SlotType.sunset: ("17:00", "18:15"),
     SlotType.dinner: ("19:00", "21:30"),
 }
+
+
+@lru_cache(maxsize=256)
+def _clock(hhmm: str):
+    """Parsed "HH:MM" as a time. The planner checks thousands of combinations, so parse once."""
+    return datetime.strptime(hhmm.strip(), "%H:%M").time()
 
 
 def load_venues() -> list[Venue]:
@@ -139,8 +146,8 @@ def next_open_visit(
     window_start = window_end = None
     if slot in SLOT_WINDOWS:
         start_s, end_s = SLOT_WINDOWS[slot]
-        window_start = datetime.combine(earliest_arrival.date(), datetime.strptime(start_s, "%H:%M").time())
-        window_end = datetime.combine(earliest_arrival.date(), datetime.strptime(end_s, "%H:%M").time())
+        window_start = datetime.combine(earliest_arrival.date(), _clock(start_s))
+        window_end = datetime.combine(earliest_arrival.date(), _clock(end_s))
         if earliest_arrival > window_end:
             return None
         earliest_arrival = max(earliest_arrival, window_start)
@@ -148,8 +155,8 @@ def next_open_visit(
     for shift in hours.split(","):
         try:
             open_s, close_s = shift.strip().split("-", 1)
-            open_time = datetime.strptime(open_s.strip(), "%H:%M").time()
-            close_time = datetime.strptime(close_s.strip(), "%H:%M").time()
+            open_time = _clock(open_s)
+            close_time = _clock(close_s)
         except ValueError:
             continue
         open_dt = datetime.combine(earliest_arrival.date(), open_time)
