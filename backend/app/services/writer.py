@@ -57,7 +57,9 @@ def _stop_times(stop: PlannedStop) -> set[str]:
     return {stop.arrival_time, stop.departure_time}
 
 
-async def write_why_picked(stop: PlannedStop, shared_vibes: list[str], shared_cuisines: list[str]) -> str:
+async def write_why_picked(
+    stop: PlannedStop, shared_vibes: list[str], shared_cuisines: list[str], use_llm: bool = True
+) -> str:
     """Generate a short, factual 'why we picked this' line without inventing facts."""
     vibe_overlap = [v for v in shared_vibes if v.lower() in [vt.lower() for vt in stop.venue.vibe_tags]]
     cuisine_overlap = [c for c in shared_cuisines if c.lower() in [ct.lower() for ct in stop.venue.cuisine_tags]]
@@ -70,7 +72,7 @@ Facts you may use:
 - Rating: {stop.venue.rating} out of 5
 Rules: no prices, no times, no exclamation marks, no quotes. Do not invent facts."""
 
-    text = await chat(prompt, max_tokens=70)
+    text = await chat(prompt, max_tokens=70) if use_llm else ""
     cleaned = (text or "").strip().strip('"').replace('"', "")
     if len(cleaned) > 10 and _facts_ok(cleaned, _stop_numbers(stop), _stop_times(stop)):
         return cleaned[:200]
@@ -86,7 +88,7 @@ Rules: no prices, no times, no exclamation marks, no quotes. Do not invent facts
     return f"Picked because {' and '.join(reasons)}."
 
 
-async def write_itinerary(plan: DatePlan) -> str:
+async def write_itinerary(plan: DatePlan, use_llm: bool = True) -> str:
     """Generate a short narrative of the day; every number is checked against the plan."""
     stops_summary = "\n".join(
         f"- {s.arrival_time} {s.slot.value} at {s.venue.name} ({s.venue.area})"
@@ -106,7 +108,7 @@ Rules: mention each place once, in order. Only use the times and the total above
         numbers |= _stop_numbers(s)
         times |= _stop_times(s)
 
-    for _ in range(2):
+    for _ in range(2 if use_llm else 0):
         text = await chat(prompt, max_tokens=160)
         cleaned = (text or "").strip()
         if len(cleaned) > 30 and _facts_ok(cleaned, numbers, times):
