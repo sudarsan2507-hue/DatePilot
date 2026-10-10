@@ -52,6 +52,17 @@ class TasteCard(BaseModel):
 
 # ── Session / Partner ────────────────────────────────────────────────────────
 
+SUPPORTED_CITIES = ("Chennai", "Coimbatore", "Madurai")
+
+
+def canonical_city(value: str) -> str:
+    canonical = {name.lower(): name for name in SUPPORTED_CITIES}
+    key = value.strip().lower()
+    if key not in canonical:
+        raise ValueError("Choose a supported Indian city: Chennai, Coimbatore, or Madurai")
+    return canonical[key]
+
+
 class SessionCreate(BaseModel):
     date: str                                       # ISO date YYYY-MM-DD
     time_start: str                                 # "HH:MM"
@@ -94,10 +105,7 @@ class SessionCreate(BaseModel):
     @field_validator("city")
     @classmethod
     def supported_city(cls, value: str) -> str:
-        canonical = {name.lower(): name for name in ("Chennai", "Coimbatore", "Madurai")}
-        if value.lower() not in canonical:
-            raise ValueError("Choose a supported Indian city: Chennai, Coimbatore, or Madurai")
-        return canonical[value.lower()]
+        return canonical_city(value)
 
     @field_validator("slots_enabled")
     @classmethod
@@ -132,6 +140,7 @@ class SessionDB(SQLModel, table=True):
     budget_inr: int
     budget_b_inr: Optional[int] = None
     city: str = "Chennai"
+    mode: str = "together"              # "solo" (one planner) or "together" (both partners answer)
     start_area: str
     max_travel_min: int
     surprise_mode: bool
