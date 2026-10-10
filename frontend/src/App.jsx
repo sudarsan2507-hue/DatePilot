@@ -9,7 +9,9 @@ import ItineraryViewer from './components/ItineraryViewer';
 import SwapModal from './components/SwapModal';
 import RatingModal from './components/RatingModal';
 import PartnerLimits from './components/PartnerLimits';
-import { ArrowUpRight, Check, Eye, Lock, MapPin, Plus, Users } from 'lucide-react';
+import QuickStart from './components/QuickStart';
+import Personalize from './components/Personalize';
+import { ArrowLeft, ArrowUpRight, Check, Eye, MapPin, Plus, Sparkles, Users, Wallet } from 'lucide-react';
 import { useReveal, useTilt } from './lib/motion';
 import { SideArtLeft, SideArtRight } from './components/SideScenes';
 import { GutterKolam, GutterPetals } from './components/motion/GutterArt';
@@ -24,8 +26,11 @@ export default function App() {
   const [tokenB, setTokenB] = useState('');
   const [activePartner, setActivePartner] = useState('a'); // 'a' or 'b'
   
-  // App views: 'setup' | 'limits' | 'invite' | 'taste' | 'review' | 'match' | 'plans'
-  const [view, setView] = useState('setup');
+  // Solo (default): 'start' -> 'plans' -> optional 'personalize'.
+  // Together (optional): 'setup' | 'limits' | 'invite' | 'taste' | 'review' | 'match' | 'plans'
+  const [view, setView] = useState('start');
+  const [mode, setMode] = useState('solo'); // 'solo' | 'together'
+  const [quickRequest, setQuickRequest] = useState(null); // last quick-plan inputs, for re-planning
 
   // Candidate Taste Cards for review
   const [candidateCardA, setCandidateCardA] = useState(null);
@@ -195,8 +200,12 @@ export default function App() {
     try {
       const s = await api.getSession(token);
       setSession(s);
-      if (partner === 'a' && s.token_b) setTokenB(s.token_b);
-      if (s.has_plan) {
+      const sessionMode = s.mode === 'solo' ? 'solo' : 'together';
+      setMode(sessionMode);
+      if (sessionMode === 'together' && partner === 'a' && s.token_b) setTokenB(s.token_b);
+      if (sessionMode === 'solo' && !s.has_plan) {
+        setView('start');
+      } else if (s.has_plan) {
         const curPlans = await api.getCurrentPlan(token);
         setPlans(curPlans);
         setSelectedPlanIndex(0);
@@ -214,6 +223,45 @@ export default function App() {
     } catch {
       // ignore
     }
+  };
+
+  // Solo: quick inputs straight to plans (no quiz first).
+  const handleQuickPlan = async (payload) => {
+    const res = await api.quickPlan(payload);
+    setMode('solo');
+    setTokenA(res.token);
+    setTokenB('');
+    setActivePartner('a');
+    setSession(res.session);
+    setQuickRequest(payload);
+    setPlans(res.plans);
+    setSelectedPlanIndex(0);
+    setRainPlanIndex(null);
+    setRainTriggerNote('');
+    setLiveWeather(null);
+    window.history.replaceState(null, '', `#session=${res.token}`);
+    setView('plans');
+    if (res.session?.date) {
+      api.getWeather(res.session.city, res.session.date).then(setLiveWeather).catch(() => setLiveWeather(null));
+    }
+  };
+
+  // "Make it more personal": same inputs plus the answers about them and about you.
+  const handleReplan = async (answers) => {
+    const base = quickRequest || {
+      city: session?.city || 'Chennai',
+      budget_inr: session?.budget_inr || 2000,
+      vibes: session?.vibes || [],
+      date: session?.date,
+      time_start: session?.time_start || '16:00',
+      start_area: session?.start_area || 'City centre',
+    };
+    await handleQuickPlan({ ...base, ...answers });
+  };
+
+  const startTogether = () => {
+    setMode('together');
+    setView('setup');
   };
 
   const handleSessionCreated = async (payload) => {
@@ -369,7 +417,9 @@ export default function App() {
     setMatchRefreshError('');
     setGenerating(false);
     setActivePartner('a');
-    setView('setup');
+    setMode('solo');
+    setQuickRequest(null);
+    setView('start');
     window.history.replaceState(null, '', window.location.pathname);
   };
 
@@ -382,7 +432,7 @@ export default function App() {
             onClick={() => {
               playIntro();
               if (tokenA || tokenB) window.scrollTo({ top: 0, behavior: 'smooth' });
-              else setView('setup');
+              else setView(mode === 'together' ? 'setup' : 'start');
             }}
             className="flex min-h-11 items-center gap-3 text-left"
           >
@@ -395,7 +445,7 @@ export default function App() {
 
           <div className="flex items-center gap-2">
             {/* Demo shortcut: preview the partner's private side on this device */}
-            {tokenA && tokenB && activePartner === 'a' && (
+            {mode === 'together' && tokenA && tokenB && activePartner === 'a' && (
               <button type="button" onClick={handleSwitchToPartnerB} className="dp-btn-quiet px-3 text-sm">
                 <Users size={18} strokeWidth={1.5} aria-hidden="true" />
                 <span className="hidden sm:inline">See partner&rsquo;s side</span>
@@ -427,27 +477,26 @@ export default function App() {
         </div>
       )}
 
-      {view === 'setup' && (
-        <section className="mx-auto grid max-w-6xl items-center gap-10 px-4 pb-10 pt-10 md:grid-cols-2 md:px-6 md:pt-16 lg:gap-16 lg:pb-16">
+      {view === 'start' && (
+        <section className="mx-auto grid max-w-6xl items-center gap-8 px-4 pb-12 pt-8 md:px-6 md:pt-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,34rem)] lg:gap-14 lg:pb-16">
           <div className="animate-enter">
             <p className="flex items-center gap-2 dp-eyebrow">
               <span className="h-1.5 w-1.5 rounded-full bg-accent-soft" aria-hidden="true" />
-              Made for two · India
+              Dates on any budget · India
             </p>
             <h1 className="mt-5 text-[44px] leading-[1.04] md:text-[52px] lg:text-[68px]">
               Less planning.{' '}<br className="hidden sm:block" />
               More <em className="text-accent-soft">butterflies.</em>
             </h1>
             <p className="mt-5 max-w-md text-base leading-relaxed text-ink-2 md:text-lg">
-              Two tastes, one day. We find the places you will both enjoy and check the time, budget and travel for you.
+              A fresh, impressive date within your budget. Never the same date twice.
             </p>
             <ul className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm text-ink-3">
+              <li className="flex items-center gap-2"><Wallet size={16} strokeWidth={1.5} aria-hidden="true" />Never over budget</li>
               <li className="flex items-center gap-2"><MapPin size={16} strokeWidth={1.5} aria-hidden="true" />Real local places</li>
-              <li className="flex items-center gap-2"><Lock size={16} strokeWidth={1.5} aria-hidden="true" />Preferences stay private</li>
+              <li className="flex items-center gap-2"><Sparkles size={16} strokeWidth={1.5} aria-hidden="true" />Ready in seconds</li>
             </ul>
-          </div>
-
-          <div ref={heroTiltRef} className="tilt date-preview mx-auto w-full max-w-md animate-enter md:max-w-none" aria-label="Example date">
+          <div ref={heroTiltRef} className="tilt date-preview mt-10 hidden w-full max-w-sm animate-enter lg:block" aria-label="Example date">
             <div className="preview-top"><span>A DAY WORTH KEEPING</span><span>01 / 03</span></div>
             <div className="preview-art" aria-hidden="true">
               <div className="sun-disc hero-sun" />
@@ -466,10 +515,15 @@ export default function App() {
               <ArrowUpRight size={22} strokeWidth={1.5} aria-hidden="true" />
             </div>
           </div>
+          </div>
+
+          <QuickStart onPlan={handleQuickPlan} onPlanTogether={startTogether} />
+
         </section>
       )}
 
-      <nav aria-label="Planning progress" className={`mx-auto max-w-2xl px-4 md:px-6 ${view === 'setup' ? '' : 'pt-8 md:pt-10'}`}>
+      {mode === 'together' && (
+      <nav aria-label="Planning progress" className="mx-auto max-w-2xl px-4 pt-8 md:px-6 md:pt-10">
         {(() => {
           const steps = [
             { label: 'Set the day', views: ['setup'], note: 'You choose the date, time, budget and where you start.' },
@@ -508,8 +562,10 @@ export default function App() {
           );
         })()}
       </nav>
+      )}
 
       {/* Main App Flow */}
+      {view !== 'start' && (
       <main ref={revealRef} className="mx-auto mt-8 max-w-7xl px-4 pb-16 md:px-6">
         <div className={view === 'plans' ? '' : 'min-[960px]:grid min-[960px]:grid-cols-[minmax(0,1fr)_minmax(0,42rem)_minmax(0,1fr)] min-[960px]:items-start min-[960px]:gap-6 min-[1180px]:grid-cols-[minmax(0,1fr)_42rem_minmax(0,1fr)] min-[1180px]:gap-8 xl:gap-10'}>
         {view !== 'plans' && (
@@ -522,9 +578,20 @@ export default function App() {
           </aside>
         )}
         <div className="min-w-0">
-        {/* Step 1: Session Setup */}
+        {/* Solo: optional answers about their date and about you */}
+        {view === 'personalize' && (
+          <Personalize onReplan={handleReplan} onBack={() => setView('plans')} />
+        )}
+
+        {/* Together, step 1: Session Setup */}
         {view === 'setup' && (
-          <SessionSetup onSessionCreated={handleSessionCreated} />
+          <div className="mx-auto max-w-2xl">
+            <button type="button" onClick={() => { setMode('solo'); setView('start'); }} className="dp-btn -ml-2 mb-3 px-2 text-sm text-ink-2 hover:text-ink">
+              <ArrowLeft size={18} strokeWidth={1.5} aria-hidden="true" />
+              Plan on my own instead
+            </button>
+            <SessionSetup onSessionCreated={handleSessionCreated} />
+          </div>
         )}
 
         {/* Step 2: Taste Profiler */}
@@ -610,6 +677,19 @@ export default function App() {
           />
         )}
 
+        {view === 'plans' && mode === 'solo' && (
+          <section className="mx-auto mt-8 flex max-w-5xl flex-col gap-4 rounded-2xl border border-line bg-well p-5 sm:flex-row sm:items-center sm:justify-between md:p-6">
+            <div>
+              <h3 className="text-2xl">Make it more personal</h3>
+              <p className="mt-1 text-sm text-ink-2">Tell us what your date likes, and what you like. We&rsquo;ll re-plan around it.</p>
+            </div>
+            <button type="button" onClick={() => setView('personalize')} className="dp-btn-primary shrink-0">
+              <Sparkles size={18} strokeWidth={1.5} aria-hidden="true" />
+              Make it personal
+            </button>
+          </section>
+        )}
+
         {/* Short steps leave a blank band above the footer */}
         {['limits', 'invite', 'match'].includes(view) && <TwoDotsMeet className="mt-10" />}
         </div>
@@ -623,6 +703,7 @@ export default function App() {
         )}
         </div>
       </main>
+      )}
       <footer className="mx-auto max-w-6xl border-t border-line px-4 py-10 text-center md:px-6">
         <p className="font-serif text-xl">DatePilot</p>
         <p className="mt-2 text-sm text-ink-3">Good company. Thoughtful plans. Now planning in Chennai, Coimbatore and Madurai.</p>
