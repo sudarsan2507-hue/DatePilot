@@ -2,7 +2,8 @@
 plan.py — Itinerary generation, Stop Swapping diff engine, and Rain Mode protocol.
 Rules:
 - Math is 100% deterministic (no LLM math errors).
-- LLM enriches 'why_picked' and friendly itinerary text with strict factual bounds.
+- Plans are built with template text only; the optional /write-text step can reword
+  'why_picked' and the itinerary with the text model, within strict factual bounds.
 - Stop Swap re-solves that specific slot while locking all others, returning an exact diff.
 """
 import json
@@ -27,6 +28,7 @@ from app.services.planner import (
 )
 from app.services.writer import write_why_picked, write_itinerary
 from app.services.live_data import get_osrm_route
+from app.llm import text_model_enabled
 
 router = APIRouter(prefix="/plan", tags=["plan"])
 IST = timezone(timedelta(hours=5, minutes=30))
@@ -106,17 +108,46 @@ def _redact_surprise_plans(plans: list[dict], city: str) -> list[dict]:
     return redacted
 
 
-async def _enrich_plan(plan: DatePlan, why_cache: dict | None = None) -> DatePlan:
-    """Enrich plan with AI explanations and friendly itinerary narrative.
+async def _enrich_plan(plan: DatePlan, why_cache: dict | None = None, use_llm: bool = False) -> DatePlan:
+    """Add the "why we picked it" lines and the day summary.
+    Templates by default (instant); use_llm=True only in the optional /write-text step.
     `why_cache` lets plans that share a place reuse its reason (one model call per place)."""
     cache = why_cache if why_cache is not None else {}
     for stop in plan.stops:
         key = (stop.venue.id, stop.slot)
         if key not in cache:
-            cache[key] = await write_why_picked(stop, plan.matched_vibes, plan.matched_cuisines)
+            cache[key] = await write_why_picked(stop, plan.matched_vibes, plan.matched_cuisines, use_llm=use_llm)
         stop.why_picked = cache[key]
-    plan.itinerary_text = await write_itinerary(plan)
+    plan.itinerary_text = await write_itinerary(plan, use_llm=use_llm)
     return plan
+
+
+@router.post("/{token}/write-text")
+async def write_text(token: str):
+    """Optional: reword every plan's text with the text model (TEXT_MODEL=ollama|cloud).
+    Every time and price it writes is checked against the plan; anything else keeps the template."""
+    if not text_model_enabled():
+        raise HTTPException(status_code=409, detail="The text model is turned off (TEXT_MODEL=none)")
+    with DBSession(engine) as db:
+        row = db.exec(select(SessionDB).where(
+            (SessionDB.token_a == token) | (SessionDB.token_b == token)
+        )).first()
+    if not row or not row.plan_json:
+        raise HTTPException(status_code=404, detail="Plan not found")
+    if _surprise_is_hidden(row, token):
+        raise HTTPException(status_code=403, detail="The plan stays hidden until the surprise date begins")
+
+    why_cache: dict = {}
+    plans = [
+        await _enrich_plan(DatePlan.model_validate(raw), why_cache, use_llm=True)
+        for raw in json.loads(row.plan_json)
+    ]
+    with DBSession(engine) as db:
+        saved = db.get(SessionDB, row.id)
+        saved.plan_json = json.dumps([p.model_dump() for p in plans])
+        db.add(saved)
+        db.commit()
+    return [p.model_dump() for p in plans]
 
 
 @router.post("/{token_a}/generate")
@@ -231,7 +262,7 @@ async def swap_stop(token: str, plan_index: int, stop_index: int, apply: bool = 
     backup_venue = feasible[1][0] if len(feasible) > 1 else None
     new_stop = replacement_plan.stops[stop_index]
     new_stop.backup_venue = backup_venue
-    new_stop.why_picked = await write_why_picked(new_stop, plan.matched_vibes, plan.matched_cuisines)
+    new_stop.why_picked = await write_why_picked(new_stop, plan.matched_vibes, plan.matched_cuisines, use_llm=False)
     plan = replacement_plan
     plan.stops[stop_index] = new_stop
 

@@ -5,7 +5,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 from app.db import create_db_and_tables
-from app.llm import warm_up
+from app.llm import text_model, warm_up
 from app.routers import sessions, taste, plan, memory_router, live_data, quick
 
 load_dotenv()
@@ -43,6 +43,13 @@ app.include_router(plan.router)
 app.include_router(memory_router.router)
 app.include_router(live_data.router)
 app.include_router(quick.router)
+
+
+@app.get("/config")
+def config():
+    """What the frontend may offer. No secrets here."""
+    from app.routers.taste import uploads_enabled
+    return {"text_model": text_model(), "uploads": uploads_enabled()}
 
 
 @app.get("/health")
