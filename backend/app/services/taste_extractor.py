@@ -11,6 +11,7 @@ import zipfile
 from typing import Any, Dict, List, Optional
 from app.llm import chat_json, chat_vision
 from app.models.schema import TasteCard, PriceComfort
+from app.services.tag_mapping import card_from_answers
 
 SYSTEM_TASTE = """You extract taste signals from social text/image data for date planning in Tamil Nadu, India.
 Output ONLY a valid JSON object matching the TasteCard schema:
@@ -217,31 +218,6 @@ Return JSON with keys: cuisines, dietary_signals, vibes, activities, dislikes, p
 
 
 async def taste_from_quiz(answers: dict) -> TasteCard:
-    """Convert structured romantic preference quiz answers to confirmed TasteCard."""
-    prompt = f"""Convert these date quiz answers to a TasteCard JSON:
-{json.dumps(answers, indent=2)}"""
-
-    data = await chat_json(prompt, system=SYSTEM_TASTE)
-    if data and isinstance(data, dict):
-        try:
-            return TasteCard.model_validate(data)
-        except Exception:
-            pass
-
-    # Direct mapping fallback from quiz fields
-    cuisines = answers.get("cuisines", ["cafe", "continental"])
-    vibes = answers.get("vibes", ["romantic", "quiet", "cozy"])
-    activities = answers.get("activities", ["sunset-walk", "board-games"])
-    dislikes = answers.get("dislikes", ["crowded"])
-    dietary = [d for d in answers.get("dietary_signals", []) if d]
-    price = answers.get("price_comfort", "mid")
-
-    return TasteCard(
-        cuisines=cuisines if isinstance(cuisines, list) else [cuisines],
-        dietary_signals=dietary if isinstance(dietary, list) else [dietary],
-        vibes=vibes if isinstance(vibes, list) else [vibes],
-        activities=activities if isinstance(activities, list) else [activities],
-        dislikes=dislikes if isinstance(dislikes, list) else [dislikes],
-        price_comfort=PriceComfort(price) if price in ["low", "mid", "high"] else PriceComfort.mid,
-        confidence={k: 0.9 for k in cuisines + vibes + activities},
-    )
+    """Quiz answers -> TasteCard with plain rules (data/tag_map.json). No model call,
+    so the review screen appears straight away and works with the model turned off."""
+    return card_from_answers(answers)

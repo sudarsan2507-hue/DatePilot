@@ -4,22 +4,13 @@ Everything here is rule-based: vibe chips become venue tags through data/tag_map
 and the stops are chosen from the start time. No model call.
 """
 from __future__ import annotations
-import json
 from datetime import datetime, timedelta, timezone
-from functools import lru_cache
-from pathlib import Path
-from app.models.schema import PriceComfort, QuickPlanRequest, SlotType, TasteCard
+from app.models.schema import QuickPlanRequest, SlotType, TasteCard
+from app.services.tag_mapping import card_from_answers, vibe_tags
 
-TAG_MAP_PATH = Path(__file__).parent.parent.parent / "data" / "tag_map.json"
 IST = timezone(timedelta(hours=5, minutes=30))
 LATEST_END = "23:00"
 MAX_STOPS = 4
-
-
-@lru_cache(maxsize=1)
-def tag_map() -> dict:
-    with open(TAG_MAP_PATH, encoding="utf-8") as f:
-        return json.load(f)
 
 
 def today_ist() -> str:
@@ -60,32 +51,11 @@ def pick_slots(time_start: str, time_end: str, vibes: list[str]) -> list[SlotTyp
     return slots
 
 
-def _answers_card(answers: dict | None) -> TasteCard:
-    """Optional quiz answers (already slugged by the client) as a TasteCard."""
-    if not answers:
-        return TasteCard()
-    as_list = lambda v: v if isinstance(v, list) else [v] if v else []
-    price = answers.get("price_comfort", "mid")
-    return TasteCard(
-        cuisines=as_list(answers.get("cuisines")),
-        vibes=as_list(answers.get("vibes")),
-        activities=as_list(answers.get("activities")),
-        dislikes=as_list(answers.get("dislikes")),
-        dietary_signals=[d for d in as_list(answers.get("dietary_signals")) if d],
-        price_comfort=PriceComfort(price) if price in ("low", "mid", "high") else PriceComfort.mid,
-    )
-
-
 def quick_taste(req: QuickPlanRequest) -> TasteCard:
     """One taste profile for the planner: the vibe chips, then their date's answers,
     then the planner's own. Dislikes and dietary needs from either side always apply."""
-    vibes: list[str] = []
-    cuisines: list[str] = []
-    for vibe in req.vibes:
-        rule = tag_map()["vibes"].get(vibe, {})
-        vibes += rule.get("vibes", [])
-        cuisines += rule.get("cuisines", [])
-    date_card, you_card = _answers_card(req.about_date), _answers_card(req.about_you)
+    vibes, cuisines = vibe_tags(req.vibes)
+    date_card, you_card = card_from_answers(req.about_date), card_from_answers(req.about_you)
     return TasteCard(
         cuisines=date_card.cuisines + cuisines + you_card.cuisines,
         vibes=date_card.vibes + vibes + you_card.vibes,

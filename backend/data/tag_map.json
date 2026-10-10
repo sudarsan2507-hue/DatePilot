@@ -1,5 +1,5 @@
 {
-  "_comment": "Plain rules that turn quick-start vibe chips into the venue tags the planner scores against. No model call.",
+  "_comment": "Plain rules that turn chips into the venue tags the planner scores against. No model call. Quiz keys are the slugs the frontend sends (frontend/src/lib/quiz.js); tests check both lists stay in sync.",
   "vibes": {
     "chill":     { "vibes": ["quiet", "peaceful", "cozy", "relaxed", "serene", "garden", "books"], "cuisines": ["cafe", "coffee"] },
     "foodie":    { "vibes": ["local", "authentic"], "cuisines": ["south-indian", "chettinad", "seafood", "biryani", "tiffin", "dosa", "desserts", "filter-coffee", "jigarthanda", "street-food"] },
@@ -7,5 +7,42 @@
     "artsy":     { "vibes": ["artsy", "museum", "heritage", "history", "culture", "cultural", "sculpture", "creative", "bohemian", "architecture", "vintage", "aesthetic"], "cuisines": [] },
     "romantic":  { "vibes": ["romantic", "candlelight", "intimate", "sunset", "golden-hour", "elegant", "garden"], "cuisines": ["desserts"] },
     "playful":   { "vibes": ["fun", "playful", "quirky", "interactive", "hands-on", "adventure", "active", "themed", "retro"], "cuisines": [] }
+  },
+  "quiz": {
+    "cuisines": {
+      "south-indian":           { "cuisines": ["south-indian", "tiffin", "dosa", "idli", "meals", "thali", "filter-coffee", "chettinad"] },
+      "continental":            { "cuisines": ["continental", "european", "bistro", "brunch"] },
+      "café-bakery":            { "cuisines": ["cafe", "bakery", "coffee", "pastries", "sandwiches"] },
+      "italian":                { "cuisines": ["italian", "pizza", "pasta", "risotto"] },
+      "mediterranean":          { "cuisines": ["mediterranean", "middle-eastern", "persian", "iranian"] },
+      "north-indian-/-tandoor": { "cuisines": ["north-indian", "mughlai", "tandoor", "kebabs", "biryani"] },
+      "desserts-gelato":        { "cuisines": ["desserts", "ice-cream", "cupcakes", "chocolate", "jigarthanda"] },
+      "coastal-seafood":        { "cuisines": ["seafood", "coastal", "kerala"] }
+    },
+    "vibes": {
+      "quiet-intimate":     { "vibes": ["quiet", "intimate", "peaceful", "cozy", "serene"] },
+      "romantic-garden":    { "vibes": ["romantic", "garden", "green", "botanical"] },
+      "vintage-/-pastel":   { "vibes": ["vintage", "pastel", "retro", "nostalgic", "aesthetic"] },
+      "beachside-breezy":   { "vibes": ["beach", "breezy", "coastal", "seaside", "beachside", "beachfront", "ocean-view"] },
+      "artsy-bohemian":     { "vibes": ["artsy", "bohemian", "quirky", "creative"] },
+      "candlelight":        { "vibes": ["candlelight", "intimate", "fine-dining", "elegant"] },
+      "heritage-cultural":  { "vibes": ["heritage", "cultural", "culture", "history", "traditional", "architecture"] }
+    },
+    "activities": {
+      "pottery-workshop":   { "activities": ["hands-on", "creative"] },
+      "board-game-café":    { "activities": ["fun", "playful", "interactive"] },
+      "sunset-promenade":   { "activities": ["sunset", "walk", "beach", "golden-hour"] },
+      "art-gallery-walk":   { "activities": ["artsy", "sculpture", "bohemian"] },
+      "historic-museum":    { "activities": ["museum", "history", "heritage"] },
+      "backwater-boating":  { "activities": ["boating", "waterfront", "estuary", "lake"] }
+    },
+    "dislikes": {
+      "loud":     ["bustling", "live-music"],
+      "crowded":  ["bustling"],
+      "noisy":    ["bustling", "live-music"],
+      "rush":     ["bustling"],
+      "spicy":    ["chettinad"],
+      "very spicy": ["chettinad"]
+    }
   }
 }
